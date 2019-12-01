@@ -1,0 +1,8 @@
+
+.vs/
+
+AdventOfCode/BenchmarkDotNet.Artifacts/
+
+AdventOfCode/bin/
+
+AdventOfCode/obj/

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "AdventOfCode": {
+      "commandName": "Project",
+      "commandLineArgs": "-d 01 -y 2019"
+    },
+    "test": {
+      "commandName": "Project",
+      "commandLineArgs": "-a -t"
+    }
+  }
+}
