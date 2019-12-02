@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -31,6 +33,7 @@ namespace AdventOfCode
                 byte day = byte.Parse(inputRegex.Groups["day"].Value);
                 ushort year = ushort.Parse(inputRegex.Groups["year"].Value);
                 Console.WriteLine(day + " - " + year);
+
                 try
                 {
                     executeSolution(day, year, inputRegex.Groups["test"].Success, true);
@@ -65,7 +68,8 @@ namespace AdventOfCode
                     Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");*/
                     try
                     {
-                        executeSolution(day, year, inputRegex.Groups["test"].Success, inputRegex.Groups["slow"].Success);
+                        executeSolution(day, year, inputRegex.Groups["test"].Success,
+                            inputRegex.Groups["slow"].Success);
                         if (inputRegex.Groups["slow"].Success)
                             Console.ReadKey();
                     }
@@ -88,14 +92,19 @@ namespace AdventOfCode
             {
                 input = getInput(day, year, test);
             }
-            catch (FileNotFoundException)
+            catch (Exception e)
             {
+                if (!(e is FileNotFoundException) && !(e is DirectoryNotFoundException))
+                    throw;
+
                 if (test)
                 {
                     Console.WriteLine($"no test input defined for {day:00}/{year}");
                     return;
                 }
-                throw;
+
+                downloadSolution(File.ReadAllText("session"), day, year).Wait();
+                input = getInput(day, year, test);
             }
 
             string output;
@@ -131,7 +140,7 @@ namespace AdventOfCode
                     string output1 = solution.Part1(split[i]);
                     string output2 = solution.Part2(split[i]);
                     Console.WriteLine(
-                        $"{day:00}/{year}/1/test: {(output1 == split[i + 1] ? ("Successfully passed test input #" + (i / 3)) : ($"failed test input #{i / 3}, expected output: {split[i+1]}"))} (output: {output1})");
+                        $"{day:00}/{year}/1/test: {(output1 == split[i + 1] ? ("Successfully passed test input #" + (i / 3)) : ($"failed test input #{i / 3}, expected output: {split[i + 1]}"))} (output: {output1})");
                     Console.WriteLine(
                         $"{day:00}/{year}/2/test: {(output2 == split[i + 2] ? ("Successfully passed test input #" + (i / 3)) : ($"failed test input #{i / 3}, expected output: {split[i + 2]}"))} (output: {output2})");
                 }
@@ -140,7 +149,8 @@ namespace AdventOfCode
 
         private static Solution getSolution(byte day, ushort year)
         {
-            IEnumerable<Type> solutions = Assembly.GetExecutingAssembly().GetTypes().Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution));
+            IEnumerable<Type> solutions = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution));
             Type solutionType = solutions.FirstOrDefault(t =>
             {
                 String[] splitted = t.Name.Split("Day", 2);
@@ -150,12 +160,35 @@ namespace AdventOfCode
             });
             if (solutionType == null)
                 throw new Exception("Solution for day" + day + ", year" + year + " not found.");
-            return (Solution)Activator.CreateInstance(solutionType);
+            return (Solution) Activator.CreateInstance(solutionType);
         }
 
         private static string getInput(byte day, ushort year, bool test)
         {
             return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in");
         }
+
+        private static async Task downloadSolution(string session, byte day, ushort year)
+        {
+            var cookieContainer = new CookieContainer();
+
+            using (var client = new HttpClient(
+                new HttpClientHandler
+                {
+                    CookieContainer = cookieContainer,
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                })
+            )
+            {
+                cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
+
+                var response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
+
+                Directory.CreateDirectory($"Input/{year}");
+
+                await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
+            }
+        }
+
     }
 }

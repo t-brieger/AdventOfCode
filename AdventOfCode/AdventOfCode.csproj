@@ -51,7 +51,7 @@
   </Target>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy $(ProjectDir)Input $(OutDir)Input /D /E /F /I /Y" />
+    <Exec Command="xcopy $(ProjectDir)session $(OutDir) /D /F /Y&#xD;&#xA;xcopy $(ProjectDir)Input\test $(OutDir)Input\test /D /E /F /I /Y" />
   </Target>
 
 </Project>

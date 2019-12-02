@@ -6,3 +6,5 @@ AdventOfCode/BenchmarkDotNet.Artifacts/
 AdventOfCode/bin/
 
 AdventOfCode/obj/
+
+AdventOfCode/Input/
