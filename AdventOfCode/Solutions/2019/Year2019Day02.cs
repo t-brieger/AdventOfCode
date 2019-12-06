@@ -1,9 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AdventOfCode.Solutions._2019
 {
     public class Year2019Day02 : Solution
     {
+        private class Day2Comp : ICComputer
+        {
+            public Day2Comp(int[] mem) : base(mem, new int[]{})
+            {
+            }
+
+            public override int? isDone()
+            {
+                return pc >= memory.Length || hasHalted ? memory[0] : (int?)null;
+            }
+        }
+
         public override string Part1(string input)
         {
             int[] mem = input.Split(',').Select(int.Parse).ToArray();
@@ -11,54 +25,35 @@ namespace AdventOfCode.Solutions._2019
             mem[1] = 12;
             mem[2] = 02;
 
-            for (int ip = 0; ip < mem.Length; ip++)
-            {
-                if (mem[ip] == 1)
-                {
-                    mem[mem[ip + 3]] = mem[mem[ip + 1]] + mem[mem[ip + 2]];
-                    ip += 3;
-                }
-                else if (mem[ip] == 2)
-                {
-                    mem[mem[ip + 3]] = mem[mem[ip + 1]] * mem[mem[ip + 2]];
-                    ip += 3;
-                }
-                else if (mem[ip] == 99)
-                    break;
-            }
+            Day2Comp computer = new Day2Comp(mem);
 
-            return mem[0].ToString();
+            while (computer.isDone() == null)
+                computer.doInstruction();
+
+            return computer.isDone().ToString();
         }
 
         // not the most elegant solution, but still completes in 0.1 seconds on my machine, so it's not a giant problem
         public override string Part2(string input)
         {
+            int[] oldmem = input.Split(',').Select(int.Parse).ToArray();
+
             for (int noun = 0; noun < 100; noun++)
             {
                 for (int verb = 0; verb < 100; verb++)
                 {
-                    int[] mem = input.Split(',').Select(int.Parse).ToArray();
+                    int[] mem = new int[oldmem.Length];
+                    System.Array.Copy(oldmem, 0, mem, 0, mem.Length);
 
                     mem[1] = noun;
                     mem[2] = verb;
 
-                    for (int ip = 0; ip < mem.Length; ip++)
-                    {
-                        if (mem[ip] == 1)
-                        {
-                            mem[mem[ip + 3]] = mem[mem[ip + 1]] + mem[mem[ip + 2]];
-                            ip += 3;
-                        }
-                        else if (mem[ip] == 2)
-                        {
-                            mem[mem[ip + 3]] = mem[mem[ip + 1]] * mem[mem[ip + 2]];
-                            ip += 3;
-                        }
-                        else if (mem[ip] == 99)
-                            break;
-                    }
+                    Day2Comp computer = new Day2Comp(mem);
 
-                    if (mem[0] == 19690720)
+                    while (computer.isDone() == null)
+                        computer.doInstruction();
+
+                    if (computer.isDone() == 19690720)
                         return (100 * noun + verb).ToString();
                 }
             }
