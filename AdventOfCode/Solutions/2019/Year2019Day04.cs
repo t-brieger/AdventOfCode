@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Runtime.Serialization.Formatters;
 
 namespace AdventOfCode.Solutions._2019
 {

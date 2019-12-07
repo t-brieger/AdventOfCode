@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Text;
-using static AdventOfCode.Solutions._2019.ModeHelper;
+﻿using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {

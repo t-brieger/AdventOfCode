@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace AdventOfCode.Solutions._2017
+﻿namespace AdventOfCode.Solutions._2017
 {
     public class Year2017Day17 : Solution
     {

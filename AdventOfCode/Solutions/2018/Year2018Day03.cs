@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BenchmarkDotNet.Attributes;
 
 namespace AdventOfCode.Solutions
 {
@@ -10,7 +9,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             var tmpList = new List<short[]>();
-            String[] tmp2 = input.Split('\n');
+            string[] tmp2 = input.Split('\n');
 
             foreach (string s in tmp2)
             {
@@ -59,7 +58,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             var tmpList = new List<short[]>();
-            String[] tmp2 = input.Split('\n');
+            string[] tmp2 = input.Split('\n');
 
             foreach (string s in tmp2)
             {

@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            String[] events = input.Split('\n');
+            string[] events = input.Split('\n');
             Array.Sort(events, StringComparer.InvariantCulture);
 
             int currentGuard = -1;
@@ -21,7 +21,7 @@ namespace AdventOfCode.Solutions
             {
                 if (s[19] == 'G') //guard change
                 {
-                    currentGuard = Int16.Parse(s.Split(' ', 5)[3].Substring(1));
+                    currentGuard = short.Parse(s.Split(' ', 5)[3].Substring(1));
                 }
                 else if (s[19] == 'f') //sleep
                 {
@@ -56,7 +56,7 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            String[] events = input.Split('\n');
+            string[] events = input.Split('\n');
             Array.Sort(events, StringComparer.InvariantCulture);
 
             int currentGuard = -1;
@@ -68,7 +68,7 @@ namespace AdventOfCode.Solutions
             {
                 if (s[19] == 'G') //guard change
                 {
-                    currentGuard = Int16.Parse(s.Split(' ', 5)[3].Substring(1));
+                    currentGuard = short.Parse(s.Split(' ', 5)[3].Substring(1));
                 }
                 else if (s[19] == 'f') //sleep
                 {

@@ -111,7 +111,7 @@ namespace AdventOfCode.Solutions._2019
             string[][] wireSegments = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(_ => _.Split(',')).ToArray();
 
-            int bestIntersection = Int32.MaxValue;
+            int bestIntersection = int.MaxValue;
 
             Dictionary<Point, int> firstWirePoints = new Dictionary<Point, int>();
             firstWirePoints.Add(new Point(0, 0), 0);

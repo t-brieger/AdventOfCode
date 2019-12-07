@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BenchmarkDotNet.Horology;
+﻿using System.Linq;
 
 namespace AdventOfCode.Solutions
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using BenchmarkDotNet.Attributes;
 
 namespace AdventOfCode.Solutions
 {
@@ -14,7 +13,7 @@ namespace AdventOfCode.Solutions
             int NumOfThreeElements = 0;
             for (int i = 0; i < inputs.Length; i++)
             {
-                String line = inputs[i];
+                string line = inputs[i];
                 Dictionary<char, int> letters = new Dictionary<char, int>();
                 foreach (char c in line)
                 {

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;D-benchmark;R-benchmark</Configurations>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
@@ -35,23 +35,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
-    <PackageReference Include="TextCopy" Version="1.7.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Input\test\2017\Day13.in">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="::set x=$(ConfigurationName)&#xD;&#xA;::if &quot;%x:~-9%&quot; == &quot;benchmark&quot; (&#xD;&#xA;::    echo running tests&#xD;&#xA;::    dotnet benchmark $(TargetPath) --filter * -j Short --join&#xD;&#xA;::)&#xD;&#xA;::exit /b 0" />
-  </Target>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy $(ProjectDir)session $(OutDir) /D /F /Y&#xD;&#xA;xcopy $(ProjectDir)Input\test $(OutDir)Input\test /D /E /F /I /Y" />
+    <ItemGroup>
+      <_Test Include="Input/test/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_Test)" DestinationFolder="$(OutDir)/Input/test" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="session" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>

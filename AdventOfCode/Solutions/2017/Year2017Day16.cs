@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Text;
-using Microsoft.CodeAnalysis;
 
 namespace AdventOfCode.Solutions._2017
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AdventOfCode.Solutions
+﻿namespace AdventOfCode.Solutions
 {
     public class Year2018Day11 : Solution
     {

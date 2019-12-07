@@ -1,6 +1,4 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,7 +8,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BenchmarkDotNet.Running;
 
 namespace AdventOfCode
 {
@@ -19,11 +16,11 @@ namespace AdventOfCode
         static int Main(string[] args)
         {
             Match inputRegex =
-                new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a(?<slow>,-s)?))(?<test>,-t)?$").Match(
-                    String.Join(',', args));
+                new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a?))(?<test>,-t)?$").Match(
+                    string.Join(',', args));
             if (!inputRegex.Success)
             {
-                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year>) | (-a[ -s])[ -t]\"");
+                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year>) | -a[ -t]\"");
                 Console.ReadKey();
                 return 1;
             }
@@ -36,7 +33,7 @@ namespace AdventOfCode
 
                 try
                 {
-                    executeSolution(day, year, inputRegex.Groups["test"].Success, true);
+                    executeSolution(day, year, inputRegex.Groups["test"].Success);
                 }
                 catch (FileNotFoundException)
                 {
@@ -68,8 +65,7 @@ namespace AdventOfCode
                     Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");*/
                     try
                     {
-                        executeSolution(day, year, inputRegex.Groups["test"].Success,
-                            inputRegex.Groups["slow"].Success);
+                        executeSolution(day, year, inputRegex.Groups["test"].Success);
                         if (inputRegex.Groups["slow"].Success)
                             Console.ReadKey();
                     }
@@ -84,7 +80,7 @@ namespace AdventOfCode
             return 0;
         }
 
-        private static void executeSolution(byte day, ushort year, bool test, bool clipboard)
+        private static void executeSolution(byte day, ushort year, bool test)
         {
             Solution solution = getSolution(day, year);
             string input = "";
@@ -103,6 +99,9 @@ namespace AdventOfCode
                     return;
                 }
 
+                if (!File.Exists("session"))
+                    throw new Exception("session file not found");
+                
                 downloadSolution(File.ReadAllText("session"), day, year).Wait();
                 input = getInput(day, year, test);
             }
@@ -115,20 +114,12 @@ namespace AdventOfCode
                 output = solution.Part1(input);
                 sw.Stop();
                 Console.WriteLine($"{day:00}/{year}/1: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");
-                if (clipboard)
-                {
-                    TextCopy.Clipboard.SetText(output);
-                }
 
                 sw = new Stopwatch();
                 sw.Start();
                 output = solution.Part2(input);
                 sw.Stop();
                 Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");
-                if (clipboard)
-                {
-                    TextCopy.Clipboard.SetText(output);
-                }
             }
             else
             {
@@ -153,7 +144,7 @@ namespace AdventOfCode
                 .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution));
             Type solutionType = solutions.FirstOrDefault(t =>
             {
-                String[] splitted = t.Name.Split("Day", 2);
+                string[] splitted = t.Name.Split("Day", 2);
                 ushort typeYear = ushort.Parse(splitted[0].Replace("Year", ""));
                 byte typeDay = byte.Parse(splitted[1]);
                 return typeYear == year && typeDay == day;
@@ -172,22 +163,19 @@ namespace AdventOfCode
         {
             var cookieContainer = new CookieContainer();
 
-            using (var client = new HttpClient(
+            using var client = new HttpClient(
                 new HttpClientHandler
                 {
                     CookieContainer = cookieContainer,
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
-                })
-            )
-            {
-                cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
+                });
+            cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
-                var response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
+            var response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
 
-                Directory.CreateDirectory($"Input/{year}");
+            Directory.CreateDirectory($"Input/{year}");
 
-                await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
-            }
+            await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
         }
 
     }
