@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {
@@ -6,7 +7,7 @@ namespace AdventOfCode.Solutions._2019
     {
         private class Day2Comp : ICComputer
         {
-            public Day2Comp(int[] mem) : base(mem, new int[]{})
+            public Day2Comp(int[] mem) : base(mem, new Queue<int>())
             {
             }
 

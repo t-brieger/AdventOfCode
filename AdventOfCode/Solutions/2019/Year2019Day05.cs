@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {
@@ -6,14 +7,17 @@ namespace AdventOfCode.Solutions._2019
     {
         private class Day5Comp : ICComputer
         {
-            public Day5Comp(int[] mem, int[] input) : base(mem)
-            {
-                this.input = input;
-            }
-
             public override int? isDone()
             {
-                return hasHalted || pc >= memory.Length ? output.LastOrDefault() : (int?)null;
+                return hasHalted || pc >= memory.Length ? output.LastOrDefault() : (int?) null;
+            }
+
+            public Day5Comp(int[] mem, Queue<int> input) : base(mem, input)
+            {
+            }
+
+            public Day5Comp(int[] mem) : base(mem)
+            {
             }
         }
 
@@ -25,8 +29,8 @@ namespace AdventOfCode.Solutions._2019
 
             int[] mem = input.Split(',').Select(int.Parse).ToArray();
 
-            var computer = new Day5Comp(mem, new []{ 1 });
-            
+            var computer = new Day5Comp(mem, new Queue<int>(new[] {1}));
+
             while (computer.isDone() == null)
                 computer.doInstruction();
 
@@ -40,7 +44,7 @@ namespace AdventOfCode.Solutions._2019
             //*/
             int[] mem = input.Split(',').Select(int.Parse).ToArray();
 
-            var computer = new Day5Comp(mem, new[] { 5 });
+            var computer = new Day5Comp(mem, new Queue<int>(new[] {5}));
 
             while (computer.isDone() == null)
                 computer.doInstruction();

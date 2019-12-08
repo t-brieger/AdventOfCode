@@ -10,11 +10,11 @@ namespace AdventOfCode.Solutions._2019
         public int pc;
 
         public bool hasHalted = false;
+        public bool isWaitingForInput = false;
+        
+        public Queue<int> input;
 
-        public int[] input;
-        public int inputIndex = 0;
-
-        public List<int> output = new List<int>();
+        public Queue<int> output = new Queue<int>();
 
         protected static Dictionary<int, ICInstruction> Opcodes = new Dictionary<int, ICInstruction>();
 
@@ -38,13 +38,19 @@ namespace AdventOfCode.Solutions._2019
             //INPUT
             Opcodes.Add(03, new ICInstruction((pc, mem, __, instance) =>
             {
-                mem[mem[pc + 1]] = instance.input[instance.inputIndex++];
+                if (instance.input.Count != 0)
+                {
+                    instance.isWaitingForInput = false;
+                    mem[mem[pc + 1]] = instance.input.Dequeue();
+                    return pc + 2;
+                }
+                instance.isWaitingForInput = true;
                 return 0;
-            }, 2));
+            }, -2));
             //OUTPUT
             Opcodes.Add(04, new ICInstruction((pc, mem, mode, instance) =>
             {
-                instance.output.Add(ModeHelper.getValue(mem, mode[0], mem[pc + 1]));
+                instance.output.Enqueue(ModeHelper.getValue(mem, mode[0], mem[pc + 1]));
                 return 0;
             }, 2));
 
@@ -90,13 +96,13 @@ namespace AdventOfCode.Solutions._2019
             }, 1));
         }
 
-        protected ICComputer(int[] mem, int[] input)
+        protected ICComputer(int[] mem, Queue<int> input)
         {
             this.memory = mem;
             this.input = input;
         }
 
-        protected ICComputer(int[] mem) : this(mem, new int[] { })
+        protected ICComputer(int[] mem) : this(mem, new Queue<int>())
         {
         }
 
