@@ -242,13 +242,13 @@ namespace AdventOfCode.Solutions._2017
             return "";
         }*/
 
-        public string Part1()
+        public override string Part1(string input)
         {
             //TODO !!
             return "Not Implemented - this is a huge mess";
         }
 
-        public string Part2()
+        public override string Part2(string input)
         {
             return "Not Implemented - this is a huge mess";
         }
