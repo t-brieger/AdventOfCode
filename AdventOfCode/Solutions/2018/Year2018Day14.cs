@@ -11,11 +11,6 @@ namespace AdventOfCode.Solutions
             return node.Next ?? list.First;
         }
 
-        private static LinkedListNode<T> Prev<T>(LinkedListNode<T> node, LinkedList<T> list)
-        {
-            return node.Previous ?? list.Last;
-        }
-
         public override string Part1(string input)
         {
             /*

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode.Solutions._2017
@@ -7,16 +8,16 @@ namespace AdventOfCode.Solutions._2017
     {
         public override string Part1(string input)
         {
-            var scanners = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            IEnumerable<(int, int)> scanners = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x =>
                 {
-                    var y = x.Split(':');
+                    string[] y = x.Split(':');
                     return (int.Parse(y[0]), int.Parse(y[1]));
                 });
 
             int severity = 0;
 
-            foreach (var scanner in scanners)
+            foreach ((int, int) scanner in scanners)
                 if (scanner.Item1 % (2 * (scanner.Item2 - 1)) == 0)
                     severity += scanner.Item1 * scanner.Item2;
 
@@ -25,10 +26,10 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part2(string input)
         {
-            var scanners = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+            IEnumerable<(int depth, int range)> scanners = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select<string, (int depth, int range)>(x =>
                 {
-                    var y = x.Split(':');
+                    string[] y = x.Split(':');
                     return (int.Parse(y[0]), int.Parse(y[1]));
                 });
             

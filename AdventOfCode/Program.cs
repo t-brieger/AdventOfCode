@@ -161,9 +161,9 @@ namespace AdventOfCode
 
         private static async Task downloadSolution(string session, byte day, ushort year)
         {
-            var cookieContainer = new CookieContainer();
+            CookieContainer cookieContainer = new CookieContainer();
 
-            using var client = new HttpClient(
+            using HttpClient client = new HttpClient(
                 new HttpClientHandler
                 {
                     CookieContainer = cookieContainer,
@@ -171,7 +171,7 @@ namespace AdventOfCode
                 });
             cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
-            var response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
+            HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
 
             Directory.CreateDirectory($"Input/{year}");
 

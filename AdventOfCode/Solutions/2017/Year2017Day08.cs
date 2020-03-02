@@ -19,7 +19,7 @@ namespace AdventOfCode.Solutions._2017
                 // 4 - register
                 // 5 - comparison operator
                 // 6 - operand
-                var words = s.Split(' ');
+                string[] words = s.Split(' ');
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
                 if (!registers.ContainsKey(words[4]))
@@ -83,7 +83,7 @@ namespace AdventOfCode.Solutions._2017
                 // 4 - register
                 // 5 - comparison operator
                 // 6 - operand
-                var words = s.Split(' ');
+                string[] words = s.Split(' ');
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
                 if (!registers.ContainsKey(words[4]))

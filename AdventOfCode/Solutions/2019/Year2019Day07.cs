@@ -70,7 +70,7 @@ namespace AdventOfCode.Solutions._2019
             
                 for (int i = 0; i < computers.Length; i++)
                 {
-                    var memcopy = new int[mem.Length];
+                    int[] memcopy = new int[mem.Length];
                     Array.Copy(mem, memcopy, mem.Length);
 
                     computers[i] = new Day7Comp(mem);
@@ -85,10 +85,10 @@ namespace AdventOfCode.Solutions._2019
                 computers[0].input.Enqueue(0);
                 
                 while (!computers.Any(c => c.hasHalted))
-                    foreach (var c in computers)
+                    foreach (Day7Comp c in computers)
                         c.doInstruction();
 
-                var result = computers[0].input.Dequeue();
+                int result = computers[0].input.Dequeue();
                 if (result > max)
                     max = result;
             }

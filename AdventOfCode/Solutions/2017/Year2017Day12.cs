@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions._2017
         {
             seen.Add(n);
 
-            foreach (var i in connections[n])
+            foreach (int i in connections[n])
             {
                 if (seen.Contains(i))
                     continue;
@@ -41,7 +41,7 @@ namespace AdventOfCode.Solutions._2017
 
             while (connections.Count > 0)
             {
-                var seen = new HashSet<int>();
+                HashSet<int> seen = new HashSet<int>();
                 getConnections(connections, seen, connections.Keys.First());
 
                 foreach (int i in seen)

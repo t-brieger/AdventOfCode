@@ -38,7 +38,7 @@ namespace AdventOfCode.Solutions._2017
 
                     Array.Reverse(numbers, pos, length);
 
-                    var affectedInSecondPart = pos + length - 256;
+                    int affectedInSecondPart = pos + length - 256;
                     if (affectedInSecondPart > 0)
                         Array.Copy(numbers, 256, numbers, 0, affectedInSecondPart);
 
@@ -79,7 +79,7 @@ namespace AdventOfCode.Solutions._2017
 
                 Array.Reverse(numbers, pos, length);
 
-                var affectedInSecondPart = pos + length - 256;
+                int affectedInSecondPart = pos + length - 256;
                 if (affectedInSecondPart > 0)
                     Array.Copy(numbers, 256, numbers, 0, affectedInSecondPart);
 

@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string s)
         {
-            string[] inputs = s.Split('\n');
+            string[] inputs = s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             int NumOfTwoElements = 0;
             int NumOfThreeElements = 0;
             for (int i = 0; i < inputs.Length; i++)
@@ -38,9 +38,9 @@ namespace AdventOfCode.Solutions
         public override string Part2(string s)
         {
             string[] inputs = s.Split(new [] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var s1 in inputs)
+            foreach (string s1 in inputs)
             {
-                foreach (var s2 in inputs)
+                foreach (string s2 in inputs)
                 {
                     if (s1 == s2)
                     {

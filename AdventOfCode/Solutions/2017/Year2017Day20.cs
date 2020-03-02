@@ -42,7 +42,7 @@ namespace AdventOfCode.Solutions._2017
 
             return input.Split(new []{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l => $"{i++} {l}").OrderBy(line =>
             {
-                var things = line.Substring(0, line.Length - 1).Split(new[] {',', '<'});
+                string[] things = line.Substring(0, line.Length - 1).Split(new[] {',', '<'});
                 return manhattanDistance(int.Parse(things[9]), int.Parse(things[10]), int.Parse(things[11]));
             }).First().Split(' ')[0];
         }
@@ -54,7 +54,7 @@ namespace AdventOfCode.Solutions._2017
             HashSet<Particle> particles = new HashSet<Particle>(input.Split(new []{ '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(
                 line =>
                 {
-                    var parts = line.Replace(">", "").Split('<', ',').ToList();
+                    string[] parts = line.Replace(">", "").Split('<', ',').ToArray();
                     return new Particle(int.Parse(parts[1]), int.Parse(parts[2]), int.Parse(parts[3]),
                         int.Parse(parts[5]), int.Parse(parts[6]), int.Parse(parts[7]), int.Parse(parts[9]),
                         int.Parse(parts[10]), int.Parse(parts[11]), id++);
@@ -79,7 +79,7 @@ namespace AdventOfCode.Solutions._2017
                     toRemove.UnionWith(particles.Where(p1 => p.x == p1.x && p.y == p1.y && p.z == p1.z && p.id != p1.id));
                 }
 
-                foreach (var particle in toRemove)
+                foreach (Particle particle in toRemove)
                 {
                     particles.Remove(particle);
                 }

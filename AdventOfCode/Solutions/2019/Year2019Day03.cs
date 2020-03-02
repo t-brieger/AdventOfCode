@@ -122,7 +122,7 @@ namespace AdventOfCode.Solutions._2019
 
             for (int i = 0; i < wireSegments[0].Length; i++)
             {
-                var updateDelay = new Action(() =>
+                Action updateDelay = new Action(() =>
                 {
                     if (firstWirePoints.ContainsKey(new Point(x, y)))
                         delay = firstWirePoints[new Point(x, y)];
@@ -178,7 +178,7 @@ namespace AdventOfCode.Solutions._2019
             for (int i = 0; i < wireSegments[1].Length; i++)
             {
 
-                var updateDelay = new Action(() =>
+                Action updateDelay = new Action(() =>
                 {
                     if (delays.ContainsKey(new Point(x, y)))
                         delay = delays[new Point(x, y)];

@@ -8,12 +8,12 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            var tmpList = new List<short[]>();
-            string[] tmp2 = input.Split('\n');
+            List<short[]> tmpList = new List<short[]>();
+            string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string s in tmp2)
             {
-                var splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
+                string[] splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
                     StringSplitOptions.RemoveEmptyEntries);
                 tmpList.Add(new[]
                 {
@@ -41,9 +41,9 @@ namespace AdventOfCode.Solutions
                 short xe = (short)(inputs[i, 3] + xs);
                 short ye = (short)(inputs[i, 4] + ys);
 
-                for (var j = (short)(xs + 1); j <= xe; j++)
+                for (short j = (short)(xs + 1); j <= xe; j++)
                 {
-                    for (var j2 = (short)(ys + 1); j2 <= ye; j2++)
+                    for (short j2 = (short)(ys + 1); j2 <= ye; j2++)
                     {
                         if (claimed[j, j2] == 1)
                             dupes++;
@@ -57,12 +57,12 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            var tmpList = new List<short[]>();
-            string[] tmp2 = input.Split('\n');
+            List<short[]> tmpList = new List<short[]>();
+            string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string s in tmp2)
             {
-                var splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
+                string[] splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
                     StringSplitOptions.RemoveEmptyEntries);
                 tmpList.Add(new[]
                 {
@@ -97,9 +97,9 @@ namespace AdventOfCode.Solutions
                 short xe = (short)(inputs[i, 3] + xs); //=the x ending point
                 short ye = (short)(inputs[i, 4] + ys); //=the y ending point
 
-                for (var j = (short)(xs + 1); j <= xe; j++)
+                for (short j = (short)(xs + 1); j <= xe; j++)
                 {
-                    for (var j2 = (short)(ys + 1); j2 <= ye; j2++)
+                    for (short j2 = (short)(ys + 1); j2 <= ye; j2++)
                     {
                         //loop through each square inch this claim contains
                         gridNumClaims[j, j2]++;

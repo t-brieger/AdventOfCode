@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions._2017
             bool[,] grid = new bool[input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length];
             char[,] extraChars = new char[grid.GetLength(0), grid.GetLength(1)];
 
-            for (var i = 0; i < input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            for (int i = 0; i < input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Length; i++)
             {
                 string line = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)[i];
 
@@ -130,7 +130,7 @@ namespace AdventOfCode.Solutions._2017
         {
             bool[,] grid = new bool[input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length];
 
-            for (var i = 0; i < input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            for (int i = 0; i < input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length; i++)
             {
                 string line = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[i];
 

@@ -98,7 +98,7 @@
                 {
                     for (short j = 0; j < 300 - size; j++)
                     {
-                        var a = powerLevel[i + size, j + size] - powerLevel[i + size, j] - powerLevel[i, j + size] + powerLevel[i, j];
+                        int a = powerLevel[i + size, j + size] - powerLevel[i + size, j] - powerLevel[i, j + size] + powerLevel[i, j];
                         if (a > maxCombinedLvl)
                         {
                             maxCombinedLvl = (short)a;

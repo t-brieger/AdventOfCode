@@ -58,7 +58,7 @@ namespace AdventOfCode.Solutions
             while (true)
             {
                 carts = carts.OrderBy(tuple => ((int)tuple[3] << 8) | tuple[2]).ToArray();
-                foreach (var cart in carts)
+                foreach (byte[] cart in carts)
                 {
                     switch (map[cart[3]][cart[2]])
                     {
@@ -120,7 +120,7 @@ namespace AdventOfCode.Solutions
                         cart[2]++;
 
 
-                    foreach (var otherCart in carts)
+                    foreach (byte[] otherCart in carts)
                     {
                         if ((otherCart[2] == cart[2] && otherCart[3] == cart[3]) && otherCart[4] != cart[4])
                             return $"{cart[2]},{cart[3]}";
@@ -181,7 +181,7 @@ namespace AdventOfCode.Solutions
             while (true)
             {
                 carts = carts.OrderBy(tuple => ((int)tuple[3] << 8) | tuple[2]).ToArray();
-                foreach (var cart in carts)
+                foreach (byte[] cart in carts)
                 {
                     if (cart[4] == 255)
                         continue;
@@ -247,7 +247,7 @@ namespace AdventOfCode.Solutions
                         cart[2]++;
 
 
-                    foreach (var otherCart in carts)
+                    foreach (byte[] otherCart in carts)
                     {
                         if ((otherCart[2] == cart[2] && otherCart[3] == cart[3]) && otherCart[4] != cart[4] && otherCart[4] != 255)
                         {

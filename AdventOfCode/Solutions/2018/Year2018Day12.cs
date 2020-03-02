@@ -54,9 +54,9 @@ namespace AdventOfCode.Solutions
             Dictionary<Tuple<bool, bool, bool, bool, bool>, bool> conversions = new Dictionary<Tuple<bool, bool, bool, bool, bool>, bool>(input
                 .Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(s =>
                 {
-                    var parts = s.Split(" => ");
+                    string[] parts = s.Split(" => ");
 
-                    var kvp = new KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool>(
+                    KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool> kvp = new KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool>(
                         new Tuple<bool, bool, bool, bool, bool>(parts[0][0] == '#', parts[0][1] == '#', parts[0][2] == '#', parts[0][3] == '#', parts[0][4] == '#'), parts[1] == "#");
                     return kvp;
                 }));

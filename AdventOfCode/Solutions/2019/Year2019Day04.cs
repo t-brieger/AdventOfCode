@@ -13,7 +13,7 @@ namespace AdventOfCode.Solutions._2019
 
             for (int i = lowerBound; i <= upperBound; i++)
             {
-                var str = i.ToString();
+                string str = i.ToString();
                 bool hasDouble = false;
                 bool isBreakExit = false;
                 for (int j = 0; j < str.Length - 1; j++)
@@ -43,13 +43,13 @@ namespace AdventOfCode.Solutions._2019
 
             for (int i = lowerBound; i <= upperBound; i++)
             {
-                var str = i.ToString();
+                string str = i.ToString();
                 bool hasDouble = false;
 
                 char last = '\0';
                 int len = 0;
 
-                foreach (var c in str)
+                foreach (char c in str)
                 {
                     if (c == last)
                         len++;

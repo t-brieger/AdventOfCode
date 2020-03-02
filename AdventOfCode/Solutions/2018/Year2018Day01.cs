@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace AdventOfCode.Solutions
     {
         private static IEnumerable<int> Cycle(IEnumerable<int> source)
         {
-            var elementBuffer = new List<int>(((ICollection)source).Count);
+            List<int> elementBuffer = new List<int>(((ICollection)source).Count);
             foreach (int element in source)
             {
                 elementBuffer.Add(element);
@@ -26,8 +27,9 @@ namespace AdventOfCode.Solutions
         public override string Part1(string s)
         {
             List<int> inputs = new List<int>();
-            foreach (var s1 in s.Split('\n'))
+            foreach (string s1 in s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
+                Console.WriteLine(s1);
                 inputs.Add(int.Parse(s1));
             }
             return inputs.Sum().ToString();
@@ -36,7 +38,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string s)
         {
             List<int> inputs = new List<int>();
-            foreach (var s1 in s.Split('\n'))
+            foreach (string s1 in s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 inputs.Add(int.Parse(s1));
             }
@@ -44,7 +46,7 @@ namespace AdventOfCode.Solutions
             int tmpSum = 0;
             HashSet<int> reachedSums = new HashSet<int>();
 
-            foreach (var i in Cycle(inputs))
+            foreach (int i in Cycle(inputs))
             {
                 if (reachedSums.Contains(tmpSum))
                     break;

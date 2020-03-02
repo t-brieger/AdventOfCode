@@ -7,13 +7,13 @@ namespace AdventOfCode.Solutions._2017
     {
         public override string Part1(string input)
         {
-            var directions = input.Split(',').ToArray();
+            string[] directions = input.Split(',');
 
             int x = 0;
             int y = 0;
             int z = 0;
 
-            foreach (var direction in directions)
+            foreach (string direction in directions)
             {
                 switch (direction)
                 {
@@ -51,7 +51,7 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part2(string input)
         {
-            var directions = input.Split(',').ToArray();
+            string[] directions = input.Split(',');
 
             int x = 0;
             int y = 0;
@@ -59,7 +59,7 @@ namespace AdventOfCode.Solutions._2017
 
             int max = 0;
 
-            foreach (var direction in directions)
+            foreach (string direction in directions)
             {
                 switch (direction)
                 {

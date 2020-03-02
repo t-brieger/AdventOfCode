@@ -25,8 +25,8 @@ namespace AdventOfCode.Solutions._2017
             int length = 16;
             //*/
 
-            var head = new Node<byte>(0);
-            var originalHead = head;
+            Node<byte> head = new Node<byte>(0);
+            Node<byte> originalHead = head;
             for (byte i = 1; i < length; i++)
             {
                 head.next = new Node<byte>(i);
@@ -51,7 +51,7 @@ namespace AdventOfCode.Solutions._2017
 
                     for (int i = 0; i < register0; i++)
                         head = head.next;
-                    var register0Node = head;
+                    Node<byte> register0Node = head;
                     head = originalHead;
                     for (int i = 0; i < register1; i++)
                         head = head.next;
@@ -98,8 +98,8 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part2(string input)
         {
-            var head = new Node<byte>(0);
-            var originalHead = head;
+            Node<byte> head = new Node<byte>(0);
+            Node<byte> originalHead = head;
             for (byte i = 1; i < 16; i++)
             {
                 head.next = new Node<byte>(i);
@@ -113,7 +113,7 @@ namespace AdventOfCode.Solutions._2017
 
             for (int j = 0;; j++)
             {
-                var s = stringifyLinkedList(head, 16);
+                string s = stringifyLinkedList(head, 16);
 
                 if (seenProgs.Contains(s))
                     return seenProgs[1_000_000_000 % j];
@@ -136,7 +136,7 @@ namespace AdventOfCode.Solutions._2017
 
                         for (int i = 0; i < register0; i++)
                             head = head.next;
-                        var register0Node = head;
+                        Node<byte> register0Node = head;
                         head = originalHead;
                         for (int i = 0; i < register1; i++)
                             head = head.next;

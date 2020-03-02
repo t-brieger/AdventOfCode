@@ -112,12 +112,12 @@ namespace AdventOfCode.Solutions._2019
         {
             if (Opcodes.ContainsKey(memory[pc] % 100))
             {
-                var instruction = Opcodes[memory[pc] % 100];
+                ICInstruction instruction = Opcodes[memory[pc] % 100];
 
-                var modes = (memory[pc] / 100).ToString().PadLeft(Math.Abs(instruction.argc) - 1, '0').ToCharArray().Reverse()
+                Modes[] modes = (memory[pc] / 100).ToString().PadLeft(Math.Abs(instruction.argc) - 1, '0').ToCharArray().Reverse()
                     .Select(c => (Modes) (c - '0')).ToArray();
 
-                var x = instruction.action(pc, memory, modes, this);
+                int x = instruction.action(pc, memory, modes, this);
                 if (instruction.argc > 0)
                     pc += instruction.argc;
                 else

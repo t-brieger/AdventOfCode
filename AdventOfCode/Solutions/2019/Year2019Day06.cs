@@ -12,7 +12,7 @@ namespace AdventOfCode.Solutions._2019
                 return 0;
             if (count.ContainsKey(id))
                 return count[id];
-            var count_ = getOrbitCount(direct[id], direct, count) + 1;
+            int count_ = getOrbitCount(direct[id], direct, count) + 1;
             count.Add(id, count_);
             return count_;
         }

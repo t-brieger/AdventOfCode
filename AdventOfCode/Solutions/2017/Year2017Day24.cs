@@ -23,9 +23,9 @@ namespace AdventOfCode.Solutions._2017
             foreach ((int pins1, int pins2) comp in usable)
             {
                 int strength1 = strength + comp.pins1 + comp.pins2;
-                var length1 = length + 1;
-                var nextPort = port == comp.Item1 ? comp.Item2 : comp.Item1;
-                var remaining = allComponents.ToList(); remaining.Remove(comp);
+                int length1 = length + 1;
+                int nextPort = port == comp.Item1 ? comp.Item2 : comp.Item1;
+                List<(int pins1, int pins2)> remaining = allComponents.ToList(); remaining.Remove(comp);
                 bridges.Add(Build(strength1, length1, nextPort, remaining, byLength));
             }
             return bridges.OrderBy(x => byLength ? x.Item2 : 0).ThenBy(x => x.Item1).Last();

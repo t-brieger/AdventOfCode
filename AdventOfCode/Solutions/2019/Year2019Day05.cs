@@ -29,7 +29,7 @@ namespace AdventOfCode.Solutions._2019
 
             int[] mem = input.Split(',').Select(int.Parse).ToArray();
 
-            var computer = new Day5Comp(mem, new Queue<int>(new[] {1}));
+            Day5Comp computer = new Day5Comp(mem, new Queue<int>(new[] {1}));
 
             while (computer.isDone() == null)
                 computer.doInstruction();
@@ -44,7 +44,7 @@ namespace AdventOfCode.Solutions._2019
             //*/
             int[] mem = input.Split(',').Select(int.Parse).ToArray();
 
-            var computer = new Day5Comp(mem, new Queue<int>(new[] {5}));
+            Day5Comp computer = new Day5Comp(mem, new Queue<int>(new[] {5}));
 
             while (computer.isDone() == null)
                 computer.doInstruction();
