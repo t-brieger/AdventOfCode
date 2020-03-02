@@ -20,7 +20,7 @@ namespace AdventOfCode
                     string.Join(',', args));
             if (!inputRegex.Success)
             {
-                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year>) | -a[ -t]\"");
+                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year> | -a)[ -t]\"");
                 Console.ReadKey();
                 return 1;
             }
