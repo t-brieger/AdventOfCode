@@ -10,3 +10,7 @@ AdventOfCode/obj/
 AdventOfCode/Input/
 
 .idea/
+
+AdventOfCode/Properties/launchSettings.json
+
+AdventOfCode/session
