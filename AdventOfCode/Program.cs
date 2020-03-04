@@ -16,11 +16,11 @@ namespace AdventOfCode
         static int Main(string[] args)
         {
             Match inputRegex =
-                new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a?))(?<test>,-t)?$").Match(
+                new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a(?<slow>,-s)))(?<test>,-t)?$").Match(
                     string.Join(',', args));
             if (!inputRegex.Success)
             {
-                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year> | -a)[ -t]\"");
+                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year> | -a [-s])[ -t]\"");
                 Console.ReadKey();
                 return 1;
             }
@@ -73,6 +73,8 @@ namespace AdventOfCode
                     {
                         Console.WriteLine($"Solution {day:00}/{year} missing");
                     }
+
+
                 }
             }
 
