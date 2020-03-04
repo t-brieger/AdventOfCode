@@ -40,9 +40,9 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <ItemGroup>
-      <_Test Include="Input/test/*" />
+      <_Test Include="Input/test/**/*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(_Test)" DestinationFolder="$(OutDir)/Input/test" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(_Test)" DestinationFolder="$(OutDir)/Input/test/%(RecursiveDir)" SkipUnchangedFiles="true" />
     <Copy SourceFiles="session" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
   </Target>
 
