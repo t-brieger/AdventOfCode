@@ -29,7 +29,6 @@ namespace AdventOfCode.Solutions
             List<int> inputs = new List<int>();
             foreach (string s1 in s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                Console.WriteLine(s1);
                 inputs.Add(int.Parse(s1));
             }
             return inputs.Sum().ToString();
