@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -60,6 +60,8 @@ namespace AdventOfCode.Solutions
             //*/
 
             int target = int.Parse(input);
+
+            input = target.ToString(); //to deal with any trailing/leading whitespace
 
             LinkedList<byte> recipes = new LinkedList<byte>();
 
