@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day10 : Solution
     {
         public override string Part1(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((int.Parse(line.Substring(36, 2)), int.Parse(line.Substring(40, 2))), (int.Parse(line.Substring(10, 6)), int.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
             bool shouldLoop = true;
             ((int start, int end) x, (int start, int end) y) boundingBox = ((50001, -50001), (50001, -50001));
@@ -18,14 +18,12 @@ namespace AdventOfCode.Solutions
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
-                        if (points[i].position.x + points[i].velocity.x > boundingBox.x.end ||
-                            points[i].position.x + points[i].velocity.x < boundingBox.x.start ||
-                            points[i].position.y + points[i].velocity.y > boundingBox.y.end ||
-                            points[i].position.y + points[i].velocity.y < boundingBox.y.start)
-                        {
-                            shouldLoop = false;
-                            break;
-                        }
+                        if (points[i].position.x + points[i].velocity.x <= boundingBox.x.end &&
+                            points[i].position.x + points[i].velocity.x >= boundingBox.x.start &&
+                            points[i].position.y + points[i].velocity.y <= boundingBox.y.end &&
+                            points[i].position.y + points[i].velocity.y >= boundingBox.y.start) continue;
+                        shouldLoop = false;
+                        break;
                     }
                 }
 
@@ -66,10 +64,10 @@ namespace AdventOfCode.Solutions
             {
                 for (int y = 0; y < result.GetLength(1); y += 1)
                 {
-                    //Console.Write(result[x, y] ? '#' : ' ');
+                    Console.Write(result[x, y] ? '#' : ' ');
                 }
 
-                //Console.Write('\n');
+                Console.Write('\n');
             }
 
             return "uncomment Writes in code - spam warning";
@@ -79,7 +77,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((int.Parse(line.Substring(36, 2)), int.Parse(line.Substring(40, 2))), (int.Parse(line.Substring(10, 6)), int.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
 
             bool shouldLoop = true;
@@ -93,14 +91,12 @@ namespace AdventOfCode.Solutions
                 {
                     for (int i = 0; i < points.Length; i++)
                     {
-                        if (points[i].position.x + points[i].velocity.x > boundingBox.x.end ||
-                            points[i].position.x + points[i].velocity.x < boundingBox.x.start ||
-                            points[i].position.y + points[i].velocity.y > boundingBox.y.end ||
-                            points[i].position.y + points[i].velocity.y < boundingBox.y.start)
-                        {
-                            shouldLoop = false;
-                            break;
-                        }
+                        if (points[i].position.x + points[i].velocity.x <= boundingBox.x.end &&
+                            points[i].position.x + points[i].velocity.x >= boundingBox.x.start &&
+                            points[i].position.y + points[i].velocity.y <= boundingBox.y.end &&
+                            points[i].position.y + points[i].velocity.y >= boundingBox.y.start) continue;
+                        shouldLoop = false;
+                        break;
                     }
                 }
 

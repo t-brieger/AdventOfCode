@@ -9,19 +9,19 @@ namespace AdventOfCode.Solutions._2017
     public class Year2017Day06 : Solution
     {
         //TODO: un-jankify
-        veryLongTuple getLongAssTupleFromArray(int[] state) => new veryLongTuple(state[0], state[1], state[2], state[3], state[4], state[5], state[6], new Tuple<int, int, int, int, int, int, int, Tuple<int, int>>(state[7], state[8], state[9], state[10], state[11], state[12], state[13], new Tuple<int, int>(state[14], state[15])));
+        private static veryLongTuple GetLongAssTupleFromArray(int[] state) => new veryLongTuple(state[0], state[1], state[2], state[3], state[4], state[5], state[6], new Tuple<int, int, int, int, int, int, int, Tuple<int, int>>(state[7], state[8], state[9], state[10], state[11], state[12], state[13], new Tuple<int, int>(state[14], state[15])));
 
         public override string Part1(string input)
         {
             HashSet<veryLongTuple> seen = new HashSet<veryLongTuple>();
 
-            int[] currentState = input.Split('\t').Select(int.Parse).ToArray();
+            int[] currentState = input.Split('\t').Select(Int32.Parse).ToArray();
 
             int cycles = 0;
             while (true)
             {
                 cycles++;
-                seen.Add(getLongAssTupleFromArray(currentState));
+                seen.Add(GetLongAssTupleFromArray(currentState));
                 int max = 0;
                 for (int i = 1; i < currentState.Length; i++)
                 {
@@ -36,7 +36,7 @@ namespace AdventOfCode.Solutions._2017
                     currentState[(max + i) % currentState.Length]++;
                 }
 
-                if (seen.Contains(getLongAssTupleFromArray(currentState)))
+                if (seen.Contains(GetLongAssTupleFromArray(currentState)))
                     return cycles.ToString();
             }
         }
@@ -45,12 +45,12 @@ namespace AdventOfCode.Solutions._2017
         {
             Dictionary<veryLongTuple, int> seen = new Dictionary<veryLongTuple, int>();
 
-            int[] currentState = input.Split('\t').Select(int.Parse).ToArray();
+            int[] currentState = input.Split('\t').Select(Int32.Parse).ToArray();
 
             int cycles = 0;
             while (true)
             {
-                seen.Add(getLongAssTupleFromArray(currentState), cycles);
+                seen.Add(GetLongAssTupleFromArray(currentState), cycles);
                 int max = 0;
                 for (int i = 1; i < currentState.Length; i++)
                 {
@@ -66,8 +66,8 @@ namespace AdventOfCode.Solutions._2017
                 }
 
                 cycles++;
-                if (seen.ContainsKey(getLongAssTupleFromArray(currentState)))
-                    return (cycles - seen[getLongAssTupleFromArray(currentState)]).ToString();
+                if (seen.ContainsKey(GetLongAssTupleFromArray(currentState)))
+                    return (cycles - seen[GetLongAssTupleFromArray(currentState)]).ToString();
             }
         }
     }

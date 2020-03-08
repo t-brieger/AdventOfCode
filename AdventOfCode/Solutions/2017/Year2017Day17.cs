@@ -1,10 +1,12 @@
-﻿namespace AdventOfCode.Solutions._2017
+﻿using System;
+
+namespace AdventOfCode.Solutions._2017
 {
     public class Year2017Day17 : Solution
     {
         private class Node<T>
         {
-            public T value;
+            public readonly T value;
             public Node<T> next;
 
             public Node(T val)
@@ -18,13 +20,12 @@
             Node<int> head = new Node<int>(0);
             head.next = head;
 
-            int skipAmount = int.Parse(input); 
+            int skipAmount = Int32.Parse(input); 
 
             for (int i = 1; i <= 2017; i++)
             {
                 for (int j = 0; j < skipAmount; j++) head = head.next;
-                Node<int> newNode = new Node<int>(i);
-                newNode.next = head.next;
+                Node<int> newNode = new Node<int>(i) {next = head.next};
                 head.next = newNode;
                 head = newNode;
             }
@@ -42,7 +43,7 @@
             int after0 = 0;
             int i = 0;
 
-            int step = int.Parse(input);
+            int step = Int32.Parse(input);
 
             for (int listLength = 1; listLength < 50_000_000; listLength++)
             {

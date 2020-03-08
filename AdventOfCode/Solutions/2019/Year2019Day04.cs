@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {
@@ -7,7 +8,7 @@ namespace AdventOfCode.Solutions._2019
         public override string Part1(string input)
         {
             int lowerBound, upperBound;
-            (lowerBound, upperBound) = input.Split('-').Select(int.Parse).ToArray();
+            (lowerBound, upperBound) = input.Split('-').Select(Int32.Parse).ToArray();
 
             int count = 0;
 
@@ -20,11 +21,9 @@ namespace AdventOfCode.Solutions._2019
                 {
                     if (str[j] == str[j + 1])
                         hasDouble = true;
-                    if (str[j] > str[j + 1])
-                    {
-                        isBreakExit = true;
-                        break;
-                    }
+                    if (str[j] <= str[j + 1]) continue;
+                    isBreakExit = true;
+                    break;
                 }
 
                 if (!isBreakExit && hasDouble)
@@ -37,7 +36,7 @@ namespace AdventOfCode.Solutions._2019
         public override string Part2(string input)
         {
             int lowerBound, upperBound;
-            (lowerBound, upperBound) = input.Split('-').Select(int.Parse).ToArray();
+            (lowerBound, upperBound) = input.Split('-').Select(Int32.Parse).ToArray();
 
             int count = 0;
 
@@ -71,11 +70,9 @@ namespace AdventOfCode.Solutions._2019
                 bool isBreakExit = false;
                 for (int j = 0; j < str.Length - 1; j++)
                 {
-                    if (str[j] > str[j + 1])
-                    {
-                        isBreakExit = true;
-                        break;
-                    }
+                    if (str[j] <= str[j + 1]) continue;
+                    isBreakExit = true;
+                    break;
                 }
 
                 if (!isBreakExit)

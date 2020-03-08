@@ -2,25 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day03 : Solution
     {
         public override string Part1(string input)
         {
-            List<short[]> tmpList = new List<short[]>();
             string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (string s in tmp2)
-            {
-                string[] splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
-                    StringSplitOptions.RemoveEmptyEntries);
-                tmpList.Add(new[]
-                {
-                    short.Parse(splitStrings[0]), short.Parse(splitStrings[1]), short.Parse(splitStrings[2]),
-                    short.Parse(splitStrings[3]), short.Parse(splitStrings[4])
-                });
-            }
+            List<short[]> tmpList = tmp2.Select(s => s.Split(new[] {'#', ' ', '@', ':', 'x', ','}, StringSplitOptions.RemoveEmptyEntries)).Select(splitStrings => new[] {Int16.Parse(splitStrings[0]), Int16.Parse(splitStrings[1]), Int16.Parse(splitStrings[2]), Int16.Parse(splitStrings[3]), Int16.Parse(splitStrings[4])}).ToList();
 
 
             short[,] inputs = new short[tmpList.Count, 5];
@@ -57,19 +47,9 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            List<short[]> tmpList = new List<short[]>();
             string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (string s in tmp2)
-            {
-                string[] splitStrings = s.Split(new[] { '#', ' ', '@', ':', 'x', ',' },
-                    StringSplitOptions.RemoveEmptyEntries);
-                tmpList.Add(new[]
-                {
-                    short.Parse(splitStrings[0]), short.Parse(splitStrings[1]), short.Parse(splitStrings[2]),
-                    short.Parse(splitStrings[3]), short.Parse(splitStrings[4])
-                });
-            }
+            List<short[]> tmpList = tmp2.Select(s => s.Split(new[] {'#', ' ', '@', ':', 'x', ','}, StringSplitOptions.RemoveEmptyEntries)).Select(splitStrings => new[] {Int16.Parse(splitStrings[0]), Int16.Parse(splitStrings[1]), Int16.Parse(splitStrings[2]), Int16.Parse(splitStrings[3]), Int16.Parse(splitStrings[4])}).ToList();
 
 
             short[,] inputs = new short[tmpList.Count, 5];
@@ -114,12 +94,10 @@ namespace AdventOfCode.Solutions
             {
                 for (short j = 0; j < 1001; j++)
                 {
-                    if (gridNumClaims[i, j] != 1)
+                    if (gridNumClaims[i, j] == 1) continue;
+                    foreach (short claim in gridClaims[i, j])
                     {
-                        foreach (short claim in gridClaims[i, j])
-                        {
-                            canBeIntact[claim] = false;
-                        }
+                        canBeIntact[claim] = false;
                     }
                 }
             }

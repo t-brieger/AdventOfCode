@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day09 : Solution
     {
@@ -17,8 +18,8 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             string[] words = input.Split(' ');
-            int players = int.Parse(words[0]);
-            int lastMarble = int.Parse(words[6]);
+            int players = Int32.Parse(words[0]);
+            int lastMarble = Int32.Parse(words[6]);
 
             int[] scores = new int[players];
             LinkedList<int> marbles = new LinkedList<int>();
@@ -56,8 +57,8 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             string[] words = input.Split(' ');
-            int players = int.Parse(words[0]);
-            int lastMarble = int.Parse(words[6]) * 100;
+            int players = Int32.Parse(words[0]);
+            int lastMarble = Int32.Parse(words[6]) * 100;
 
             long[] scores = new long[players];
             LinkedList<int> marbles = new LinkedList<int>();

@@ -3,17 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day01 : Solution
     {
         private static IEnumerable<int> Cycle(IEnumerable<int> source)
         {
             List<int> elementBuffer = new List<int>(((ICollection)source).Count);
-            foreach (int element in source)
-            {
-                elementBuffer.Add(element);
-            }
+            elementBuffer.AddRange(source);
 
             ushort index = 0;
             while (true)
@@ -22,33 +19,24 @@ namespace AdventOfCode.Solutions
                 index++;
                 index = (ushort)(index % elementBuffer.Count);
             }
+            // ReSharper disable once IteratorNeverReturns
         }
         
         public override string Part1(string s)
         {
-            List<int> inputs = new List<int>();
-            foreach (string s1 in s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                inputs.Add(int.Parse(s1));
-            }
+            List<int> inputs = s.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
             return inputs.Sum().ToString();
         }
 
         public override string Part2(string s)
         {
-            List<int> inputs = new List<int>();
-            foreach (string s1 in s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                inputs.Add(int.Parse(s1));
-            }
+            List<int> inputs = s.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
 
             int tmpSum = 0;
             HashSet<int> reachedSums = new HashSet<int>();
 
-            foreach (int i in Cycle(inputs))
+            foreach (int i in Cycle(inputs).TakeWhile(i => !reachedSums.Contains(tmpSum)))
             {
-                if (reachedSums.Contains(tmpSum))
-                    break;
                 reachedSums.Add(tmpSum);
                 tmpSum += i;
             }

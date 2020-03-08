@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventOfCode.Solutions._2015
 {
@@ -14,55 +12,32 @@ namespace AdventOfCode.Solutions._2015
 
             foreach (string s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                int operation = -1;
-                switch (s.Substring(0, 7))
+                int operation = s.Substring(0, 7) switch
                 {
-                    case "turn on":
-                        operation = 0;
-                        break;
-                    case "turn of":
-                        operation = 1;
-                        break;
-                    case "toggle ":
-                        operation = 2;
-                        break;
-                    default:
-                        throw new Exception("unrecognized instruction: " + s.Substring(0, 7));
-                }
+                    "turn on" => 0,
+                    "turn of" => 1,
+                    "toggle " => 2,
+                    _ => throw new Exception("unrecognized instruction: " + s.Substring(0, 7))
+                };
 
                 string[] parts = s.Split(' ');
-                string[] point1 = parts[parts.Length - 3].Split(',');
-                string[] point2 = parts[parts.Length - 1].Split(',');
+                string[] point1 = parts[^3].Split(',');
+                string[] point2 = parts[^1].Split(',');
 
-                (int x, int y) firstPoint = (int.Parse(point1[0]), int.Parse(point1[1]));
-                (int x, int y) secondPoint = (int.Parse(point2[0]), int.Parse(point2[1])); ;
+                (int x, int y) firstPoint = (Int32.Parse(point1[0]), Int32.Parse(point1[1]));
+                (int x, int y) secondPoint = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
 
-                if (operation == 0)
+                for (int i = firstPoint.x; i <= secondPoint.x; i++)
                 {
-                    for (int i = firstPoint.x; i <= secondPoint.x; i++)
+                    for (int j = firstPoint.y; j <= secondPoint.y; j++)
                     {
-                        for (int j = firstPoint.y; j <= secondPoint.y; j++)
+                        grid[j * 1000 + i] = operation switch
                         {
-                            grid[j * 1000 + i] = true;
-                        }
-                    }
-                }else if (operation == 1)
-                {
-                    for (int i = firstPoint.x; i <= secondPoint.x; i++)
-                    {
-                        for (int j = firstPoint.y; j <= secondPoint.y; j++)
-                        {
-                            grid[j * 1000 + i] = false;
-                        }
-                    }
-                }else
-                {
-                    for (int i = firstPoint.x; i <= secondPoint.x; i++)
-                    {
-                        for (int j = firstPoint.y; j <= secondPoint.y; j++)
-                        {
-                            grid[j * 1000 + i] = !grid[j * 1000 + i];
-                        }
+                            0 => true,
+                            1 => false,
+                            2 => !grid[j * 1000 + i],
+                            _ => throw new Exception()
+                        };
                     }
                 }
             }
@@ -77,28 +52,20 @@ namespace AdventOfCode.Solutions._2015
 
             foreach (string s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                int operation = -1;
-                switch (s.Substring(0, 7))
+                int operation = s.Substring(0, 7) switch
                 {
-                    case "turn on":
-                        operation = 1;
-                        break;
-                    case "turn of":
-                        operation = -1;
-                        break;
-                    case "toggle ":
-                        operation = 2;
-                        break;
-                    default:
-                        throw new Exception("unrecognized instruction: " + s.Substring(0, 7));
-                }
+                    "turn on" => 1,
+                    "turn of" => -1,
+                    "toggle " => 2,
+                    _ => throw new Exception("unrecognized instruction: " + s.Substring(0, 7))
+                };
 
                 string[] parts = s.Split(' ');
-                string[] point1 = parts[parts.Length - 3].Split(',');
-                string[] point2 = parts[parts.Length - 1].Split(',');
+                string[] point1 = parts[^3].Split(',');
+                string[] point2 = parts[^1].Split(',');
 
-                (int x, int y) firstPoint = (int.Parse(point1[0]), int.Parse(point1[1]));
-                (int x, int y) secondPoint = (int.Parse(point2[0]), int.Parse(point2[1])); ;
+                (int x, int y) firstPoint = (Int32.Parse(point1[0]), Int32.Parse(point1[1]));
+                (int x, int y) secondPoint = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
 
                 for (int i = firstPoint.x; i <= secondPoint.x; i++)
                 {

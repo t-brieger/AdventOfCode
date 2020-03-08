@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day05 : Solution
     {
         private static bool opposite_polarity(char c, char c2)
         {
-            return (c - 32 == c2 || c2 - 32 == c);
+            return c - 32 == c2 || c2 - 32 == c;
         }
 
         private static string FullyReact(string input)
@@ -54,7 +55,7 @@ namespace AdventOfCode.Solutions
             int shortest = input.Length - 1;
             for (char c = 'a'; c <= 'z'; c++)
             {
-                int length = FullyReact(input.Replace(c.ToString(), "").Replace(char.ToUpper(c).ToString(), "")).Length;
+                int length = FullyReact(input.Replace(c.ToString(), "").Replace(Char.ToUpper(c).ToString(), "")).Length;
                 if (length < shortest)
                     shortest = length;
             }

@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AdventOfCode.Solutions._2015
+﻿namespace AdventOfCode.Solutions._2015
 {
     class Year2015Day01 : Solution
     {
         public override string Part1(string input)
         {
             int floor = 0;
-            for (int i = 0; i < input.Length; i++)
+            foreach (char c in input)
             {
-                if (input[i] == '(')
+                if (c == '(')
                     floor++;
-                else if (input[i] == ')')
+                else if (c == ')')
                     floor--;
             }
 

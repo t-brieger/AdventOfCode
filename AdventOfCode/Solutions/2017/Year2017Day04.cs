@@ -35,9 +35,8 @@ namespace AdventOfCode.Solutions._2017
             foreach (string s in passPhrases)
             {
                 HashSet<string> words = new HashSet<string>();
-                foreach (string word in s.Split(' '))
+                foreach (string ordered in s.Split(' ').Select(word => new string(word.OrderBy(c => c).ToArray())))
                 {
-                    string ordered = new string(word.OrderBy(c => c).ToArray());
                     if (words.Contains(ordered))
                     {
                         valid--;

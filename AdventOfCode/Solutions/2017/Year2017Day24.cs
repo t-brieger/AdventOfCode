@@ -12,7 +12,7 @@ namespace AdventOfCode.Solutions._2017
      */
     class Year2017Day24 : Solution
     {
-        (int strength, int length) Build(int strength, int length, int port, List<(int pins1, int pins2)> allComponents, bool byLength)
+        (int strength, int length) Build(int strength, int length, int port, IReadOnlyCollection<(int pins1, int pins2)> allComponents, bool byLength)
         {
             List<(int pins1, int pins2)> usable = allComponents.Where(x => x.pins1 == port || x.pins2 == port).ToList();
 
@@ -33,28 +33,16 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part1(string input)
         {
-            List<(int l, int r)> components = new List<(int, int)>();
-
             string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in lines)
-            {
-                string[] split = s.Split('/');
-                components.Add((int.Parse(split[0]), int.Parse(split[1])));
-            }
+            List<(int l, int r)> components = lines.Select(s => s.Split('/')).Select(split => (Int32.Parse(split[0]), Int32.Parse(split[1]))).ToList();
 
             return Build(0, 0, 0, components, false).Item1.ToString();
         }
 
         public override string Part2(string input)
         {
-            List<(int l, int r)> components = new List<(int, int)>();
-
             string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string s in lines)
-            {
-                string[] split = s.Split('/');
-                components.Add((int.Parse(split[0]), int.Parse(split[1])));
-            }
+            List<(int l, int r)> components = lines.Select(s => s.Split('/')).Select(split => (Int32.Parse(split[0]), Int32.Parse(split[1]))).ToList();
 
             return Build(0, 0, 0, components, true).Item1.ToString();
         }

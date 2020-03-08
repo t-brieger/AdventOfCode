@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace AdventOfCode.Solutions._2017
@@ -41,13 +42,13 @@ namespace AdventOfCode.Solutions._2017
                 originalHead = head;
                 if (instruction[0] == 's')
                 {
-                    int spinSize = int.Parse(instruction.Substring(1));
+                    int spinSize = Int32.Parse(instruction.Substring(1));
                     for (int i = 0; i < length - spinSize; i++)
                         head = head.next;
                 }else if (instruction[0] == 'x')
                 {
-                    byte register0 = byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
-                    byte register1 = byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
+                    byte register0 = Byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
+                    byte register1 = Byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
 
                     for (int i = 0; i < register0; i++)
                         head = head.next;
@@ -81,10 +82,10 @@ namespace AdventOfCode.Solutions._2017
                 }
             }
 
-            return stringifyLinkedList(head, length);
+            return StringifyLinkedList(head, length);
         }
 
-        private static string stringifyLinkedList(Node<byte> head, int l)
+        private static string StringifyLinkedList(Node<byte> head, int l)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < l; i++)
@@ -113,7 +114,7 @@ namespace AdventOfCode.Solutions._2017
 
             for (int j = 0;; j++)
             {
-                string s = stringifyLinkedList(head, 16);
+                string s = StringifyLinkedList(head, 16);
 
                 if (seenProgs.Contains(s))
                     return seenProgs[1_000_000_000 % j];
@@ -125,14 +126,14 @@ namespace AdventOfCode.Solutions._2017
                     originalHead = head;
                     if (instruction[0] == 's')
                     {
-                        int spinSize = int.Parse(instruction.Substring(1));
+                        int spinSize = Int32.Parse(instruction.Substring(1));
                         for (int i = 0; i < 16 - spinSize; i++)
                             head = head.next;
                     }
                     else if (instruction[0] == 'x')
                     {
-                        byte register0 = byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
-                        byte register1 = byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
+                        byte register0 = Byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
+                        byte register1 = Byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
 
                         for (int i = 0; i < register0; i++)
                             head = head.next;

@@ -18,7 +18,7 @@ namespace AdventOfCode.Solutions._2017
                 {
                     char c = line[j];
 
-                    grid[j, i] = !char.IsWhiteSpace(c);
+                    grid[j, i] = !Char.IsWhiteSpace(c);
                     if (c >= 'A' && c <= 'Z')
                         extraChars[j, i] = c;
                 }
@@ -51,11 +51,13 @@ namespace AdventOfCode.Solutions._2017
                     if (direction != 1)
                         if (positionY - 1 >= 0 && grid[positionX, positionY - 1])
                             break;
-                    if (direction != 3)
-                        if (positionY + 1 < grid.GetLength(1) && grid[positionX, positionY + 1])
-                            break;
+                    if (direction == 3) return chars;
+                    if (positionY + 1 < grid.GetLength(1) && grid[positionX, positionY + 1])
+                        break;
                     return chars;
+#pragma warning disable 162
                 } while (false);
+#pragma warning restore 162
 
                 switch (direction)
                 {
@@ -138,7 +140,7 @@ namespace AdventOfCode.Solutions._2017
                 {
                     char c = line[j];
 
-                    grid[j, i] = !char.IsWhiteSpace(c);
+                    grid[j, i] = !Char.IsWhiteSpace(c);
                 }
             }
 
@@ -167,11 +169,13 @@ namespace AdventOfCode.Solutions._2017
                     if (direction != 1)
                         if (positionY - 1 >= 0 && grid[positionX, positionY - 1])
                             break;
-                    if (direction != 3)
-                        if (positionY + 1 < grid.GetLength(1) && grid[positionX, positionY + 1])
-                            break;
+                    if (direction == 3) return steps.ToString();
+                    if (positionY + 1 < grid.GetLength(1) && grid[positionX, positionY + 1])
+                        break;
                     return steps.ToString();
+#pragma warning disable 162
                 } while (false);
+#pragma warning restore 162
 
                 switch (direction)
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AdventOfCode.Solutions._2017
@@ -11,7 +12,7 @@ namespace AdventOfCode.Solutions._2017
             int bits = 0;
             for (int i = 0; i < 128; i++)
             {
-                byte[] hash = Year2017Day10.getKnotHash(input + "-" + i);
+                byte[] hash = Year2017Day10.GetKnotHash(input + "-" + i);
                 for (byte j = 0; j < hash.Length; j++)
                 {
                     bits += (hash[j] & (1 << 0)) >> 0;
@@ -32,30 +33,33 @@ namespace AdventOfCode.Solutions._2017
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (char c in hex.ToCharArray())
+            foreach (int intValue in hex.Select(c => Int32.Parse(c.ToString(), System.Globalization.NumberStyles.HexNumber)))
             {
-                int intValue = int.Parse(c.ToString(), System.Globalization.NumberStyles.HexNumber);
                 sb.Append(Convert.ToString(intValue, 2).PadLeft(4, '0'));
             }
 
             return sb.ToString();
         }
 
-        private static void floodFill(HashSet<(byte, byte)> seen, bool[,] grid, byte x, byte y)
+        private static void FloodFill(ISet<(byte, byte)> seen, bool[,] grid, byte x, byte y)
         {
-            if (grid[x, y] || seen.Contains((x, y)))
-                return;
+            while (true)
+            {
+                if (grid[x, y] || seen.Contains((x, y))) return;
 
-            seen.Add((x, y));
+                seen.Add((x, y));
 
-            if (x != 0)
-                floodFill(seen, grid, (byte) (x - 1), y);
-            if (x != grid.GetLength(0) - 1)
-                floodFill(seen, grid, (byte) (x + 1), y);
-            if (y != 0)
-                floodFill(seen, grid, x, (byte) (y - 1));
-            if (y != grid.GetLength(1) - 1)
-                floodFill(seen, grid, x, (byte) (y + 1));
+                if (x != 0) FloodFill(seen, grid, (byte) (x - 1), y);
+                if (x != grid.GetLength(0) - 1) FloodFill(seen, grid, (byte) (x + 1), y);
+                if (y != 0) FloodFill(seen, grid, x, (byte) (y - 1));
+                if (y != grid.GetLength(1) - 1)
+                {
+                    y = (byte) (y + 1);
+                    continue;
+                }
+
+                break;
+            }
         }
 
         public override string Part2(string input)
@@ -64,7 +68,7 @@ namespace AdventOfCode.Solutions._2017
 
             for (int i = 0; i < 128; i++)
             {
-                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.getKnotHash($"{input}-{i}")).Replace("-", ""));
+                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.GetKnotHash($"{input}-{i}")).Replace("-", ""));
                 for (int j = 0; j < hash.Length; j++)
                     grid[i, j] = hash[j] == '0';
             }
@@ -77,11 +81,9 @@ namespace AdventOfCode.Solutions._2017
             {
                 for (byte j = 0; j < grid.GetLength(1); j++)
                 {
-                    if (!grid[i, j] && !seen.Contains((i, j)))
-                    {
-                        regions++;
-                        floodFill(seen, grid, i, j);
-                    }
+                    if (grid[i, j] || seen.Contains((i, j))) continue;
+                    regions++;
+                    FloodFill(seen, grid, i, j);
                 }
             }
 

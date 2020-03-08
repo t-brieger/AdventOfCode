@@ -13,11 +13,11 @@ namespace AdventOfCode
 {
     class Program
     {
-        static int Main(string[] args)
+        private static int Main(string[] args)
         {
             Match inputRegex =
                 new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a(?<slow>,-s)))(?<test>,-t)?$").Match(
-                    string.Join(',', args));
+                    String.Join(',', args));
             if (!inputRegex.Success)
             {
                 Console.Error.WriteLine("USAGE: \"(-d <day> -y <year> | -a [-s])[ -t]\"");
@@ -27,13 +27,13 @@ namespace AdventOfCode
 
             if (!inputRegex.Groups["all"].Success)
             {
-                byte day = byte.Parse(inputRegex.Groups["day"].Value);
-                ushort year = ushort.Parse(inputRegex.Groups["year"].Value);
+                byte day = Byte.Parse(inputRegex.Groups["day"].Value);
+                ushort year = UInt16.Parse(inputRegex.Groups["year"].Value);
                 Console.WriteLine(day + " - " + year);
 
                 try
                 {
-                    executeSolution(day, year, inputRegex.Groups["test"].Success);
+                    ExecuteSolution(day, year, inputRegex.Groups["test"].Success);
                 }
                 catch (FileNotFoundException)
                 {
@@ -49,8 +49,8 @@ namespace AdventOfCode
                         (Solution) Activator.CreateInstance(t)))
                 {
                     string[] splitted = s.GetType().Name.Split("Day", 2);
-                    ushort year = ushort.Parse(splitted[0].Replace("Year", ""));
-                    byte day = byte.Parse(splitted[1]);
+                    ushort year = UInt16.Parse(splitted[0].Replace("Year", ""));
+                    byte day = Byte.Parse(splitted[1]);
                     /*string input = getInput(day, year);
                     string output;
                     Stopwatch sw = new Stopwatch();
@@ -65,7 +65,7 @@ namespace AdventOfCode
                     Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");*/
                     try
                     {
-                        executeSolution(day, year, inputRegex.Groups["test"].Success);
+                        ExecuteSolution(day, year, inputRegex.Groups["test"].Success);
                         if (inputRegex.Groups["slow"].Success)
                             Console.ReadKey();
                     }
@@ -82,13 +82,13 @@ namespace AdventOfCode
             return 0;
         }
 
-        private static void executeSolution(byte day, ushort year, bool test)
+        private static void ExecuteSolution(byte day, ushort year, bool test)
         {
-            Solution solution = getSolution(day, year);
+            Solution solution = GetSolution(day, year);
             string input = "";
             try
             {
-                input = getInput(day, year, test);
+                input = GetInput(day, year, test);
             }
             catch (Exception e)
             {
@@ -104,8 +104,8 @@ namespace AdventOfCode
                 if (!File.Exists("session"))
                     throw new Exception("session file not found");
                 
-                downloadSolution(File.ReadAllText("session"), day, year).Wait();
-                input = getInput(day, year, test);
+                DownloadSolution(File.ReadAllText("session"), day, year).Wait();
+                input = GetInput(day, year, test);
             }
 
             string output;
@@ -133,22 +133,22 @@ namespace AdventOfCode
                     string output1 = solution.Part1(split[i]);
                     string output2 = solution.Part2(split[i]);
                     Console.WriteLine(
-                        $"{day:00}/{year}/1/test: {(output1 == split[i + 1] ? ("Successfully passed test input #" + (i / 3)) : ($"failed test input #{i / 3}, expected output: {split[i + 1]}"))} (output: {output1})");
+                        $"{day:00}/{year}/1/test: {(output1 == split[i + 1] ? "Successfully passed test input #" + i / 3 : $"failed test input #{i / 3}, expected output: {split[i + 1]}")} (output: {output1})");
                     Console.WriteLine(
-                        $"{day:00}/{year}/2/test: {(output2 == split[i + 2] ? ("Successfully passed test input #" + (i / 3)) : ($"failed test input #{i / 3}, expected output: {split[i + 2]}"))} (output: {output2})");
+                        $"{day:00}/{year}/2/test: {(output2 == split[i + 2] ? "Successfully passed test input #" + i / 3 : $"failed test input #{i / 3}, expected output: {split[i + 2]}")} (output: {output2})");
                 }
             }
         }
 
-        private static Solution getSolution(byte day, ushort year)
+        private static Solution GetSolution(byte day, ushort year)
         {
             IEnumerable<Type> solutions = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution));
             Type solutionType = solutions.FirstOrDefault(t =>
             {
                 string[] splitted = t.Name.Split("Day", 2);
-                ushort typeYear = ushort.Parse(splitted[0].Replace("Year", ""));
-                byte typeDay = byte.Parse(splitted[1]);
+                ushort typeYear = UInt16.Parse(splitted[0].Replace("Year", ""));
+                byte typeDay = Byte.Parse(splitted[1]);
                 return typeYear == year && typeDay == day;
             });
             if (solutionType == null)
@@ -156,12 +156,12 @@ namespace AdventOfCode
             return (Solution) Activator.CreateInstance(solutionType);
         }
 
-        private static string getInput(byte day, ushort year, bool test)
+        private static string GetInput(byte day, ushort year, bool test)
         {
             return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in");
         }
 
-        private static async Task downloadSolution(string session, byte day, ushort year)
+        private static async Task DownloadSolution(string session, byte day, ushort year)
         {
             CookieContainer cookieContainer = new CookieContainer();
 

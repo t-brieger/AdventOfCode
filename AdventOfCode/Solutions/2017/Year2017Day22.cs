@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AdventOfCode.Solutions._2017
 {
@@ -45,23 +44,14 @@ namespace AdventOfCode.Solutions._2017
                     infectionCount++;
                 }
                 virusFacing %= 4;
-                switch (virusFacing)
+                virusPos = virusFacing switch
                 {
-                    case 0:
-                        virusPos = (virusPos.x, virusPos.y - 1);
-                        break;
-                    case 1:
-                        virusPos = (virusPos.x + 1, virusPos.y);
-                        break;
-                    case 2:
-                        virusPos = (virusPos.x, virusPos.y + 1);
-                        break;
-                    case 3:
-                        virusPos = (virusPos.x - 1, virusPos.y);
-                        break;
-                    default:
-                        throw new Exception("virusPos was not 1-3");
-                }
+                    0 => (virusPos.x, virusPos.y - 1),
+                    1 => (virusPos.x + 1, virusPos.y),
+                    2 => (virusPos.x, virusPos.y + 1),
+                    3 => (virusPos.x - 1, virusPos.y),
+                    _ => throw new Exception("virusPos was not 1-3")
+                };
             }
 
             return infectionCount.ToString();
@@ -116,23 +106,14 @@ namespace AdventOfCode.Solutions._2017
                     infected.Add(virusPos, 0);
                 }
                 virusFacing %= 4;
-                switch (virusFacing)
+                virusPos = virusFacing switch
                 {
-                    case 0:
-                        virusPos = (virusPos.x, virusPos.y - 1);
-                        break;
-                    case 1:
-                        virusPos = (virusPos.x + 1, virusPos.y);
-                        break;
-                    case 2:
-                        virusPos = (virusPos.x, virusPos.y + 1);
-                        break;
-                    case 3:
-                        virusPos = (virusPos.x - 1, virusPos.y);
-                        break;
-                    default:
-                        throw new Exception("virusPos was not 1-3");
-                }
+                    0 => (virusPos.x, virusPos.y - 1),
+                    1 => (virusPos.x + 1, virusPos.y),
+                    2 => (virusPos.x, virusPos.y + 1),
+                    3 => (virusPos.x - 1, virusPos.y),
+                    _ => throw new Exception("virusPos was not 1-3")
+                };
             }
 
             return infectionCount.ToString();

@@ -8,7 +8,8 @@ namespace AdventOfCode.Solutions._2017
     {
         private class Particle
         {
-            public int x, y, z, xv, yv, zv, xa, ya, za, id;
+            public int x, y, z, xv, yv, zv;
+            public readonly int xa, ya, za, id;
 
             public Particle(int x, int y, int z, int xv, int yv, int zv, int xa, int ya, int za, int id)
             {
@@ -23,13 +24,12 @@ namespace AdventOfCode.Solutions._2017
                 this.ya = ya;
                 this.za = za;
             }
-            public Particle() { }
         }
 
         /// <summary>
         /// from 0
         /// </summary>
-        private static int manhattanDistance(int x, int y, int z)
+        private static int ManhattanDistance(int x, int y, int z)
         {
             return Math.Abs(x) + Math.Abs(y) + Math.Abs(z);
         }
@@ -42,8 +42,8 @@ namespace AdventOfCode.Solutions._2017
 
             return input.Split(new []{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l => $"{i++} {l}").OrderBy(line =>
             {
-                string[] things = line.Substring(0, line.Length - 1).Split(new[] {',', '<'});
-                return manhattanDistance(int.Parse(things[9]), int.Parse(things[10]), int.Parse(things[11]));
+                string[] things = line.Substring(0, line.Length - 1).Split(',', '<');
+                return ManhattanDistance(Int32.Parse(things[9]), Int32.Parse(things[10]), Int32.Parse(things[11]));
             }).First().Split(' ')[0];
         }
 
@@ -55,9 +55,9 @@ namespace AdventOfCode.Solutions._2017
                 line =>
                 {
                     string[] parts = line.Replace(">", "").Split('<', ',').ToArray();
-                    return new Particle(int.Parse(parts[1]), int.Parse(parts[2]), int.Parse(parts[3]),
-                        int.Parse(parts[5]), int.Parse(parts[6]), int.Parse(parts[7]), int.Parse(parts[9]),
-                        int.Parse(parts[10]), int.Parse(parts[11]), id++);
+                    return new Particle(Int32.Parse(parts[1]), Int32.Parse(parts[2]), Int32.Parse(parts[3]),
+                        Int32.Parse(parts[5]), Int32.Parse(parts[6]), Int32.Parse(parts[7]), Int32.Parse(parts[9]),
+                        Int32.Parse(parts[10]), Int32.Parse(parts[11]), id++);
                 }));
             
             for (int i = 0; i < 300; i++)

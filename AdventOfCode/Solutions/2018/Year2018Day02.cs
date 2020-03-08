@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day02 : Solution
     {
         public override string Part1(string s)
         {
             string[] inputs = s.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            int NumOfTwoElements = 0;
-            int NumOfThreeElements = 0;
-            for (int i = 0; i < inputs.Length; i++)
+            int numOfTwoElements = 0;
+            int numOfThreeElements = 0;
+            foreach (string line in inputs)
             {
-                string line = inputs[i];
                 Dictionary<char, int> letters = new Dictionary<char, int>();
                 foreach (char c in line)
                 {
@@ -27,12 +26,12 @@ namespace AdventOfCode.Solutions
                     }
                 }
 
-                NumOfThreeElements = letters.ContainsValue(3) ? NumOfThreeElements + 1 : NumOfThreeElements;
+                numOfThreeElements = letters.ContainsValue(3) ? numOfThreeElements + 1 : numOfThreeElements;
 
-                NumOfTwoElements = letters.ContainsValue(2) ? NumOfTwoElements + 1 : NumOfTwoElements;
+                numOfTwoElements = letters.ContainsValue(2) ? numOfTwoElements + 1 : numOfTwoElements;
             }
 
-            return (NumOfThreeElements * NumOfTwoElements).ToString();
+            return (numOfThreeElements * numOfTwoElements).ToString();
         }
         
         public override string Part2(string s)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day04 : Solution
     {
@@ -21,30 +21,34 @@ namespace AdventOfCode.Solutions
             {
                 if (s[19] == 'G') //guard change
                 {
-                    currentGuard = short.Parse(s.Split(' ', 5)[3].Substring(1));
+                    currentGuard = Int16.Parse(s.Split(' ', 5)[3].Substring(1));
                 }
                 else if (s[19] == 'f') //sleep
                 {
-                    minuteSleepStart = byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]);
+                    minuteSleepStart = Byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]);
                 }
                 else //wake up
                 {
-                    byte minsSpentAsleep = (byte)(byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]) - minuteSleepStart);
+                    byte minsSpentAsleep = (byte)(Byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]) - minuteSleepStart);
                     if (asleepMins.ContainsKey(currentGuard))
                     {
                         totalAsleepMins[currentGuard] += minsSpentAsleep;
-                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep))
+                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep).Select(i => (byte) i))
+                        {
                             if (asleepMins[currentGuard].ContainsKey(minute))
                                 asleepMins[currentGuard][minute]++;
                             else
                                 asleepMins[currentGuard].Add(minute, 1);
+                        }
                     }
                     else
                     {
                         totalAsleepMins.Add(currentGuard, minsSpentAsleep);
                         asleepMins.Add(currentGuard, new Dictionary<byte, int>());
-                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep))
+                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep).Select(i => (byte) i))
+                        {
                             asleepMins[currentGuard].Add(minute, 1);
+                        }
                     }
                 }
             }
@@ -68,28 +72,32 @@ namespace AdventOfCode.Solutions
             {
                 if (s[19] == 'G') //guard change
                 {
-                    currentGuard = short.Parse(s.Split(' ', 5)[3].Substring(1));
+                    currentGuard = Int16.Parse(s.Split(' ', 5)[3].Substring(1));
                 }
                 else if (s[19] == 'f') //sleep
                 {
-                    minuteSleepStart = byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]);
+                    minuteSleepStart = Byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]);
                 }
                 else //wake up
                 {
-                    byte minsSpentAsleep = (byte)(byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]) - minuteSleepStart);
+                    byte minsSpentAsleep = (byte)(Byte.Parse(s.Split(':', 2)[1].Split(']', 2)[0]) - minuteSleepStart);
                     if (asleepMins.ContainsKey(currentGuard))
                     {
-                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep))
+                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep).Select(i => (byte) i))
+                        {
                             if (asleepMins[currentGuard].ContainsKey(minute))
                                 asleepMins[currentGuard][minute]++;
                             else
                                 asleepMins[currentGuard].Add(minute, 1);
+                        }
                     }
                     else
                     {
                         asleepMins.Add(currentGuard, new Dictionary<byte, int>());
-                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep))
+                        foreach (byte minute in Enumerable.Range(minuteSleepStart, minsSpentAsleep).Select(i => (byte) i))
+                        {
                             asleepMins[currentGuard].Add(minute, 1);
+                        }
                     }
                 }
             }

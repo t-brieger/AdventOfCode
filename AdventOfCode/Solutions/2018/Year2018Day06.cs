@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day06 : Solution
     {
@@ -13,7 +13,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             short[][] inputs;
-            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries).Select(short.Parse).ToArray()).ToArray();
+            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;
@@ -43,12 +43,9 @@ namespace AdventOfCode.Solutions
                     }
                     else
                     {
-                        foreach (int icoord in closest)
+                        foreach (int icoord in closest.Where(icoord => area[icoord] != -1))
                         {
-                            if (area[icoord] != -1)
-                            {
-                                area[icoord]++;
-                            }
+                            area[icoord]++;
                         }
                     }
                 }
@@ -59,24 +56,15 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             short[][] inputs;
-            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(short.Parse).ToArray()).ToArray();
+            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;
             int minY = inputs.Min(coord => coord[1]) - 1;
             int maxY = inputs.Max(coord => coord[1]) + 1;
 
-            int area = 0;
+            int area = (from x in Enumerable.Range(minX, maxX - minX + 1) from y in Enumerable.Range(minY, maxY - minX + 1) select inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Sum()).Count(d => d < 10000);
 
-            foreach (int x in Enumerable.Range(minX, maxX - minX + 1))
-            {
-                foreach (int y in Enumerable.Range(minY, maxY - minX + 1))
-                {
-                    int d = inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Sum();
-                    if (d < 10000)
-                        area++;
-                }
-            }
             return area.ToString();
         }
     }

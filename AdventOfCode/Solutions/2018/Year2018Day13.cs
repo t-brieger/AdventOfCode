@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day13 : Solution
     {
-        private enum DIRECTIONS : byte
+        private enum Directions : byte
         {
             DOWN, LEFT, UP, RIGHT
         }
@@ -29,22 +29,22 @@ namespace AdventOfCode.Solutions
                     {
                         if (map[y][x] == '^')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.UP, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.UP, x, y, (byte)cartList.Count });
                             map[y][x] = '|';
                         }
                         else if (map[y][x] == 'v')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.DOWN, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.DOWN, x, y, (byte)cartList.Count });
                             map[y][x] = '|';
                         }
                         else if (map[y][x] == '<')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.LEFT, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.LEFT, x, y, (byte)cartList.Count });
                             map[y][x] = '-';
                         }
                         else if (map[y][x] == '>')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.RIGHT, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.RIGHT, x, y, (byte)cartList.Count });
                             map[y][x] = '-';
                         }
                     }
@@ -66,36 +66,36 @@ namespace AdventOfCode.Solutions
                         case '-':
                             break;
                         case '\\':
-                            if (cart[1] == (byte)DIRECTIONS.LEFT)
-                                cart[1] = (byte)DIRECTIONS.UP;
-                            else if (cart[1] == (byte)DIRECTIONS.UP)
-                                cart[1] = (byte)DIRECTIONS.LEFT;
-                            else if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                cart[1] = (byte)DIRECTIONS.DOWN;
-                            else if (cart[1] == (byte)DIRECTIONS.DOWN)
-                                cart[1] = (byte)DIRECTIONS.RIGHT;
+                            if (cart[1] == (byte)Directions.LEFT)
+                                cart[1] = (byte)Directions.UP;
+                            else if (cart[1] == (byte)Directions.UP)
+                                cart[1] = (byte)Directions.LEFT;
+                            else if (cart[1] == (byte)Directions.RIGHT)
+                                cart[1] = (byte)Directions.DOWN;
+                            else if (cart[1] == (byte)Directions.DOWN)
+                                cart[1] = (byte)Directions.RIGHT;
                             break;
                         case '/':
-                            if (cart[1] == (byte)DIRECTIONS.LEFT)
-                                cart[1] = (byte)DIRECTIONS.DOWN;
-                            else if (cart[1] == (byte)DIRECTIONS.UP)
-                                cart[1] = (byte)DIRECTIONS.RIGHT;
-                            else if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                cart[1] = (byte)DIRECTIONS.UP;
-                            else if (cart[1] == (byte)DIRECTIONS.DOWN)
-                                cart[1] = (byte)DIRECTIONS.LEFT;
+                            if (cart[1] == (byte)Directions.LEFT)
+                                cart[1] = (byte)Directions.DOWN;
+                            else if (cart[1] == (byte)Directions.UP)
+                                cart[1] = (byte)Directions.RIGHT;
+                            else if (cart[1] == (byte)Directions.RIGHT)
+                                cart[1] = (byte)Directions.UP;
+                            else if (cart[1] == (byte)Directions.DOWN)
+                                cart[1] = (byte)Directions.LEFT;
                             break;
                         case '+':
                             if (cart[0] == 0)
                             {
-                                if (cart[1] == (byte) DIRECTIONS.DOWN)
-                                    cart[1] = (byte) DIRECTIONS.RIGHT;
+                                if (cart[1] == (byte) Directions.DOWN)
+                                    cart[1] = (byte) Directions.RIGHT;
                                 else
                                     cart[1]--;
                             }else if (cart[0] == 2)
                             {
-                                if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                    cart[1] = (byte)DIRECTIONS.DOWN;
+                                if (cart[1] == (byte)Directions.RIGHT)
+                                    cart[1] = (byte)Directions.DOWN;
                                 else
                                     cart[1]++;
                             }
@@ -110,20 +110,19 @@ namespace AdventOfCode.Solutions
                             break;
                     }
 
-                    if (cart[1] == (byte)DIRECTIONS.UP)
+                    if (cart[1] == (byte)Directions.UP)
                         cart[3]--;
-                    else if (cart[1] == (byte)DIRECTIONS.DOWN)
+                    else if (cart[1] == (byte)Directions.DOWN)
                         cart[3]++;
-                    else if (cart[1] == (byte)DIRECTIONS.LEFT)
+                    else if (cart[1] == (byte)Directions.LEFT)
                         cart[2]--;
-                    else if (cart[1] == (byte)DIRECTIONS.RIGHT)
+                    else if (cart[1] == (byte)Directions.RIGHT)
                         cart[2]++;
 
 
-                    foreach (byte[] otherCart in carts)
+                    if (carts.Any(otherCart => otherCart[2] == cart[2] && otherCart[3] == cart[3] && otherCart[4] != cart[4]))
                     {
-                        if ((otherCart[2] == cart[2] && otherCart[3] == cart[3]) && otherCart[4] != cart[4])
-                            return $"{cart[2]},{cart[3]}";
+                        return $"{cart[2]},{cart[3]}";
                     }
                 }
             }
@@ -152,22 +151,22 @@ namespace AdventOfCode.Solutions
                     {
                         if (map[y][x] == '^')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.UP, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.UP, x, y, (byte)cartList.Count });
                             map[y][x] = '|';
                         }
                         else if (map[y][x] == 'v')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.DOWN, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.DOWN, x, y, (byte)cartList.Count });
                             map[y][x] = '|';
                         }
                         else if (map[y][x] == '<')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.LEFT, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.LEFT, x, y, (byte)cartList.Count });
                             map[y][x] = '-';
                         }
                         else if (map[y][x] == '>')
                         {
-                            cartList.Add(new byte[] { 0, (byte)DIRECTIONS.RIGHT, x, y, (byte)cartList.Count });
+                            cartList.Add(new byte[] { 0, (byte)Directions.RIGHT, x, y, (byte)cartList.Count });
                             map[y][x] = '-';
                         }
                     }
@@ -181,48 +180,45 @@ namespace AdventOfCode.Solutions
             while (true)
             {
                 carts = carts.OrderBy(tuple => ((int)tuple[3] << 8) | tuple[2]).ToArray();
-                foreach (byte[] cart in carts)
+                foreach (byte[] cart in carts.Where(cart => cart[4] != 255))
                 {
-                    if (cart[4] == 255)
-                        continue;
-
                     switch (map[cart[3]][cart[2]])
                     {
                         case '|':
                         case '-':
                             break;
                         case '\\':
-                            if (cart[1] == (byte)DIRECTIONS.LEFT)
-                                cart[1] = (byte)DIRECTIONS.UP;
-                            else if (cart[1] == (byte)DIRECTIONS.UP)
-                                cart[1] = (byte)DIRECTIONS.LEFT;
-                            else if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                cart[1] = (byte)DIRECTIONS.DOWN;
-                            else if (cart[1] == (byte)DIRECTIONS.DOWN)
-                                cart[1] = (byte)DIRECTIONS.RIGHT;
+                            if (cart[1] == (byte)Directions.LEFT)
+                                cart[1] = (byte)Directions.UP;
+                            else if (cart[1] == (byte)Directions.UP)
+                                cart[1] = (byte)Directions.LEFT;
+                            else if (cart[1] == (byte)Directions.RIGHT)
+                                cart[1] = (byte)Directions.DOWN;
+                            else if (cart[1] == (byte)Directions.DOWN)
+                                cart[1] = (byte)Directions.RIGHT;
                             break;
                         case '/':
-                            if (cart[1] == (byte)DIRECTIONS.LEFT)
-                                cart[1] = (byte)DIRECTIONS.DOWN;
-                            else if (cart[1] == (byte)DIRECTIONS.UP)
-                                cart[1] = (byte)DIRECTIONS.RIGHT;
-                            else if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                cart[1] = (byte)DIRECTIONS.UP;
-                            else if (cart[1] == (byte)DIRECTIONS.DOWN)
-                                cart[1] = (byte)DIRECTIONS.LEFT;
+                            if (cart[1] == (byte)Directions.LEFT)
+                                cart[1] = (byte)Directions.DOWN;
+                            else if (cart[1] == (byte)Directions.UP)
+                                cart[1] = (byte)Directions.RIGHT;
+                            else if (cart[1] == (byte)Directions.RIGHT)
+                                cart[1] = (byte)Directions.UP;
+                            else if (cart[1] == (byte)Directions.DOWN)
+                                cart[1] = (byte)Directions.LEFT;
                             break;
                         case '+':
                             if (cart[0] == 0)
                             {
-                                if (cart[1] == (byte)DIRECTIONS.DOWN)
-                                    cart[1] = (byte)DIRECTIONS.RIGHT;
+                                if (cart[1] == (byte)Directions.DOWN)
+                                    cart[1] = (byte)Directions.RIGHT;
                                 else
                                     cart[1]--;
                             }
                             else if (cart[0] == 2)
                             {
-                                if (cart[1] == (byte)DIRECTIONS.RIGHT)
-                                    cart[1] = (byte)DIRECTIONS.DOWN;
+                                if (cart[1] == (byte)Directions.RIGHT)
+                                    cart[1] = (byte)Directions.DOWN;
                                 else
                                     cart[1]++;
                             }
@@ -237,27 +233,25 @@ namespace AdventOfCode.Solutions
                             break;
                     }
 
-                    if (cart[1] == (byte)DIRECTIONS.UP)
+                    if (cart[1] == (byte)Directions.UP)
                         cart[3]--;
-                    else if (cart[1] == (byte)DIRECTIONS.DOWN)
+                    else if (cart[1] == (byte)Directions.DOWN)
                         cart[3]++;
-                    else if (cart[1] == (byte)DIRECTIONS.LEFT)
+                    else if (cart[1] == (byte)Directions.LEFT)
                         cart[2]--;
-                    else if (cart[1] == (byte)DIRECTIONS.RIGHT)
+                    else if (cart[1] == (byte)Directions.RIGHT)
                         cart[2]++;
 
 
-                    foreach (byte[] otherCart in carts)
+                    foreach (byte[] otherCart in carts.Where(otherCart => otherCart[2] == cart[2] && otherCart[3] == cart[3] && otherCart[4] != cart[4] && otherCart[4] != 255))
                     {
-                        if ((otherCart[2] == cart[2] && otherCart[3] == cart[3]) && otherCart[4] != cart[4] && otherCart[4] != 255)
-                        {
-                            otherCart[4] = 255;
-                            cart[4] = 255;
-                            break;
-                        }
+                        otherCart[4] = 255;
+                        cart[4] = 255;
+                        break;
                     }
                 }
-                if (carts.Count(c => c[4] == 255) == carts.Length - 1)
+
+                if (carts.Count(c => c[4] == 255) != carts.Length - 1) continue;
                 {
                     byte[] winningCart = carts.Where(c => c[4] != 255).ToArray()[0];
                     return $"{winningCart[2]},{winningCart[3]}";

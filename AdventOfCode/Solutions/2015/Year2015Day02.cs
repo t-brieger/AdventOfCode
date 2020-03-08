@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventOfCode.Solutions._2015
 {
@@ -13,9 +11,8 @@ namespace AdventOfCode.Solutions._2015
 
             int totalArea = 0;
 
-            foreach (string line in lines)
+            foreach (int[] measurements in lines.Select(line => line.Split('x').Select(Int32.Parse).ToArray()))
             {
-                int[] measurements = line.Split('x').Select(int.Parse).ToArray();
                 totalArea += 2 * (measurements[0] * measurements[1] + measurements[1] * measurements[2] + measurements[0] * measurements[2]);
                 totalArea += Math.Min(Math.Min(measurements[0] * measurements[1], measurements[1] * measurements[2]), measurements[0] * measurements[2]);
             }
@@ -29,10 +26,8 @@ namespace AdventOfCode.Solutions._2015
 
             int totalLength = 0;
 
-            foreach (string line in lines)
+            foreach (int[] measurements in lines.Select(line => line.Split('x').Select(Int32.Parse).ToArray()))
             {
-                int[] measurements = line.Split('x').Select(int.Parse).ToArray();
-
                 totalLength += 2 * measurements.Sum() - 2 * measurements.Max();
                 totalLength += measurements[0] * measurements[1] * measurements[2];
             }
