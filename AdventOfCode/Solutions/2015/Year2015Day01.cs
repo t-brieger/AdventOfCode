@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AdventOfCode.Solutions._2015
+﻿namespace AdventOfCode.Solutions._2015
 {
     class Year2015Day01 : Solution
     {
