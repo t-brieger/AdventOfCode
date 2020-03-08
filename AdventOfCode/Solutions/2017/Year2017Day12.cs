@@ -6,7 +6,7 @@ namespace AdventOfCode.Solutions._2017
 {
     public class Year2017Day12 : Solution
     {
-        private static void getConnections(Dictionary<int, HashSet<int>> connections, HashSet<int> seen, int n)
+        private static void GetConnections(Dictionary<int, HashSet<int>> connections, HashSet<int> seen, int n)
         {
             seen.Add(n);
 
@@ -14,7 +14,7 @@ namespace AdventOfCode.Solutions._2017
             {
                 if (seen.Contains(i))
                     continue;
-                getConnections(connections, seen, i);
+                GetConnections(connections, seen, i);
             }
         }
 
@@ -22,11 +22,11 @@ namespace AdventOfCode.Solutions._2017
         {
             Dictionary<int, HashSet<int>> connections = input
                 .Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
-                .ToDictionary(x => int.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(int.Parse)));
+                .ToDictionary(x => Int32.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(Int32.Parse)));
 
             HashSet<int> seen = new HashSet<int>();
 
-            getConnections(connections, seen, 0);
+            GetConnections(connections, seen, 0);
 
             return seen.Count.ToString();
         }
@@ -35,14 +35,14 @@ namespace AdventOfCode.Solutions._2017
         {
             Dictionary<int, HashSet<int>> connections = input
                 .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
-                .ToDictionary(x => int.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(int.Parse)));
+                .ToDictionary(x => Int32.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(Int32.Parse)));
 
             int groups = 0;
 
             while (connections.Count > 0)
             {
                 HashSet<int> seen = new HashSet<int>();
-                getConnections(connections, seen, connections.Keys.First());
+                GetConnections(connections, seen, connections.Keys.First());
 
                 foreach (int i in seen)
                     connections.Remove(i);

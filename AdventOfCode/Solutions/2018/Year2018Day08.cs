@@ -1,6 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day08 : Solution
     {
@@ -70,7 +71,7 @@ namespace AdventOfCode.Solutions
             //*/
 
             int i = 0;
-            return Part1RecursiveMethod(input.Split(' ').Select(x => int.Parse(x)).ToArray(), ref i).ToString();
+            return Part1RecursiveMethod(input.Split(' ').Select(Int32.Parse).ToArray(), ref i).ToString();
         }
 
         public override string Part2(string input)
@@ -80,7 +81,7 @@ namespace AdventOfCode.Solutions
             //*/
 
             int i = 0;
-            return Part2RecursiveMethod(input.Split(' ').Select(x => int.Parse(x)).ToArray(), ref i).ToString();
+            return Part2RecursiveMethod(input.Split(' ').Select(Int32.Parse).ToArray(), ref i).ToString();
         }
     }
 }

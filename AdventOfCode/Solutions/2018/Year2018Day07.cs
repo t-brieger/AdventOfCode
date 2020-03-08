@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day07 : Solution
     {
@@ -91,12 +91,10 @@ namespace AdventOfCode.Solutions
                         continue;
                     for (int i = 0; i < working.Length; i++)
                     {
-                        if (working[i] == ' ')
-                        {
-                            working[i] = c;
-                            timeLeft[i] = (byte)((byte)c - 4);
-                            break;
-                        }
+                        if (working[i] != ' ') continue;
+                        working[i] = c;
+                        timeLeft[i] = (byte)((byte)c - 4);
+                        break;
                     }
                 }
             }

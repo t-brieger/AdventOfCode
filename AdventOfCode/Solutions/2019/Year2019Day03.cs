@@ -24,7 +24,7 @@ namespace AdventOfCode.Solutions._2019
                 int y = 0;
                 foreach (string modifier in wires[wireIndex].Split(','))
                 {
-                    int steps = int.Parse(modifier.Substring(1));
+                    int steps = Int32.Parse(modifier.Substring(1));
                     switch (modifier[0])
                     {
                         case 'U':
@@ -33,11 +33,9 @@ namespace AdventOfCode.Solutions._2019
                                 y--;
                                 if (grid.ContainsKey(new Point(x, y)))
                                 {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add(new Point(x, y));
-                                    }
+                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
+                                    grid[new Point(x, y)] = null;
+                                    collisions.Add(new Point(x, y));
                                 }
                                 else
                                     grid.Add(new Point(x, y), wireIndex != 0);
@@ -50,11 +48,9 @@ namespace AdventOfCode.Solutions._2019
                                 y++;
                                 if (grid.ContainsKey(new Point(x, y)))
                                 {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add(new Point(x, y));
-                                    }
+                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
+                                    grid[new Point(x, y)] = null;
+                                    collisions.Add(new Point(x, y));
                                 }
                                 else
                                     grid.Add(new Point(x, y), wireIndex != 0);
@@ -67,11 +63,9 @@ namespace AdventOfCode.Solutions._2019
                                 x--;
                                 if (grid.ContainsKey(new Point(x, y)))
                                 {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add(new Point(x, y));
-                                    }
+                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
+                                    grid[new Point(x, y)] = null;
+                                    collisions.Add(new Point(x, y));
                                 }
                                 else
                                     grid.Add(new Point(x, y), wireIndex != 0);
@@ -84,11 +78,9 @@ namespace AdventOfCode.Solutions._2019
                                 x++;
                                 if (grid.ContainsKey(new Point(x, y)))
                                 {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add(new Point(x, y));
-                                    }
+                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
+                                    grid[new Point(x, y)] = null;
+                                    collisions.Add(new Point(x, y));
                                 }
                                 else
                                     grid.Add(new Point(x, y), wireIndex != 0);
@@ -111,10 +103,9 @@ namespace AdventOfCode.Solutions._2019
             string[][] wireSegments = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
                 .Select(_ => _.Split(',')).ToArray();
 
-            int bestIntersection = int.MaxValue;
+            int bestIntersection = Int32.MaxValue;
 
-            Dictionary<Point, int> firstWirePoints = new Dictionary<Point, int>();
-            firstWirePoints.Add(new Point(0, 0), 0);
+            Dictionary<Point, int> firstWirePoints = new Dictionary<Point, int> {{new Point(0, 0), 0}};
 
             int delay = 0;
             int x = 0;
@@ -122,7 +113,7 @@ namespace AdventOfCode.Solutions._2019
 
             for (int i = 0; i < wireSegments[0].Length; i++)
             {
-                Action updateDelay = new Action(() =>
+                void UpdateDelay()
                 {
                     if (firstWirePoints.ContainsKey(new Point(x, y)))
                         delay = firstWirePoints[new Point(x, y)];
@@ -131,9 +122,9 @@ namespace AdventOfCode.Solutions._2019
                         delay++;
                         firstWirePoints.Add(new Point(x, y), delay);
                     }
-                });
+                }
 
-                int length = int.Parse(wireSegments[0][i].Substring(1));
+                int length = Int32.Parse(wireSegments[0][i].Substring(1));
 
                 switch (wireSegments[0][i][0])
                 {
@@ -141,7 +132,7 @@ namespace AdventOfCode.Solutions._2019
                         for (int j = 0; j < length; j++)
                         {
                             y--;
-                            updateDelay();
+                            UpdateDelay();
                         }
 
                         break;
@@ -149,21 +140,21 @@ namespace AdventOfCode.Solutions._2019
                         for (int j = 0; j < length; j++)
                         {
                             y++;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                     case 'L':
                         for (int j = 0; j < length; j++)
                         {
                             x--;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                     case 'R':
                         for (int j = 0; j < length; j++)
                         {
                             x++;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                 }
@@ -177,22 +168,21 @@ namespace AdventOfCode.Solutions._2019
 
             for (int i = 0; i < wireSegments[1].Length; i++)
             {
+                int x1 = x;
 
-                Action updateDelay = new Action(() =>
+                void UpdateDelay()
                 {
-                    if (delays.ContainsKey(new Point(x, y)))
-                        delay = delays[new Point(x, y)];
+                    if (delays.ContainsKey(new Point(x1, y)))
+                        delay = delays[new Point(x1, y)];
                     else
                     {
                         delay++;
-                        delays.Add(new Point(x, y), delay);
-                        if (firstWirePoints.ContainsKey(new Point(x, y)) &&
-                            (delays[new Point(x, y)] + firstWirePoints[new Point(x, y)]) < bestIntersection)
-                            bestIntersection = delays[new Point(x, y)] + firstWirePoints[new Point(x, y)];
+                        delays.Add(new Point(x1, y), delay);
+                        if (firstWirePoints.ContainsKey(new Point(x1, y)) && delays[new Point(x1, y)] + firstWirePoints[new Point(x1, y)] < bestIntersection) bestIntersection = delays[new Point(x1, y)] + firstWirePoints[new Point(x1, y)];
                     }
-                });
+                }
 
-                int length = int.Parse(wireSegments[1][i].Substring(1));
+                int length = Int32.Parse(wireSegments[1][i].Substring(1));
 
                 switch (wireSegments[1][i][0])
                 {
@@ -200,7 +190,7 @@ namespace AdventOfCode.Solutions._2019
                         for (int j = 0; j < length; j++)
                         {
                             y--;
-                            updateDelay();
+                            UpdateDelay();
                         }
 
                         break;
@@ -208,21 +198,21 @@ namespace AdventOfCode.Solutions._2019
                         for (int j = 0; j < length; j++)
                         {
                             y++;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                     case 'L':
                         for (int j = 0; j < length; j++)
                         {
                             x--;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                     case 'R':
                         for (int j = 0; j < length; j++)
                         {
                             x++;
-                            updateDelay();
+                            UpdateDelay();
                         }
                         break;
                 }

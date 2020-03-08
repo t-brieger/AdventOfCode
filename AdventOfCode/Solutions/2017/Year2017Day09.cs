@@ -40,8 +40,6 @@
         {
             int trashChars = 0;
 
-            int nestingLevel = 0;
-
             bool nextEscaped = false;
             bool isInGarbage = false;
 
@@ -68,9 +66,12 @@
                 if (c == '<')
                     isInGarbage = true;
                 if (c == '{')
-                    nestingLevel++;
+                {
+                }
+
                 if (c == '}')
-                    nestingLevel--;
+                {
+                }
             }
             return trashChars.ToString();
         }

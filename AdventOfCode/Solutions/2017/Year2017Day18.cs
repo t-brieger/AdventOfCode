@@ -7,9 +7,7 @@ namespace AdventOfCode.Solutions._2017
     {
         private long getValueOfString(string s, long[] registers)
         {
-            if (s[0] >= 'a')
-                return registers[s[0] - 'a'];
-            return long.Parse(s);
+            return s[0] >= 'a' ? registers[s[0] - 'a'] : Int64.Parse(s);
         }
 
         public override string Part1(string input)
@@ -141,7 +139,7 @@ namespace AdventOfCode.Solutions._2017
                     i0++;
                 }
 
-                if (!twoWaiting)
+                if (twoWaiting) continue;
                 {
                     if (i1 >= instructions.Length)
                     {
@@ -157,20 +155,20 @@ namespace AdventOfCode.Solutions._2017
                     {
                         case "snd":
                             oneSendCount++;
-                            queue0.Enqueue(getValueOfString(arguments[1], registers1));
+                            queue0.Enqueue(this.getValueOfString(arguments[1], registers1));
                             oneWaiting = false;
                             break;
                         case "set":
-                            registers1[arguments[1][0] - 'a'] = getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] = this.getValueOfString(arguments[2], registers1);
                             break;
                         case "add":
-                            registers1[arguments[1][0] - 'a'] += getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] += this.getValueOfString(arguments[2], registers1);
                             break;
                         case "mul":
-                            registers1[arguments[1][0] - 'a'] *= getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] *= this.getValueOfString(arguments[2], registers1);
                             break;
                         case "mod":
-                            registers1[arguments[1][0] - 'a'] %= getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] %= this.getValueOfString(arguments[2], registers1);
                             break;
                         case "rcv":
                             if (queue1.Count == 0)
@@ -184,8 +182,8 @@ namespace AdventOfCode.Solutions._2017
                             }
                             break;
                         case "jgz":
-                            if (getValueOfString(arguments[1], registers1) > 0)
-                                i1 += getValueOfString(arguments[2], registers1) - 1;
+                            if (this.getValueOfString(arguments[1], registers1) > 0)
+                                i1 += this.getValueOfString(arguments[2], registers1) - 1;
                             break;
                         default:
                             return "unrecognized instruction: " + instruction;

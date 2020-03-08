@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {
@@ -6,26 +7,20 @@ namespace AdventOfCode.Solutions._2019
     {
         public override string Part1(string input)
         {
-            int sum = 0;
-            foreach (string line in input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries))
-            {
-                sum += int.Parse(line) / 3 - 2;
-            }
+            int sum = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Sum(line => Int32.Parse(line) / 3 - 2);
             return sum.ToString();
         }
 
         public override string Part2(string input)
         {
             int sum = 0;
-            foreach (string line in input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (int tmpSum in input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(line => Int32.Parse(line) / 3 - 2))
             {
-                int tmpSum = int.Parse(line) / 3 - 2;
                 sum += tmpSum;
                 while (true)
                 {
-                    tmpSum = tmpSum / 3 - 2;
-                    if (tmpSum > 0)
-                        sum += tmpSum;
+                    if (tmpSum / 3 - 2 > 0)
+                        sum += tmpSum / 3 - 2;
                     else
                         break;
                 }

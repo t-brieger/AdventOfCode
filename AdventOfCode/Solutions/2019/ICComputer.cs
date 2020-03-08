@@ -4,39 +4,39 @@ using System.Linq;
 
 namespace AdventOfCode.Solutions._2019
 {
-    public abstract class ICComputer
+    public abstract class IcComputer
     {
         public int[] memory;
         public int pc;
 
-        public bool hasHalted = false;
-        public bool isWaitingForInput = false;
+        public bool hasHalted;
+        public bool isWaitingForInput;
         
         public Queue<int> input;
 
         public Queue<int> output = new Queue<int>();
 
-        protected static Dictionary<int, ICInstruction> Opcodes = new Dictionary<int, ICInstruction>();
+        protected static Dictionary<int, IcInstruction> opcodes = new Dictionary<int, IcInstruction>();
 
-        static ICComputer()
+        static IcComputer()
         {
             // C = A + B
-            Opcodes.Add(01, new ICInstruction((pc, mem, mode, _) =>
+            opcodes.Add(01, new IcInstruction((pc, mem, mode, _) =>
             {
-                mem[mem[pc + 3]] = ModeHelper.getValue(mem, mode[0], mem[pc + 1]) +
-                                              ModeHelper.getValue(mem, mode[1], mem[pc + 2]);
+                mem[mem[pc + 3]] = ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) +
+                                              ModeHelper.GetValue(mem, mode[1], mem[pc + 2]);
                 return 0;
             }, 4));
             // C = A * B
-            Opcodes.Add(02, new ICInstruction((pc, mem, mode, _) =>
+            opcodes.Add(02, new IcInstruction((pc, mem, mode, _) =>
             {
-                mem[mem[pc + 3]] = ModeHelper.getValue(mem, mode[0], mem[pc + 1]) *
-                                              ModeHelper.getValue(mem, mode[1], mem[pc + 2]);
+                mem[mem[pc + 3]] = ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) *
+                                              ModeHelper.GetValue(mem, mode[1], mem[pc + 2]);
                 return 0;
             }, 4));
 
             //INPUT
-            Opcodes.Add(03, new ICInstruction((pc, mem, __, instance) =>
+            opcodes.Add(03, new IcInstruction((pc, mem, __, instance) =>
             {
                 if (instance.input.Count != 0)
                 {
@@ -48,71 +48,71 @@ namespace AdventOfCode.Solutions._2019
                 return 0;
             }, -2));
             //OUTPUT
-            Opcodes.Add(04, new ICInstruction((pc, mem, mode, instance) =>
+            opcodes.Add(04, new IcInstruction((pc, mem, mode, instance) =>
             {
-                instance.output.Enqueue(ModeHelper.getValue(mem, mode[0], mem[pc + 1]));
+                instance.output.Enqueue(ModeHelper.GetValue(mem, mode[0], mem[pc + 1]));
                 return 0;
             }, 2));
 
             //JUMP IF NONZERO
-            Opcodes.Add(05, new ICInstruction((pc, mem, mode, instance) =>
+            opcodes.Add(05, new IcInstruction((pc, mem, mode, instance) =>
             {
-                if (ModeHelper.getValue(mem, mode[0], mem[pc + 1]) != 0)
-                    return ModeHelper.getValue(mem, mode[1], mem[pc + 2]);
+                if (ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) != 0)
+                    return ModeHelper.GetValue(mem, mode[1], mem[pc + 2]);
                 return pc + 3;
             }, -3));
             //JUMP IF ZERO
-            Opcodes.Add(06, new ICInstruction((pc, mem, mode, instance) =>
+            opcodes.Add(06, new IcInstruction((pc, mem, mode, instance) =>
             {
-                if (ModeHelper.getValue(mem, mode[0], mem[pc + 1]) == 0)
-                    return ModeHelper.getValue(mem, mode[1], mem[pc + 2]);
+                if (ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) == 0)
+                    return ModeHelper.GetValue(mem, mode[1], mem[pc + 2]);
                 return pc + 3;
             }, -3));
 
             //LESS THAN
-            Opcodes.Add(07, new ICInstruction((pc, mem, mode, instance) =>
+            opcodes.Add(07, new IcInstruction((pc, mem, mode, instance) =>
             {
-                mem[mem[pc + 3]] = ModeHelper.getValue(mem, mode[0], mem[pc + 1]) <
-                              ModeHelper.getValue(mem, mode[1], mem[pc + 2])
+                mem[mem[pc + 3]] = ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) <
+                              ModeHelper.GetValue(mem, mode[1], mem[pc + 2])
                     ? 1
                     : 0;
                 return 0;
             }, 4));
             //EQUALS
-            Opcodes.Add(08, new ICInstruction((pc, mem, mode, instance) =>
+            opcodes.Add(08, new IcInstruction((pc, mem, mode, instance) =>
                 {
-                    mem[mem[pc + 3]] = ModeHelper.getValue(mem, mode[0], mem[pc + 1]) ==
-                              ModeHelper.getValue(mem, mode[1], mem[pc + 2])
+                    mem[mem[pc + 3]] = ModeHelper.GetValue(mem, mode[0], mem[pc + 1]) ==
+                              ModeHelper.GetValue(mem, mode[1], mem[pc + 2])
                     ? 1
                     : 0;
                 return 0;
             }, 4));
 
             //HALT
-            Opcodes.Add(99, new ICInstruction((_, __, ___, instance) =>
+            opcodes.Add(99, new IcInstruction((_, __, ___, instance) =>
             {
                 instance.hasHalted = true;
                 return 0;
             }, 1));
         }
 
-        protected ICComputer(int[] mem, Queue<int> input)
+        protected IcComputer(int[] mem, Queue<int> input)
         {
             this.memory = mem;
             this.input = input;
         }
 
-        protected ICComputer(int[] mem) : this(mem, new Queue<int>())
+        protected IcComputer(int[] mem) : this(mem, new Queue<int>())
         {
         }
 
-        public abstract int? isDone();
+        public abstract int? IsDone();
 
-        public void doInstruction()
+        public void DoInstruction()
         {
-            if (Opcodes.ContainsKey(memory[pc] % 100))
+            if (opcodes.ContainsKey(memory[pc] % 100))
             {
-                ICInstruction instruction = Opcodes[memory[pc] % 100];
+                IcInstruction instruction = opcodes[memory[pc] % 100];
 
                 Modes[] modes = (memory[pc] / 100).ToString().PadLeft(Math.Abs(instruction.argc) - 1, '0').ToCharArray().Reverse()
                     .Select(c => (Modes) (c - '0')).ToArray();
@@ -130,14 +130,14 @@ namespace AdventOfCode.Solutions._2019
         }
     }
 
-    public class ICInstruction
+    public class IcInstruction
     {
         public int argc;
 
-        public Func<int, int[], Modes[], ICComputer, int> action;
+        public Func<int, int[], Modes[], IcComputer, int> action;
 
 
-        public ICInstruction(Func<int, int[], Modes[], ICComputer, int> action, int argc)
+        public IcInstruction(Func<int, int[], Modes[], IcComputer, int> action, int argc)
         {
             this.action = action;
             this.argc = argc;
@@ -151,17 +151,14 @@ namespace AdventOfCode.Solutions._2019
 
     public static class ModeHelper
     {
-        public static int getValue(int[] mem, Modes mode, int value)
+        public static int GetValue(int[] mem, Modes mode, int value)
         {
-            switch (mode)
+            return mode switch
             {
-                case Modes.INDEX:
-                    return mem[value];
-                case Modes.DIRECT:
-                    return value;
-                default:
-                    return -1;
-            }
+                Modes.INDEX => mem[value],
+                Modes.DIRECT => value,
+                _ => -1
+            };
         }
     }
 }

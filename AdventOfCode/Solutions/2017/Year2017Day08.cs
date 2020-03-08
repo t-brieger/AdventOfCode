@@ -10,22 +10,14 @@ namespace AdventOfCode.Solutions._2017
         {
             Dictionary<string, int> registers = new Dictionary<string, int>();
 
-            foreach (string s in input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string[] words in input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
             {
-                // 0 - register
-                // 1 - inc/dec
-                // 2 - operand
-                // 3 - "if"
-                // 4 - register
-                // 5 - comparison operator
-                // 6 - operand
-                string[] words = s.Split(' ');
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
                 if (!registers.ContainsKey(words[4]))
                     registers.Add(words[4], 0);
 
-                int comparisonOperand = int.Parse(words[6]);
+                int comparisonOperand = Int32.Parse(words[6]);
 
                 switch (words[5])
                 {
@@ -55,7 +47,7 @@ namespace AdventOfCode.Solutions._2017
                         break;
                 }
 
-                int otherOperand = int.Parse(words[2]);
+                int otherOperand = Int32.Parse(words[2]);
 
                 if (words[1] == "inc")
                     registers[words[0]] += otherOperand;
@@ -74,22 +66,14 @@ namespace AdventOfCode.Solutions._2017
 
             int max = 0;
 
-            foreach (string s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string[] words in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
             {
-                // 0 - register
-                // 1 - inc/dec
-                // 2 - operand
-                // 3 - "if"
-                // 4 - register
-                // 5 - comparison operator
-                // 6 - operand
-                string[] words = s.Split(' ');
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
                 if (!registers.ContainsKey(words[4]))
                     registers.Add(words[4], 0);
 
-                int comparisonOperand = int.Parse(words[6]);
+                int comparisonOperand = Int32.Parse(words[6]);
 
                 switch (words[5])
                 {
@@ -119,7 +103,7 @@ namespace AdventOfCode.Solutions._2017
                         break;
                 }
 
-                int otherOperand = int.Parse(words[2]);
+                int otherOperand = Int32.Parse(words[2]);
 
                 if (words[1] == "inc")
                     registers[words[0]] += otherOperand;

@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions._2017
             long aValue, bValue;
 
             (aValue, bValue) = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => int.Parse(line.Split(' ', 5)[4])).ToArray();
+                .Select(line => Int32.Parse(line.Split(' ', 5)[4])).ToArray();
 
             int count = 0;
 
@@ -33,7 +33,7 @@ namespace AdventOfCode.Solutions._2017
             long aValue, bValue;
 
             (aValue, bValue) = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => int.Parse(line.Split(' ', 5)[4])).ToArray();
+                .Select(line => Int32.Parse(line.Split(' ', 5)[4])).ToArray();
 
             int count = 0;
 

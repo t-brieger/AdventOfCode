@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions._2017
             if (s[0] >= 'a' && s[0] <= 'z')
                 return registers[s[0]];
             else
-                return int.Parse(s);
+                return Int32.Parse(s);
         }
 
         public override string Part1(string input)
@@ -59,7 +59,7 @@ namespace AdventOfCode.Solutions._2017
             // that inputs only differ in the second operand to the first "set" instruction, and that 
             // it is always a 2-digit number.
 
-            int b = int.Parse(input.Substring(6, 2)) * 100 + 100000;
+            int b = Int32.Parse(input.Substring(6, 2)) * 100 + 100000;
             int c = b + 17000;
 
             //# of composites from b to c
@@ -69,11 +69,9 @@ namespace AdventOfCode.Solutions._2017
             {
                 for (int i = 2; i * i <= b; i++)
                 {
-                    if (b % i == 0)
-                    {
-                        h++;
-                        break;
-                    }
+                    if (b % i != 0) continue;
+                    h++;
+                    break;
                 }
             }
 

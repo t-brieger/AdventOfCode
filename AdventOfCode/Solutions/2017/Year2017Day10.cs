@@ -4,18 +4,18 @@ using System.Text;
 
 namespace AdventOfCode.Solutions._2017
 {
-    public class Year2017Day10 : Solution
+    class Year2017Day10 : Solution
     {
-        public static byte[] getKnotHash(string s)
+        public static byte[] GetKnotHash(string s)
         {
             //*
             byte[] lengths = new byte[Encoding.ASCII.GetByteCount(s) + 5];
             Array.Copy(Encoding.ASCII.GetBytes(s), 0, lengths, 0, lengths.Length - 5);
-            lengths[lengths.Length - 5] = 17;
-            lengths[lengths.Length - 4] = 31;
-            lengths[lengths.Length - 3] = 73;
-            lengths[lengths.Length - 2] = 47;
-            lengths[lengths.Length - 1] = 23;
+            lengths[^5] = 17;
+            lengths[^4] = 31;
+            lengths[^3] = 73;
+            lengths[^2] = 47;
+            lengths[^1] = 23;
             //*/
             /*
             byte[] lengths = new byte[Encoding.ASCII.GetByteCount(s)];
@@ -64,7 +64,7 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part1(string input)
         {
-            int[] lengths = input.Split(',').Select(int.Parse).ToArray();
+            int[] lengths = input.Split(',').Select(Int32.Parse).ToArray();
             byte[] numbers = new byte[511];
             for (short i = 0; i < numbers.Length; i++)
                 numbers[i] = (byte) (i % 256);
@@ -93,7 +93,7 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part2(string input)
         {
-            byte[] denseHash = getKnotHash(input);
+            byte[] denseHash = GetKnotHash(input);
 
             return BitConverter.ToString(denseHash).Replace("-", "").ToLowerInvariant();
         }

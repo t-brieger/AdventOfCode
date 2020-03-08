@@ -6,16 +6,16 @@ namespace AdventOfCode.Solutions._2017
     {
         public override string Part1(string input)
         {
-            int target = int.Parse(input);
+            int target = Int32.Parse(input);
 
-            int num = ((int)Math.Ceiling(Math.Sqrt(target))) / 2;
-            int off = (target - ((2 * num - 1) * (2 * num - 1))) % (2 * num);
+            int num = (int)Math.Ceiling(Math.Sqrt(target)) / 2;
+            int off = (target - (2 * num - 1) * (2 * num - 1)) % (2 * num);
             return (num + Math.Abs(off - num)).ToString();
         }
 
         public override string Part2(string input)
         {
-            int target = int.Parse(input);
+            int target = Int32.Parse(input);
 
             //OEIS A141481
             int[] values = {

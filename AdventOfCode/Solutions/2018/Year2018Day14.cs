@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day14 : Solution
     {
@@ -17,7 +18,7 @@ namespace AdventOfCode.Solutions
             input = "2018";
             //*/
 
-            int warmup = int.Parse(input);
+            int warmup = Int32.Parse(input);
 
             LinkedList<byte> recipes = new LinkedList<byte>();
 
@@ -59,7 +60,7 @@ namespace AdventOfCode.Solutions
             input = "293801";
             //*/
 
-            int target = int.Parse(input);
+            int target = Int32.Parse(input);
 
             input = target.ToString(); //to deal with any trailing/leading whitespace
 

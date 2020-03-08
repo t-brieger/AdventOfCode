@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode.Solutions._2017
 {
@@ -11,12 +12,12 @@ namespace AdventOfCode.Solutions._2017
             LinkedListNode<char> currentNumber = numbers.First;
 
             int sum = 0;
-            for (int _ = 0; _ < numbers.Count; _++)
+            foreach (char unused in numbers)
             {
-                if (currentNumber.Value == (currentNumber.Next ?? numbers.First).Value)
-                    sum += currentNumber.Value - 0x30;
+                if (currentNumber != null && currentNumber.Value == (currentNumber.Next ?? numbers.First).Value)
+                    sum += currentNumber.Value - '0';
 
-                currentNumber = currentNumber.Next;
+                currentNumber = currentNumber?.Next;
             }
 
             return sum.ToString();
@@ -26,13 +27,7 @@ namespace AdventOfCode.Solutions._2017
         {
             char[] numbers = input.ToCharArray();
 
-            int sum = 0;
-
-            for (int i = 0; i < numbers.Length; i++)
-            {
-                if (numbers[i] == numbers[(i + numbers.Length / 2) % numbers.Length])
-                    sum += numbers[i] - 0x30;
-            }
+            int sum = numbers.Where((t, i) => t == numbers[(i + numbers.Length / 2) % numbers.Length]).Sum(t => t - '0');
 
             return sum.ToString();
         }

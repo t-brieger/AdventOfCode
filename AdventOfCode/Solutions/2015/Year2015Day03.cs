@@ -9,19 +9,18 @@ namespace AdventOfCode.Solutions._2015
             int posX = 0;
             int posY = 0;
 
-            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)>();
+            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)> {(0, 0)};
 
-            visited.Add((0, 0));
 
-            for (int i = 0; i < input.Length; i++)
+            foreach (char direction in input)
             {
-                if (input[i] == '<')
+                if (direction == '<')
                     posX--;
-                else if (input[i] == '>')
+                else if (direction == '>')
                     posX++;
-                else if (input[i] == 'v')
+                else if (direction == 'v')
                     posY++;
-                else if (input[i] == '^')
+                else if (direction == '^')
                     posY--;
 
                 if (!visited.Contains((posX, posY)))
@@ -41,28 +40,27 @@ namespace AdventOfCode.Solutions._2015
 
             bool isRobosTurn = false;
 
-            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)>();
+            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)> {(0, 0)};
 
-            visited.Add((0, 0));
 
-            for (int i = 0; i < input.Length; i++)
+            foreach (char direction in input)
             {
-                if (input[i] == '<')
+                if (direction == '<')
                     if (isRobosTurn)
                         posX1--;
                     else
                         posX--;
-                else if (input[i] == '>')
+                else if (direction == '>')
                     if (isRobosTurn)
                         posX1++;
                     else
                         posX++;
-                else if (input[i] == 'v')
+                else if (direction == 'v')
                     if (isRobosTurn)
                         posY1++;
                     else
                         posY++;
-                else if (input[i] == '^')
+                else if (direction == '^')
                     if (isRobosTurn)
                         posY1--;
                     else

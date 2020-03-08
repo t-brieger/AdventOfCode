@@ -12,9 +12,12 @@ namespace AdventOfCode.Solutions._2015
 
             foreach (string s in strings)
             {
-                if (s.IndexOf("ab") >= 0 || s.IndexOf("cd") >= 0 || s.IndexOf("pq") >= 0 || s.IndexOf("xy") >= 0)
+                if (s.IndexOf("ab", StringComparison.Ordinal) >= 0 ||
+                    s.IndexOf("cd", StringComparison.Ordinal) >= 0 ||
+                    s.IndexOf("pq", StringComparison.Ordinal) >= 0 ||
+                    s.IndexOf("xy", StringComparison.Ordinal) >= 0)
                     continue;
-                int vowelCount = s[s.Length - 1] == 'a' || s[s.Length - 1] == 'e' || s[s.Length - 1] == 'i' || s[s.Length - 1] == 'o' || s[s.Length - 1] == 'u' ? 1 : 0;
+                int vowelCount = s[^1] == 'a' || s[^1] == 'e' || s[^1] == 'i' || s[^1] == 'o' || s[^1] == 'u' ? 1 : 0;
                 bool hasDoubleLetter = false;
                 for (int i = 0; i < s.Length - 1; i++)
                 {
@@ -57,11 +60,9 @@ namespace AdventOfCode.Solutions._2015
                     {
                         if (j == i || j == i - 1 || j == i + 1)
                             continue;
-                        if (s.Substring(j, 2) == twoLetters)
-                        {
-                            canBreak = true;
-                            break;
-                        }
+                        if (s.Substring(j, 2) != twoLetters) continue;
+                        canBreak = true;
+                        break;
                     }
                     if (canBreak)
                         break;

@@ -9,8 +9,8 @@ namespace AdventOfCode.Solutions._2019
         {
             int layerSize = 25 * 6;
             
-            int fewestZeroes = int.MaxValue;
-            int onesTimesTwoes = int.MinValue;
+            int fewestZeroes = Int32.MaxValue;
+            int onesTimesTwoes = Int32.MinValue;
             
             for (int i = 0; i < input.Length / layerSize; i++)
             {
@@ -20,19 +20,18 @@ namespace AdventOfCode.Solutions._2019
                 int ones = 0;
                 int twos = 0;
                 
-                for (int j = 0; j < layer.Length; j++)
-                    if (layer[j] == '0')
+                foreach (char t in layer)
+                    if (t == '0')
                         zeros++;
-                    else if (layer[j] == '1')
+                    else if (t == '1')
                         ones++;
-                    else if (layer[j] == '2')
+                    else if (t == '2')
                         twos++;
 
-                if (zeros < fewestZeroes)
-                {
-                    fewestZeroes = zeros;
-                    onesTimesTwoes = ones * twos;
-                }
+
+                if (zeros >= fewestZeroes) continue;
+                fewestZeroes = zeros;
+                onesTimesTwoes = ones * twos;
             }
 
             return onesTimesTwoes.ToString();

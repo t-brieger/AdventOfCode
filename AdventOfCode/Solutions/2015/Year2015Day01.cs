@@ -5,11 +5,11 @@
         public override string Part1(string input)
         {
             int floor = 0;
-            for (int i = 0; i < input.Length; i++)
+            foreach (char c in input)
             {
-                if (input[i] == '(')
+                if (c == '(')
                     floor++;
-                else if (input[i] == ')')
+                else if (c == ')')
                     floor--;
             }
 

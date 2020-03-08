@@ -1,8 +1,10 @@
-﻿namespace AdventOfCode.Solutions
+﻿using System;
+
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day11 : Solution
     {
-        private static int buildSATable(int[,] a, int x, int y)
+        public static int BuildSaTable(int[,] a, int x, int y)
         {
             if (x < 0 || y < 0)
                 return 0;
@@ -17,17 +19,17 @@
 
         public override string Part1(string input)
         {
-            int serialNumber = int.Parse(input);
+            int serialNumber = Int32.Parse(input);
             sbyte[,] powerLevel = new sbyte[300, 300];
             for (short i = 0; i < 300; i++)
             {
                 for (short j = 0; j < 300; j++)
                 {
-                    short RackID = (short)(i + 10);
-                    int tmpPowerLevel = RackID * j;
+                    short rackId = (short)(i + 10);
+                    int tmpPowerLevel = rackId * j;
                     tmpPowerLevel += serialNumber;
-                    tmpPowerLevel *= RackID;
-                    tmpPowerLevel = (tmpPowerLevel % 1000) / 100;
+                    tmpPowerLevel *= rackId;
+                    tmpPowerLevel = tmpPowerLevel % 1000 / 100;
 
                     powerLevel[i, j] = (sbyte)(tmpPowerLevel - 5);
                 }
@@ -49,12 +51,10 @@
                         }
                     }
 
-                    if (maxCombinedLvl <= tmp)
-                    {
-                        maxCombinedLvl = tmp;
-                        xcoord = i;
-                        ycoord = j;
-                    }
+                    if (maxCombinedLvl > tmp) continue;
+                    maxCombinedLvl = tmp;
+                    xcoord = i;
+                    ycoord = j;
                 }
             }
 
@@ -63,18 +63,18 @@
 
         public override string Part2(string input)
         {
-            int serialNumber = int.Parse(input);
+            int serialNumber = Int32.Parse(input);
 
             int[,] powerLevel = new int[300, 300];
             for (short i = 0; i < 300; i++)
             {
                 for (short j = 0; j < 300; j++)
                 {
-                    short RackID = (short)(i + 10);
-                    int tmpPowerLevel = RackID * j;
+                    short rackId = (short)(i + 10);
+                    int tmpPowerLevel = rackId * j;
                     tmpPowerLevel += serialNumber;
-                    tmpPowerLevel *= RackID;
-                    tmpPowerLevel = (tmpPowerLevel % 1000) / 100;
+                    tmpPowerLevel *= rackId;
+                    tmpPowerLevel = tmpPowerLevel % 1000 / 100;
 
                     powerLevel[i, j] = tmpPowerLevel - 5;
                 }
@@ -84,7 +84,7 @@
             {
                 for (int j = 0; j < 300; j++)
                 {
-                    powerLevel[i, j] = buildSATable(powerLevel, i, j);
+                    powerLevel[i, j] = BuildSaTable(powerLevel, i, j);
                 }
             }
 
@@ -99,13 +99,11 @@
                     for (short j = 0; j < 300 - size; j++)
                     {
                         int a = powerLevel[i + size, j + size] - powerLevel[i + size, j] - powerLevel[i, j + size] + powerLevel[i, j];
-                        if (a > maxCombinedLvl)
-                        {
-                            maxCombinedLvl = (short)a;
-                            xcoord = i;
-                            ycoord = j;
-                            maxSize = size;
-                        }
+                        if (a <= maxCombinedLvl) continue;
+                        maxCombinedLvl = (short)a;
+                        xcoord = i;
+                        ycoord = j;
+                        maxSize = size;
                     }
                 }
             }

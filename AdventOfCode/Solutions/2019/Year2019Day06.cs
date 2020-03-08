@@ -6,15 +6,15 @@ namespace AdventOfCode.Solutions._2019
 {
     public class Year2019Day06 : Solution
     {
-        private static int getOrbitCount(string id, Dictionary<string, string> direct, Dictionary<string, int> count)
+        private static int GetOrbitCount(string id, Dictionary<string, string> direct, Dictionary<string, int> count)
         {
             if (id == "COM")
                 return 0;
             if (count.ContainsKey(id))
                 return count[id];
-            int count_ = getOrbitCount(direct[id], direct, count) + 1;
-            count.Add(id, count_);
-            return count_;
+            int count2 = GetOrbitCount(direct[id], direct, count) + 1;
+            count.Add(id, count2);
+            return count2;
         }
 
         public override string Part1(string input)
@@ -38,7 +38,7 @@ namespace AdventOfCode.Solutions._2019
             int count = 0;
 
             foreach (string s in orbits.Keys)
-                count += getOrbitCount(s, orbits, counts);
+                count += GetOrbitCount(s, orbits, counts);
 
             return count.ToString();
         }
@@ -60,12 +60,12 @@ namespace AdventOfCode.Solutions._2019
                 orbits.Add(s[1], s[0]);
             }
 
-            List<string> YOUorbits = new List<string>();
+            List<string> youOrbits = new List<string>();
             string current = "YOU";
             while (current != null)
             {
                 current = orbits[current];
-                YOUorbits.Add(current);
+                youOrbits.Add(current);
             }
 
             current = "SAN";
@@ -73,7 +73,7 @@ namespace AdventOfCode.Solutions._2019
             while (current != null)
             {
                 current = orbits[current];
-                int indexOfCurrent = YOUorbits.IndexOf(current);
+                int indexOfCurrent = youOrbits.IndexOf(current);
                 if (indexOfCurrent > 0)
                     return (i + indexOfCurrent).ToString();
                 i++;

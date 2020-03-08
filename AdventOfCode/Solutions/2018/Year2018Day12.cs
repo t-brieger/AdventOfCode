@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions._2018
 {
     public class Year2018Day12 : Solution
     {
@@ -80,18 +80,6 @@ namespace AdventOfCode.Solutions
             }
 
             return sum.ToString();
-        }
-
-        private static int score(bool[] state)
-        {
-            int sum = 0;
-            for (int i = -50; i < state.Length - 50; i++)
-            {
-                if (state[i + 50])
-                    sum += i;
-            }
-
-            return sum;
         }
 
         public override string Part2(string input)
