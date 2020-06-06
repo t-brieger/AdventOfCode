@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions._2017
+namespace AdventOfCode.Solutions
 {
     //TODO: try to do something like the following:
     /*  remove all the "double-components" (cant think of a better word rn), like 0/0, 1/1, 2/2 etc, from the original list of components

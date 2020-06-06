@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 
-namespace AdventOfCode.Solutions._2019
+namespace AdventOfCode.Solutions
 {
     public class Year2019Day08 : Solution
     {

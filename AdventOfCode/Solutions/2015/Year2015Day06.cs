@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace AdventOfCode.Solutions._2015
+namespace AdventOfCode.Solutions
 {
     class Year2015Day06 : Solution
     {

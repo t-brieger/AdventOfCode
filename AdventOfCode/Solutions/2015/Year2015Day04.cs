@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace AdventOfCode.Solutions._2015
+namespace AdventOfCode.Solutions
 {
     //I honestly think this is one of the worst puzzles in all of adventofcode, because you can only bruteforce it - though that may be related to it being the 3rd ever, so I'll forgive it
     class Year2015Day04 : Solution

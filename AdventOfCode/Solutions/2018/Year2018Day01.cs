@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions._2018
+namespace AdventOfCode.Solutions
 {
     public class Year2018Day01 : Solution
     {

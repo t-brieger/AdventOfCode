@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions._2019
+namespace AdventOfCode.Solutions
 {
     public abstract class IcComputer
     {

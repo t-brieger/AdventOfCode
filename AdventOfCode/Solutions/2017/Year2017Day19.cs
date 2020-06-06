@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdventOfCode.Solutions._2017
+namespace AdventOfCode.Solutions
 {
     //Please dont touch this - it can and will break
     public class Year2017Day19 : Solution

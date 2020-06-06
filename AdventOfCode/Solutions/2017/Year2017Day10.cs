@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 
-namespace AdventOfCode.Solutions._2017
+namespace AdventOfCode.Solutions
 {
     class Year2017Day10 : Solution
     {

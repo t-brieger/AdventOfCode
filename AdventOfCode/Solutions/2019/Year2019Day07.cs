@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions._2019
+namespace AdventOfCode.Solutions
 {
     public class Year2019Day07 : Solution
     {

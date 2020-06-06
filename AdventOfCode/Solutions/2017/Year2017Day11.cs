@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace AdventOfCode.Solutions._2017
+namespace AdventOfCode.Solutions
 {
     public class Year2017Day11 : Solution
     {
         public override string Part1(string input)
         {
-            string[] directions = input.Split(',');
+            string[] directions = input.Trim().Split(',');
 
             int x = 0;
             int y = 0;
@@ -41,7 +41,7 @@ namespace AdventOfCode.Solutions._2017
                         y++;
                         break;
                     default:
-                        throw new Exception("Malformed input");
+                        throw new Exception("Malformed input: " + direction);
                 }
             }
 
@@ -50,7 +50,7 @@ namespace AdventOfCode.Solutions._2017
 
         public override string Part2(string input)
         {
-            string[] directions = input.Split(',');
+            string[] directions = input.Trim().Split(',');
 
             int x = 0;
             int y = 0;
@@ -87,7 +87,7 @@ namespace AdventOfCode.Solutions._2017
                         y++;
                         break;
                     default:
-                        throw new Exception("Malformed input");
+                        throw new Exception("Malformed input: " + direction);
                 }
 
                 int dist = (Math.Abs(x) + Math.Abs(y) + Math.Abs(z)) / 2;

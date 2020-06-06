@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AdventOfCode.Solutions._2015
+namespace AdventOfCode.Solutions
 {
     class Year2015Day03 : Solution
     {

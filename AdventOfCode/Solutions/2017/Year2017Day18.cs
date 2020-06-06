@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AdventOfCode.Solutions._2017
+namespace AdventOfCode.Solutions
 {
     public class Year2017Day18 : Solution
     {

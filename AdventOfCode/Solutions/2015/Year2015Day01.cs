@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Solutions._2015
+﻿namespace AdventOfCode.Solutions
 {
     class Year2015Day01 : Solution
     {
