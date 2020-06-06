@@ -13,152 +13,160 @@ namespace AdventOfCode
 {
     class Program
     {
-        private static int Main(string[] args)
+        private static async Task<int> Main(string[] args)
         {
-            Match inputRegex =
-                new Regex(@"^(-d,(?<day>\d\d),-y,(?<year>\d\d\d\d)|(?<all>-a(?<slow>,-s)))(?<test>,-t)?$").Match(
-                    String.Join(',', args));
-            if (!inputRegex.Success)
+            //TODO showdesc
+            bool all = false, pause = false, showdesc = false, test = false;
+            int y = -1, d = -1;
+
+            for (int i = 0; i < args.Length; i++)
             {
-                Console.Error.WriteLine("USAGE: \"(-d <day> -y <year> | -a [-s])[ -t]\"");
-                Console.ReadKey();
-                return 1;
+                switch (args[i])
+                {
+                    case "-h":
+                    case "--help":
+                        showUsage();
+                        break;
+                    case "-a":
+                    case "--all":
+                        if (d != -1)
+                            showUsage("--all can't be used with --day");
+                        all = true;
+                        break;
+                    case "-p":
+                    case "-s":
+                    case "--pause":
+                    case "--slow":
+                        pause = true;
+                        break;
+                    case "--showdesc":
+                    case "--problems":
+                        showdesc = true;
+                        break;
+                    case "-t":
+                    case "--test":
+                    case "--samples":
+                        test = true;
+                        break;
+                    case "-y":
+                    case "--year":
+                        if (i >= args.Length - 1)
+                            showUsage("--year needs an argument");
+                        if (!Int32.TryParse(args[i + 1], out y))
+                            showUsage("--year needs an integer argument");
+                        if (y < 2015)
+                            showUsage("--year needs an argument above 2014");
+                        break;
+                    case "-d":
+                    case "--day":
+                        if (all)
+                            showUsage("--day can't be used with --all");
+                        if (i >= args.Length - 1)
+                            showUsage("--day needs an argument");
+                        if (!Int32.TryParse(args[i + 1], out d))
+                            showUsage("--day needs an integer argument");
+                        if (d < 1 || d > 31)
+                            showUsage("--day needs an argument between 1 and 31");
+                        break;
+                    default:
+                        showUsage(args[i] + " was not recognized as a valid argument.");
+                        break;
+                }
             }
 
-            if (!inputRegex.Groups["all"].Success)
-            {
-                byte day = Byte.Parse(inputRegex.Groups["day"].Value);
-                ushort year = UInt16.Parse(inputRegex.Groups["year"].Value);
-                Console.WriteLine(day + " - " + year);
+            if (pause && !all)
+                showUsage("--pause can't be used without --all");
+            if (!all && (d == -1 || y == -1))
+                showUsage("if --all is not specified, both --day and --year have to be given");
 
-                try
-                {
-                    ExecuteSolution(day, year, inputRegex.Groups["test"].Success);
-                }
-                catch (FileNotFoundException)
-                {
-                    Console.Error.WriteLine("Solution not found, exiting");
-                    Console.ReadKey();
-                    return 1;
-                }
-            }
-            else
+            if (all)
             {
                 foreach (Solution s in Assembly.GetExecutingAssembly().GetTypes()
                     .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution)).Select(t =>
                         (Solution) Activator.CreateInstance(t)))
                 {
-                    string[] splitted = s.GetType().Name.Split("Day", 2);
-                    ushort year = UInt16.Parse(splitted[0].Replace("Year", ""));
-                    byte day = Byte.Parse(splitted[1]);
-                    /*string input = getInput(day, year);
-                    string output;
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    output = s.Part1(input);
-                    sw.Stop();
-                    Console.WriteLine($"{day:00}/{year}/1: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");
-                    sw = new Stopwatch();
-                    sw.Start();
-                    output = s.Part2(input);
-                    sw.Stop();
-                    Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");*/
-                    try
-                    {
-                        ExecuteSolution(day, year, inputRegex.Groups["test"].Success);
-                        if (inputRegex.Groups["slow"].Success)
-                            Console.ReadKey();
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        Console.WriteLine($"Solution {day:00}/{year} missing");
-                    }
+                    //gets called on an instance of all children of Solution
+                    string[] yearday = s.GetType().Name.Replace("Year", "").Split("Day", 2);
+                    byte day = Byte.Parse(yearday[1]);
+                    ushort year = UInt16.Parse(yearday[0]);
 
+                    if (y != -1 && year != y)
+                        continue;
 
+                    string input = await GetInput(day, year, test);
+                    Console.WriteLine($"{year}/{day:00}/1: {s.Part1(input)}");
+                    Console.WriteLine($"{year}/{day:00}/2: {s.Part2(input)}");
+
+                    if (pause)
+                        Console.ReadKey();
                 }
-            }
-
-            Console.ReadKey();
-            return 0;
-        }
-
-        private static void ExecuteSolution(byte day, ushort year, bool test)
-        {
-            Solution solution = GetSolution(day, year);
-            string input = "";
-            try
-            {
-                input = GetInput(day, year, test);
-            }
-            catch (Exception e)
-            {
-                if (!(e is FileNotFoundException) && !(e is DirectoryNotFoundException))
-                    throw;
-
-                if (test)
-                {
-                    Console.WriteLine($"no test input defined for {day:00}/{year}");
-                    return;
-                }
-
-                if (!File.Exists("session"))
-                    throw new Exception("session file not found");
-                
-                DownloadSolution(File.ReadAllText("session"), day, year).Wait();
-                input = GetInput(day, year, test);
-            }
-
-            string output;
-            if (!test)
-            {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                output = solution.Part1(input);
-                sw.Stop();
-                Console.WriteLine($"{day:00}/{year}/1: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");
-
-                sw = new Stopwatch();
-                sw.Start();
-                output = solution.Part2(input);
-                sw.Stop();
-                Console.WriteLine($"{day:00}/{year}/2: {output} completed in (very roughly) {sw.ElapsedMilliseconds}");
             }
             else
             {
-                string[] split = input.Replace("\r", "").Split("\n\n\n\n\n");
-                for (int i = 0; i < split.Length; i += 3)
+                //must have specified day and year
+                Solution s = null;
+                try
                 {
-                    //Console.WriteLine($"input: {split[i]}");
-
-                    string output1 = solution.Part1(split[i]);
-                    string output2 = solution.Part2(split[i]);
-                    Console.WriteLine(
-                        $"{day:00}/{year}/1/test: {(output1 == split[i + 1] ? "Successfully passed test input #" + i / 3 : $"failed test input #{i / 3}, expected output: {split[i + 1]}")} (output: {output1})");
-                    Console.WriteLine(
-                        $"{day:00}/{year}/2/test: {(output2 == split[i + 2] ? "Successfully passed test input #" + i / 3 : $"failed test input #{i / 3}, expected output: {split[i + 2]}")} (output: {output2})");
+                    s = (Solution) Activator.CreateInstance(Assembly.GetExecutingAssembly()
+                        .GetType($"AdventOfCode.Solutions.Year{y}Day{d:00}", true));
                 }
+                catch (ArgumentException)
+                {
+                    showUsage("the specified day and/or year are too long");
+                }
+                catch (TypeLoadException)
+                {
+                    showUsage("That solution does not exist");
+                }
+
+                string input = await GetInput((byte) d, (ushort) y, test);
+                Console.WriteLine($"{y}/{d:00}/1: {s.Part1(input)}");
+                Console.WriteLine($"{y}/{d:00}/2: {s.Part2(input)}");
             }
+            return 0;
         }
 
-        private static Solution GetSolution(byte day, ushort year)
+        private static void showUsage(string problem = null)
         {
-            IEnumerable<Type> solutions = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution));
-            Type solutionType = solutions.FirstOrDefault(t =>
+            if (problem != null)
+                Console.WriteLine(problem);
+            Console.WriteLine(
+                "Usage:\n" +
+                "--help,-h     show this usage help\n" +
+                "--all,-a      run all solutions, optionally only in a given year, not compatible with -d\n" +
+                "-p,--pause,\n" +
+                "-s,--slow     wait for a keypress after running each solution, needs -a\n" +
+                "--showdesc,\n" +
+                "--problems    show the problem description(s)\n" +
+                "--test,-t,\n" +
+                "--samples     run test inputs\n" +
+                "-y,--year     specify the year to run solutions from\n" +
+                "-d,--day      specify the day to run solutions from, not compatible with -a");
+            Environment.Exit(1);
+        }
+
+        private static string GetSession()
+        {
+            return File.ReadAllText("session");
+        }
+        
+        private static async Task<string> GetInput(byte day, ushort year, bool test)
+        {
+            try
             {
-                string[] splitted = t.Name.Split("Day", 2);
-                ushort typeYear = UInt16.Parse(splitted[0].Replace("Year", ""));
-                byte typeDay = Byte.Parse(splitted[1]);
-                return typeYear == year && typeDay == day;
-            });
-            if (solutionType == null)
-                throw new Exception("Solution for day" + day + ", year" + year + " not found.");
-            return (Solution) Activator.CreateInstance(solutionType);
-        }
-
-        private static string GetInput(byte day, ushort year, bool test)
-        {
-            return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in");
+                return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory($"Input/{(test ? "test/" : "")}{year}");
+                await DownloadSolution(GetSession(), day, year);
+                return await GetInput(day, year, test);
+            }
+            catch (FileNotFoundException)
+            {
+                await DownloadSolution(GetSession(), day, year);
+                return await GetInput(day, year, test);
+            }
         }
 
         private static async Task DownloadSolution(string session, byte day, ushort year)
@@ -175,10 +183,7 @@ namespace AdventOfCode
 
             HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
 
-            Directory.CreateDirectory($"Input/{year}");
-
             await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
         }
-
     }
 }
