@@ -96,7 +96,24 @@ namespace AdventOfCode.Solutions
             Tree<int> tree = new Tree<int> {id = GetRootNode(lines)};
             PopulateTree(tree, lines);
             MakeCumulative(tree);
-            return "";
+            return FindOutlier(tree).ToString();
+        }
+
+        private int FindOutlier(Tree<int> tree, int diff = 0)
+        {
+            if (tree.children.All(x => x.value == tree.children.First().value))
+                return tree.value - tree.children.Sum(x => x.value) - diff;
+
+            Tree<int> firstChild = tree.children[0];
+            Tree<int> secondChild = tree.children.First(x => x.value != firstChild.value);
+            int firstValCount = 1;
+            for (int i = 2; i < tree.children.Length; i++)
+            {
+                if (tree.children[i].value == firstChild.value)
+                    firstValCount++;
+            }
+
+            return FindOutlier(firstValCount == 1 ? firstChild : secondChild, Math.Abs(firstChild.value - secondChild.value));
         }
     }
 }
