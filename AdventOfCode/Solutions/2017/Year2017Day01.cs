@@ -1,34 +1,52 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace AdventOfCode.Solutions
 {
     public class Year2017Day01 : Solution
     {
+        private class Node
+        {
+            public char value;
+            public Node next;
+        }
+
         public override string Part1(string input)
         {
-            LinkedList<char> numbers = new LinkedList<char>(input);
+            Node first = new Node {value = input[0]};
+            Node cur = first;
+            for (int i = 1; i < input.Length; i++)
+            {
+                if (input[i] < '0' || input[i] > '9')
+                    continue;
+                cur.next = new Node {value = input[i]};
+                cur = cur.next;
+            }
 
-            LinkedListNode<char> currentNumber = numbers.First;
+            cur.next = first;
+            cur = cur.next.next;
 
             int sum = 0;
-            foreach (char unused in numbers)
+            do
             {
-                if (currentNumber != null && currentNumber.Value == (currentNumber.Next ?? numbers.First).Value)
-                    sum += currentNumber.Value - '0';
-
-                currentNumber = currentNumber?.Next;
-            }
+                if (cur.value == cur.next.value)
+                    sum += cur.value - '0';
+                cur = cur.next;
+            } while (cur != first.next);
 
             return sum.ToString();
         }
 
         public override string Part2(string input)
         {
-            char[] numbers = input.ToCharArray();
+            char[] c = input.Where(c2 => c2 >= '0' && c2 <= '9').ToArray();
 
-            int sum = numbers.Where((t, i) => t == numbers[(i + numbers.Length / 2) % numbers.Length]).Sum(t => t - '0');
-
+            int sum = 0;
+            for (int i = 0; i < c.Length; i++)
+            {
+                if (c[i] == c[(i + c.Length / 2) % c.Length])
+                    sum += c[i] - '0';
+            }
+            
             return sum.ToString();
         }
     }
