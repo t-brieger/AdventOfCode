@@ -96,13 +96,16 @@ namespace AdventOfCode
                     if (showdesc)
                         await DisplayText(day, year);
                     Console.WriteLine();
-                    
+
                     Console.WriteLine($"{year}/{day:00}/1: {s.Part1(input)}");
                     Console.WriteLine($"{year}/{day:00}/2: {s.Part2(input)}");
 
                     if (!pause) continue;
                     Console.ReadKey();
-                    Console.Clear();
+                    // the reason for not using Console.Clear here is that it just scrolls, so 
+                    // if you scroll up (which is necessary to read some of the longer problem statements),
+                    // there is no clear separation of the days
+                    Console.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                 }
             }
             else
@@ -124,9 +127,9 @@ namespace AdventOfCode
                 }
 
                 if (showdesc)
-                    await DisplayText((byte)d, (ushort)y);
+                    await DisplayText((byte) d, (ushort) y);
                 Console.WriteLine();
-                
+
                 string input = await GetInput((byte) d, (ushort) y, test);
                 Console.WriteLine(
                     $"{y}/{d:00}/1: {(s ?? throw new Exception("this should never happen")).Part1(input)}");
@@ -246,6 +249,7 @@ namespace AdventOfCode
             switch (n.NodeName.ToLowerInvariant())
             {
                 case "script":
+                case "style":
                     break;
                 case "#text":
                     Console.Write(n.NodeValue.Replace("\n", ""));
@@ -281,6 +285,7 @@ namespace AdventOfCode
                     }
                     else
                         Console.ForegroundColor = ConsoleColor.Gray;
+
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
                         await RenderNode(n.ChildNodes[i]);
@@ -288,7 +293,9 @@ namespace AdventOfCode
                     Console.WriteLine();
                     break;
                 case "em":
-                    Console.ForegroundColor = ((IElement) n).ClassList.Contains("star") ? ConsoleColor.Yellow : ConsoleColor.White;
+                    Console.ForegroundColor = ((IElement) n).ClassList.Contains("star")
+                        ? ConsoleColor.Yellow
+                        : ConsoleColor.White;
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
                         await RenderNode(n.ChildNodes[i]);
