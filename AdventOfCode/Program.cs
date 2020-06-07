@@ -54,6 +54,7 @@ namespace AdventOfCode
                             ShowUsage("--year needs an integer argument");
                         if (y < 2015)
                             ShowUsage("--year needs an argument above 2014");
+                        i++;
                         break;
                     case "-d":
                     case "--day":
@@ -65,6 +66,7 @@ namespace AdventOfCode
                             ShowUsage("--day needs an integer argument");
                         if (d < 1 || d > 31)
                             ShowUsage("--day needs an argument between 1 and 31");
+                        i++;
                         break;
                     default:
                         ShowUsage(args[i] + " was not recognized as a valid argument.");
@@ -241,7 +243,7 @@ namespace AdventOfCode
                    await BufferText(await DownloadText(GetSession(), day, year), day, year);
         }
 
-        private static async Task RenderNode(INode n)
+        private static async Task RenderNode(INode n, bool inPre = false)
         {
             //not using foreach loops here because We're modifying the child node list
             ConsoleColor oldfColor = Console.ForegroundColor;
@@ -252,20 +254,20 @@ namespace AdventOfCode
                 case "style":
                     break;
                 case "#text":
-                    Console.Write(n.NodeValue.Replace("\n", ""));
+                    Console.Write(n.NodeValue.Replace("\n", inPre ? "\n" : ""));
                     break;
                 case "code":
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
-                        await RenderNode(n.ChildNodes[i]);
+                        await RenderNode(n.ChildNodes[i], inPre);
                     break;
                 case "h2":
                     Console.ForegroundColor = ConsoleColor.White;
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
-                        await RenderNode(n.ChildNodes[i]);
+                        await RenderNode(n.ChildNodes[i], inPre);
                     Console.WriteLine();
                     break;
                 case "li":
@@ -273,6 +275,8 @@ namespace AdventOfCode
                     //this is dumb, but C# doesnt want me to just have it fallthrough
                     goto case "p";
                 case "ul":
+                    Console.WriteLine();
+                    goto case "p";
                 case "p":
                     if (((IElement) n).ClassList.Contains("day-success"))
                     {
@@ -288,9 +292,14 @@ namespace AdventOfCode
 
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
-                        await RenderNode(n.ChildNodes[i]);
+                        await RenderNode(n.ChildNodes[i], inPre);
                     Console.WriteLine();
                     Console.WriteLine();
+                    break;
+                case "pre":
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i], true);
                     break;
                 case "em":
                     Console.ForegroundColor = ((IElement) n).ClassList.Contains("star")
@@ -298,12 +307,12 @@ namespace AdventOfCode
                         : ConsoleColor.White;
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
-                        await RenderNode(n.ChildNodes[i]);
+                        await RenderNode(n.ChildNodes[i], inPre);
                     break;
                 default:
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
-                        await RenderNode(n.ChildNodes[i]);
+                        await RenderNode(n.ChildNodes[i], inPre);
                     break;
             }
 
