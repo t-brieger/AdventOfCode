@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AdventOfCode
@@ -25,12 +22,12 @@ namespace AdventOfCode
                 {
                     case "-h":
                     case "--help":
-                        showUsage();
+                        ShowUsage();
                         break;
                     case "-a":
                     case "--all":
                         if (d != -1)
-                            showUsage("--all can't be used with --day");
+                            ShowUsage("--all can't be used with --day");
                         all = true;
                         break;
                     case "-p":
@@ -51,33 +48,33 @@ namespace AdventOfCode
                     case "-y":
                     case "--year":
                         if (i >= args.Length - 1)
-                            showUsage("--year needs an argument");
+                            ShowUsage("--year needs an argument");
                         if (!Int32.TryParse(args[i + 1], out y))
-                            showUsage("--year needs an integer argument");
+                            ShowUsage("--year needs an integer argument");
                         if (y < 2015)
-                            showUsage("--year needs an argument above 2014");
+                            ShowUsage("--year needs an argument above 2014");
                         break;
                     case "-d":
                     case "--day":
                         if (all)
-                            showUsage("--day can't be used with --all");
+                            ShowUsage("--day can't be used with --all");
                         if (i >= args.Length - 1)
-                            showUsage("--day needs an argument");
+                            ShowUsage("--day needs an argument");
                         if (!Int32.TryParse(args[i + 1], out d))
-                            showUsage("--day needs an integer argument");
+                            ShowUsage("--day needs an integer argument");
                         if (d < 1 || d > 31)
-                            showUsage("--day needs an argument between 1 and 31");
+                            ShowUsage("--day needs an argument between 1 and 31");
                         break;
                     default:
-                        showUsage(args[i] + " was not recognized as a valid argument.");
+                        ShowUsage(args[i] + " was not recognized as a valid argument.");
                         break;
                 }
             }
 
             if (pause && !all)
-                showUsage("--pause can't be used without --all");
+                ShowUsage("--pause can't be used without --all");
             if (!all && (d == -1 || y == -1))
-                showUsage("if --all is not specified, both --day and --year have to be given");
+                ShowUsage("if --all is not specified, both --day and --year have to be given");
 
             if (all)
             {
@@ -112,21 +109,21 @@ namespace AdventOfCode
                 }
                 catch (ArgumentException)
                 {
-                    showUsage("the specified day and/or year are too long");
+                    ShowUsage("the specified day and/or year are too long");
                 }
                 catch (TypeLoadException)
                 {
-                    showUsage("That solution does not exist");
+                    ShowUsage("That solution does not exist");
                 }
 
                 string input = await GetInput((byte) d, (ushort) y, test);
-                Console.WriteLine($"{y}/{d:00}/1: {s.Part1(input)}");
+                Console.WriteLine($"{y}/{d:00}/1: {(s ?? throw new Exception("this should never happen")).Part1(input)}");
                 Console.WriteLine($"{y}/{d:00}/2: {s.Part2(input)}");
             }
             return 0;
         }
 
-        private static void showUsage(string problem = null)
+        private static void ShowUsage(string problem = null)
         {
             if (problem != null)
                 Console.WriteLine(problem);
