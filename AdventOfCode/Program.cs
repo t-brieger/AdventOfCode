@@ -5,14 +5,15 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using AngleSharp;
+using AngleSharp.Dom;
 
 namespace AdventOfCode
 {
-    class Program
+    static class Program
     {
         private static async Task<int> Main(string[] args)
         {
-            //TODO showdesc
             bool all = false, pause = false, showdesc = false, test = false;
             int y = -1, d = -1;
 
@@ -91,11 +92,17 @@ namespace AdventOfCode
                         continue;
 
                     string input = await GetInput(day, year, test);
+
+                    if (showdesc)
+                        await DisplayText(day, year);
+                    Console.WriteLine();
+                    
                     Console.WriteLine($"{year}/{day:00}/1: {s.Part1(input)}");
                     Console.WriteLine($"{year}/{day:00}/2: {s.Part2(input)}");
 
-                    if (pause)
-                        Console.ReadKey();
+                    if (!pause) continue;
+                    Console.ReadKey();
+                    Console.Clear();
                 }
             }
             else
@@ -116,10 +123,16 @@ namespace AdventOfCode
                     ShowUsage("That solution does not exist");
                 }
 
+                if (showdesc)
+                    await DisplayText((byte)d, (ushort)y);
+                Console.WriteLine();
+                
                 string input = await GetInput((byte) d, (ushort) y, test);
-                Console.WriteLine($"{y}/{d:00}/1: {(s ?? throw new Exception("this should never happen")).Part1(input)}");
+                Console.WriteLine(
+                    $"{y}/{d:00}/1: {(s ?? throw new Exception("this should never happen")).Part1(input)}");
                 Console.WriteLine($"{y}/{d:00}/2: {s.Part2(input)}");
             }
+
             return 0;
         }
 
@@ -146,7 +159,7 @@ namespace AdventOfCode
         {
             return File.ReadAllText("session");
         }
-        
+
         private static async Task<string> GetInput(byte day, ushort year, bool test)
         {
             try
@@ -181,6 +194,125 @@ namespace AdventOfCode
             HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
 
             await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
+        }
+
+        private static async Task<string> DownloadText(string session, byte day, ushort year)
+        {
+            CookieContainer cookieContainer = new CookieContainer();
+
+            using HttpClient client = new HttpClient(
+                new HttpClientHandler
+                {
+                    CookieContainer = cookieContainer,
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                });
+            cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
+
+            HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}");
+
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        private static async Task<string> TryGetBufferedText(byte day, ushort year)
+        {
+            try
+            {
+                return await File.ReadAllTextAsync($"problems/{year}/{day:00}.html");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static async Task<string> BufferText(string content, byte day, ushort year)
+        {
+            Directory.CreateDirectory($"problems/{year}");
+            await File.WriteAllTextAsync($"problems/{year}/{day:00}.html", content);
+            return content;
+        }
+
+        private static async Task<string> GetText(byte day, ushort year)
+        {
+            return await TryGetBufferedText(day, year) ??
+                   await BufferText(await DownloadText(GetSession(), day, year), day, year);
+        }
+
+        private static async Task RenderNode(INode n)
+        {
+            //not using foreach loops here because We're modifying the child node list
+            ConsoleColor oldfColor = Console.ForegroundColor;
+            ConsoleColor oldbColor = Console.BackgroundColor;
+            switch (n.NodeName.ToLowerInvariant())
+            {
+                case "script":
+                    break;
+                case "#text":
+                    Console.Write(n.NodeValue.Replace("\n", ""));
+                    break;
+                case "code":
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.BackgroundColor = ConsoleColor.White;
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i]);
+                    break;
+                case "h2":
+                    Console.ForegroundColor = ConsoleColor.White;
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i]);
+                    Console.WriteLine();
+                    break;
+                case "li":
+                    Console.Write("  - ");
+                    //this is dumb, but C# doesnt want me to just have it fallthrough
+                    goto case "p";
+                case "ul":
+                case "p":
+                    if (((IElement) n).ClassList.Contains("day-success"))
+                    {
+                        while (n.NextSibling != null)
+                        {
+                            n.NextSibling.RemoveFromParent();
+                        }
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    else
+                        Console.ForegroundColor = ConsoleColor.Gray;
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i]);
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    break;
+                case "em":
+                    Console.ForegroundColor = ((IElement) n).ClassList.Contains("star") ? ConsoleColor.Yellow : ConsoleColor.White;
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i]);
+                    break;
+                default:
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (int i = 0; i < n.ChildNodes.Length; i++)
+                        await RenderNode(n.ChildNodes[i]);
+                    break;
+            }
+
+            Console.ForegroundColor = oldfColor;
+            Console.BackgroundColor = oldbColor;
+        }
+
+        private static async Task DisplayText(byte day, ushort year)
+        {
+            string html = await GetText(day, year);
+
+            IDocument doc = await BrowsingContext.New(Configuration.Default).OpenAsync(r => r.Content(html));
+
+            INode main = doc.Body.ChildNodes.First(n => n.NodeName.ToLower() == "main");
+
+            await RenderNode(main);
         }
     }
 }
