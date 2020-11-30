@@ -17,10 +17,14 @@ namespace AdventOfCode.Solutions
             foreach (int tmpSum in input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(line => Int32.Parse(line) / 3 - 2))
             {
                 sum += tmpSum;
+                int currentMass = tmpSum;
                 while (true)
                 {
-                    if (tmpSum / 3 - 2 > 0)
-                        sum += tmpSum / 3 - 2;
+                    if (currentMass / 3 - 2 > 0)
+                    {
+                        sum += currentMass / 3 - 2;
+                        currentMass = currentMass / 3 - 2;
+                    }
                     else
                         break;
                 }
