@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            (char, int)[] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            (char, int)[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => (line[0], int.Parse(line.Substring(1)))).ToArray();
 
             int x = 0;
@@ -65,7 +65,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            (char, int)[] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            (char, int)[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => (line[0], int.Parse(line.Substring(1)))).ToArray();
 
             int x = 10;

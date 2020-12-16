@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions
         {
             
 
-            int[] jumps = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+            int[] jumps = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
 
             int cycles = 0;
             int pc = 0;
@@ -26,7 +26,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            int[] jumps = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+            int[] jumps = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
 
             int cycles = 0;
             int pc = 0;

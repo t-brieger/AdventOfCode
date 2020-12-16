@@ -7,13 +7,10 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] groups = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
-            if (groups.Length == 1)
-                //unix line endings
-                groups = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
-
+            string[] groups = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+            
             int[] x = groups.Select(g =>
-                g.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).SelectMany(x => x).Distinct()
+                g.Split('\n', StringSplitOptions.RemoveEmptyEntries).SelectMany(x => x).Distinct()
                     .Count()).ToArray();
             
             return x.Sum().ToString();
@@ -21,13 +18,10 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] groups = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
-            if (groups.Length == 1)
-                //unix line endings
-                groups = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] groups = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
 
             int[] x = groups.Select(g =>
-                g.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)).Select(group =>
+                g.Split('\n', StringSplitOptions.RemoveEmptyEntries)).Select(group =>
             {
                 int letterCount = 0;
                 for (char c = 'a'; c <= 'z'; c++)

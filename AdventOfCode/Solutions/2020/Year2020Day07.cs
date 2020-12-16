@@ -21,7 +21,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             string[][] rules = input
-                .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => new string(line.Substring(0, line.Length - 1).Where(c => c < '0' || c > '9').ToArray())
                     .Replace(" bags", " bag").Replace(" bag", "")
                     .Split(" contain ")).ToArray();
@@ -71,7 +71,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             string[][] rules = input
-                .Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => new string(line.Substring(0, line.Length - 1).ToArray())
                     .Replace(" bags", " bag").Replace(" bag", "")
                     .Split(" contain ")).ToArray();

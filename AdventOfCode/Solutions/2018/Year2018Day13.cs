@@ -14,7 +14,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             //y, then x
-            char[][] map = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray()).ToArray();
+            char[][] map = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray()).ToArray();
 
             //TURNNUMBER, DIRECTION, X, Y, ID
             byte[][] carts;
@@ -130,13 +130,8 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            /*
-            input =
-                "/>-<\\  \r\n|   |  \r\n| /<+-\\\r\n| | | v\r\n\\>+</ |\r\n  |   ^\r\n  \\<->/";
-            //*/
-
             //y, then x
-            char[][] map = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray()).ToArray();
+            char[][] map = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray()).ToArray();
 
             //TURNNUMBER, DIRECTION, X, Y, ID
             byte[][] carts;

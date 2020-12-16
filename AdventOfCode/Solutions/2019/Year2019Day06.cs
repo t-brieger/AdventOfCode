@@ -28,7 +28,7 @@ namespace AdventOfCode.Solutions
                 { "COM", null }
             };
 
-            foreach (string[] s in input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            foreach (string[] s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Split(')')))
             {
                 orbits.Add(s[1], s[0]);
@@ -54,7 +54,7 @@ namespace AdventOfCode.Solutions
                 { "COM", null }
             };
 
-            foreach (string[] s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+            foreach (string[] s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Split(')')))
             {
                 orbits.Add(s[1], s[0]);

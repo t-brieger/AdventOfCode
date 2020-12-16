@@ -32,12 +32,12 @@ namespace AdventOfCode.Solutions
                 numIters += input[i] - '0';
             }
 
-            string[] rawBehaviours = input.Split(new[] { "\n\n", "\r\n\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] rawBehaviours = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
             for (int i = 1; i < rawBehaviours.Length; i++)
             {
                 string behaviourStr = rawBehaviours[i];
                 char id = behaviourStr[9];
-                string[] lines = behaviourStr.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = behaviourStr.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 bool write0 = lines[2][22] == '1';
                 bool dir0 = lines[3][27] == 'r';
                 char next0 = lines[4][26];

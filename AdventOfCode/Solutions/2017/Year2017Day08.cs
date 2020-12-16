@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions
         {
             Dictionary<string, int> registers = new Dictionary<string, int>();
 
-            foreach (string[] words in input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
+            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
             {
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
@@ -66,7 +66,7 @@ namespace AdventOfCode.Solutions
 
             int max = 0;
 
-            foreach (string[] words in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
+            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
             {
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);

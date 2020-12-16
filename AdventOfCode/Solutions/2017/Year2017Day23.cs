@@ -15,7 +15,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            string[] instructions = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             Dictionary<char, int> registers = new Dictionary<char, int>(8);
             for (char c = 'a'; c <= 'h'; c++)

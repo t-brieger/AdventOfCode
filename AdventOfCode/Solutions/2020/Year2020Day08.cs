@@ -36,7 +36,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            string[][] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            string[][] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Split(' ')).ToArray();
 
             return run(instructions).Item2.ToString();
@@ -44,7 +44,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[][] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            string[][] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.Split(' ')).ToArray();
             string[][] currentInstructions;
 

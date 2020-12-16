@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] passPhrases = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int valid = passPhrases.Length;
             foreach (string s in passPhrases)
             {
@@ -30,7 +30,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] passPhrases = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int valid = passPhrases.Length;
             foreach (string s in passPhrases)
             {

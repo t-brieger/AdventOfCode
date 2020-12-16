@@ -13,7 +13,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             short[][] inputs;
-            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
+            inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;
@@ -56,7 +56,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             short[][] inputs;
-            inputs = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
+            inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;

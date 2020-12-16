@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
             bool shouldLoop = true;
             ((int start, int end) x, (int start, int end) y) boundingBox = ((50001, -50001), (50001, -50001));
@@ -77,7 +77,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
 
             bool shouldLoop = true;

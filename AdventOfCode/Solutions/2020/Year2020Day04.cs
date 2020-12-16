@@ -7,13 +7,10 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] entries = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
-            if (entries.Length == 1)
-                //unix line endings
-                entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+            string[] entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
 
             string[][] includedFields = entries
-                .Select(entry => entry.Split(new[] {' ', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(entry => entry.Split(new[] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries))
                 .Select(fieldValues => fieldValues.Select(fieldValue => fieldValue.Split(':')[0]).ToArray()).ToArray();
 
             int validCount = 0;
@@ -53,13 +50,10 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] entries = input.Split("\r\n\r\n", StringSplitOptions.RemoveEmptyEntries);
-            if (entries.Length == 1)
-                //unix line endings
-                entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
-
+            string[] entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
+            
             (string, string)[][] includedFields = entries
-                .Select(entry => entry.Split(new[] {' ', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(entry => entry.Split(new[] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries))
                 .Select(fieldValues =>
                     fieldValues.Select(fieldValue => (fieldValue.Split(':')[0], fieldValue.Split(':')[1])).ToArray())
                 .ToArray();

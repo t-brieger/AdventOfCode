@@ -8,51 +8,14 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            /*
-            input =
-                "initial state: #..#.#..##......###...###\r\n\r\n" +
-                "..... => .\r\n" +
-                "....# => .\r\n" +
-                "...#. => .\r\n" +
-                "...## => #\r\n" +
-                "..#.. => #\r\n" +
-                "..#.# => .\r\n" +
-                "..##. => .\r\n" +
-                "..### => .\r\n" +
-                ".#... => #\r\n" +
-                ".#..# => .\r\n" +
-                ".#.#. => #\r\n" +
-                ".#.## => #\r\n" +
-                ".##.. => #\r\n" +
-                ".##.# => .\r\n" +
-                ".###. => .\r\n" +
-                ".#### => #\r\n" +
-                "#.... => .\r\n" +
-                "#...# => .\r\n" +
-                "#..#. => .\r\n" +
-                "#..## => .\r\n" +
-                "#.#.. => .\r\n" +
-                "#.#.# => #\r\n" +
-                "#.##. => .\r\n" +
-                "#.### => #\r\n" +
-                "##... => .\r\n" +
-                "##..# => .\r\n" +
-                "##.#. => #\r\n" +
-                "##.## => #\r\n" +
-                "###.. => #\r\n" +
-                "###.# => #\r\n" +
-                "####. => #\r\n" +
-                "##### => .";
-            //*/
-
-            string startState = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[0].Split(' ', 3)[2];
+            string startState = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Split(' ', 3)[2];
 
             bool[] state = new bool[startState.Length + 100]; //probably only needs 80 (40 in either direction)
 
             Array.Copy(startState.Select(c => c == '#').ToArray(), 0, state, 50, startState.Length);
 
             Dictionary<Tuple<bool, bool, bool, bool, bool>, bool> conversions = new Dictionary<Tuple<bool, bool, bool, bool, bool>, bool>(input
-                .Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(s =>
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(s =>
                 {
                     string[] parts = s.Split(" => ");
 

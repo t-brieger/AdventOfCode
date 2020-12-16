@@ -24,13 +24,13 @@ namespace AdventOfCode.Solutions
         
         public override string Part1(string s)
         {
-            List<int> inputs = s.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
+            List<int> inputs = s.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
             return inputs.Sum().ToString();
         }
 
         public override string Part2(string s)
         {
-            List<int> inputs = s.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
+            List<int> inputs = s.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
 
             int tmpSum = 0;
             HashSet<int> reachedSums = new HashSet<int>();

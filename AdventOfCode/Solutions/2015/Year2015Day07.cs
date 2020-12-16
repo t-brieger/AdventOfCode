@@ -117,7 +117,7 @@ namespace AdventOfCode.Solutions._2015
         {
             //input = "123 -> x\n456 -> y\nx AND y -> d\nx OR y -> e\nx LSHIFT 2 -> f\ny RSHIFT 2 -> g\nNOT x -> h\nNOT y -> i\nh AND i -> z";
 
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             //Literal:    0
             //AND:        1

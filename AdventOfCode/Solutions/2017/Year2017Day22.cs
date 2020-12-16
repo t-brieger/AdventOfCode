@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int startingSize = lines[0].Length / 2;
 
             HashSet<(int x, int y)> infected = new HashSet<(int x, int y)>();
@@ -60,7 +60,7 @@ namespace AdventOfCode.Solutions
         //this isnt perfect, but im ok with 1.5 seconds
         public override string Part2(string input)
         {
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int startingSize = lines[0].Length / 2;
 
             //0: weakened, 2: flagged, 1: infected

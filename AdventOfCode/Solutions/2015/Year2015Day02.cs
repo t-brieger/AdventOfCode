@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int totalArea = 0;
 
@@ -22,7 +22,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int totalLength = 0;
 

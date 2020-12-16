@@ -11,7 +11,7 @@ namespace AdventOfCode.Solutions
         {
             Dictionary<char, List<char>> requirements = new Dictionary<char, List<char>>();
             
-            foreach (string line in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 if (!requirements.ContainsKey(line[36]))
                     requirements.Add(line[36], new List<char>(5));
@@ -44,7 +44,7 @@ namespace AdventOfCode.Solutions
         {
             Dictionary<char, List<char>> requirements = new Dictionary<char, List<char>>();
 
-            foreach (string line in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 if (!requirements.ContainsKey(line[36]))
                     requirements.Add(line[36], new List<char>(5));

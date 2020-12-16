@@ -11,7 +11,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            string[] wires = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             //null -> intersection; 0/1 -> wires[x]
             Dictionary<Point, bool?> grid = new Dictionary<Point, bool?>();
@@ -100,7 +100,7 @@ namespace AdventOfCode.Solutions
         {
             // fuck this
             //TODO: make this work
-            string[][] wireSegments = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            string[][] wireSegments = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(_ => _.Split(',')).ToArray();
 
             int bestIntersection = Int32.MaxValue;
@@ -220,7 +220,7 @@ namespace AdventOfCode.Solutions
 
             return bestIntersection.ToString();
 
-            /* string[] wires = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            /* string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             Dictionary<Point, int>[] delaysGlobal = new Dictionary<Point, int>[2]; //I suck at naming things
 
             //null -> intersection; 0/1 -> wires[x]

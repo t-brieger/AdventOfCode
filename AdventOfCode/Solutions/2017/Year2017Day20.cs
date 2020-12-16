@@ -40,7 +40,7 @@ namespace AdventOfCode.Solutions
         {
             int i = 0;
 
-            return input.Split(new []{'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(l => $"{i++} {l}").OrderBy(line =>
+            return input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(l => $"{i++} {l}").OrderBy(line =>
             {
                 string[] things = line.Substring(0, line.Length - 1).Split(',', '<');
                 return ManhattanDistance(Int32.Parse(things[9]), Int32.Parse(things[10]), Int32.Parse(things[11]));
@@ -51,7 +51,7 @@ namespace AdventOfCode.Solutions
         {
             int id = 0;
 
-            HashSet<Particle> particles = new HashSet<Particle>(input.Split(new []{ '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(
+            HashSet<Particle> particles = new HashSet<Particle>(input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(
                 line =>
                 {
                     string[] parts = line.Replace(">", "").Split('<', ',').ToArray();

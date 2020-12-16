@@ -169,7 +169,7 @@ namespace AdventOfCode
         {
             try
             {
-                return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in");
+                return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in").Replace("\r\n", "\n");
             }
             catch (DirectoryNotFoundException)
             {

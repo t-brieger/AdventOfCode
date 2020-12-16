@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] lines = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int[] busses = lines[1].Split(',').Where(s => s != "x").Select(int.Parse).ToArray();
             int origTimestamp = int.Parse(lines[0]);
             for (int timestamp = origTimestamp;; timestamp++)
@@ -36,7 +36,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            (long, int)[] busses = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)[1]
+            (long, int)[] busses = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[1]
                 .Split(',').Select((str, ix) => (str, ix)).Where(x => x.str != "x")
                 .Select(i => (long.Parse(i.str), i.ix)).ToArray();
             return ChineseRemainderTheorem(busses.Select(bus => (mod: bus.Item1, a: bus.Item1 - bus.Item2)).ToArray())

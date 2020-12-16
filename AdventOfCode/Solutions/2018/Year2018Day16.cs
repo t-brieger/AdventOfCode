@@ -42,8 +42,8 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             {
-                string[] tmp = input.Split("\r\n\r\n\r\n", 2);
-                input = tmp.Length == 1 ? input.Split("\n\n\n", 2)[0] : tmp[0];
+                string[] tmp = input.Split("\n\n\n", 2);
+                input = tmp[0];
             }
 
             int moreThanThreePossibilities = 0;
@@ -54,10 +54,10 @@ namespace AdventOfCode.Solutions
                 for (int j = 0; j < opCodesPossible.GetLength(1); j++)
                     opCodesPossible[i, j] = true;
 
-            string[] samples = input.Split("\r\n\r\n"); //TODO unix line ending support
+            string[] samples = input.Split("\n\n");
             foreach (string sample in samples)
             {
-                string[] lines = sample.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = sample.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 int[] beforeRegisters = lines[0].Split(' ', 2)[1]
                     .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
                 int[] afterRegisters = lines[2].Split(' ', 2)[1]
@@ -103,7 +103,7 @@ namespace AdventOfCode.Solutions
         {
             string inputFirstPart;
             {
-                string[] tmp = input.Split("\r\n\r\n\r\n", 2);
+                string[] tmp = input.Split("\n\n\n", 2);
                 inputFirstPart = tmp.Length == 1 ? input.Split("\n\n\n", 2)[0] : tmp[0];
             }
 
@@ -113,10 +113,10 @@ namespace AdventOfCode.Solutions
                 for (int j = 0; j < opCodesPossible.GetLength(1); j++)
                     opCodesPossible[i, j] = true;
 
-            string[] samples = inputFirstPart.Split("\r\n\r\n"); //TODO unix line ending support
+            string[] samples = inputFirstPart.Split("\n\n");
             foreach (string sample in samples)
             {
-                string[] lines = sample.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] lines = sample.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 int[] beforeRegisters = lines[0].Split(' ', 2)[1]
                     .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
                 int[] afterRegisters = lines[2].Split(' ', 2)[1]
@@ -178,11 +178,7 @@ namespace AdventOfCode.Solutions
                 }
             }
 
-            string[] demoProgram;
-            {
-                string[] tmp = input.Split("\r\n\r\n\r\n\r\n", 2);
-                demoProgram = tmp.Length == 1 ? input.Split("\n\n\n\n", 2)[1].Split(new []{'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries) : tmp[1].Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            }
+            string[] demoProgram = input.Split("\n\n\n\n", 2)[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int[] registers = new int[4];
             registers = demoProgram.Select(i => i.Split(' ').Select(Int32.Parse).ToArray()).Aggregate(registers, (current, instruction) => ExecuteOpCode(opCodes[instruction[0]], current, instruction[1], instruction[2], instruction[3]));

@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            bool[][] isTree = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+            bool[][] isTree = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Select(c => c == '#').ToArray()).ToArray();
 
             int x = 0, y = 0;
@@ -26,7 +26,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            bool[][] isTree = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+            bool[][] isTree = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Select(c => c == '#').ToArray()).ToArray();
 
             int x = 0, y = 0;

@@ -10,7 +10,7 @@ namespace AdventOfCode.Solutions
             bool[] grid = new bool[1_000_000];
             Array.Fill(grid, false);
 
-            foreach (string s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 int operation = s.Substring(0, 7) switch
                 {
@@ -50,7 +50,7 @@ namespace AdventOfCode.Solutions
             int[] grid = new int[1_000_000];
             Array.Fill(grid, 0);
 
-            foreach (string s in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 int operation = s.Substring(0, 7) switch
                 {

@@ -12,18 +12,12 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            /*
-            input =
-                "set a 1\r\nadd a 2\r\nmul a a\r\nmod a 5\r\nsnd a\r\nset a 0\r\nrcv a\r\njgz a -1\r\nset a 1\r\njgz a -2";
-            /*/
-            //*/
-
             long[] registers = new long[26];
 
             for (int i = 0; i < 26; i++)
                 registers[i] = 0;
 
-            string[] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             long lastFrequency = -1;
 
@@ -74,7 +68,7 @@ namespace AdventOfCode.Solutions
             registers0['p' - 'a'] = 0;
             registers1['p' - 'a'] = 1;
 
-            string[] instructions = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             bool oneWaiting = false, twoWaiting = false;
 

@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            IEnumerable<(int, int)> scanners = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            IEnumerable<(int, int)> scanners = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(x =>
                 {
                     string[] y = x.Split(':');
@@ -22,7 +22,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            (int depth, int range)[] scanners = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+            (int depth, int range)[] scanners = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select<string, (int depth, int range)>(x =>
                 {
                     string[] y = x.Split(':');

@@ -7,12 +7,12 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            bool[,] grid = new bool[input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length];
+            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
             char[,] extraChars = new char[grid.GetLength(0), grid.GetLength(1)];
 
-            for (int i = 0; i < input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
             {
-                string line = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)[i];
+                string line = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[i];
 
                 for (int j = 0; j < line.Length; j++)
                 {
@@ -130,11 +130,11 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            bool[,] grid = new bool[input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length];
+            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
 
-            for (int i = 0; i < input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
             {
-                string line = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)[i];
+                string line = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[i];
 
                 for (int j = 0; j < line.Length; j++)
                 {

@@ -21,7 +21,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             Dictionary<int, HashSet<int>> connections = input
-                .Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
                 .ToDictionary(x => Int32.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(Int32.Parse)));
 
             HashSet<int> seen = new HashSet<int>();
@@ -34,7 +34,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             Dictionary<int, HashSet<int>> connections = input
-                .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Split(" <-> "))
                 .ToDictionary(x => Int32.Parse(x[0]), x => new HashSet<int>(x[1].Split(',').Select(Int32.Parse)));
 
             int groups = 0;

@@ -133,7 +133,7 @@
 
         public override string Part1(string input)
         {
-            string[] lines = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             Dictionary<SubGrid, SubGrid> transformations = new Dictionary<SubGrid, SubGrid>();
 

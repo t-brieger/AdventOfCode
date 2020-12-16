@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tmp2 = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             List<short[]> tmpList = tmp2.Select(s => s.Split(new[] {'#', ' ', '@', ':', 'x', ','}, StringSplitOptions.RemoveEmptyEntries)).Select(splitStrings => new[] {Int16.Parse(splitStrings[0]), Int16.Parse(splitStrings[1]), Int16.Parse(splitStrings[2]), Int16.Parse(splitStrings[3]), Int16.Parse(splitStrings[4])}).ToList();
 
@@ -47,7 +47,7 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            string[] tmp2 = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] tmp2 = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             List<short[]> tmpList = tmp2.Select(s => s.Split(new[] {'#', ' ', '@', ':', 'x', ','}, StringSplitOptions.RemoveEmptyEntries)).Select(splitStrings => new[] {Int16.Parse(splitStrings[0]), Int16.Parse(splitStrings[1]), Int16.Parse(splitStrings[2]), Int16.Parse(splitStrings[3]), Int16.Parse(splitStrings[4])}).ToList();
 

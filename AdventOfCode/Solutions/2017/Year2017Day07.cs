@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             Dictionary<string, HashSet<string>> lines = new Dictionary<string, HashSet<string>>();
-            foreach (string line in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 string[] parts = line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (string value in parts.Skip(3))
@@ -78,7 +78,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             Dictionary<string, Tuple<HashSet<string>, int>> lines = new Dictionary<string, Tuple<HashSet<string>, int>>();
-            foreach (string[] parts in input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)))
+            foreach (string[] parts in input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)))
             {
                 foreach (string value in parts.Skip(3))
                 {

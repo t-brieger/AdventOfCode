@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             int sum = 0;
-            foreach (string s in input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 int max = Int32.MinValue;
                 int min = Int32.MaxValue;
@@ -44,7 +44,7 @@ namespace AdventOfCode.Solutions
                 return 0;
             }
             
-            int[][] grid = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            int[][] grid = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Split('\t').Select(Int32.Parse).ToArray()).ToArray();
 
             int sum = grid.Sum(Foo);

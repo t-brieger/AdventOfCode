@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            char[][] seats = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            char[][] seats = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.ToCharArray()).ToArray();
 
             bool hasChanged = true;
@@ -66,7 +66,7 @@ namespace AdventOfCode.Solutions
         [SuppressMessage("ReSharper", "EmptyGeneralCatchClause")]
         public override string Part2(string input)
         {
-            char[][] seats = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            char[][] seats = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.ToCharArray()).ToArray();
 
             bool hasChanged = true;
@@ -92,7 +92,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -109,7 +109,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -125,7 +125,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -142,7 +142,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -158,7 +158,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -175,7 +175,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -191,7 +191,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 
@@ -208,7 +208,7 @@ namespace AdventOfCode.Solutions
                         {
                             adjacent += seats[posY][posX] == '#' ? 1 : 0;
                         }
-                        catch (Exception e)
+                        catch (Exception)
                         {
                         }
 

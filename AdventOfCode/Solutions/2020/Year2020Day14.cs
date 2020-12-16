@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] lines = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             //could be a bit shorter but eh who cares, this is the max length
             Dictionary<long, long> mem = new Dictionary<long, long>(lines.Length - 1);
             bool?[] currentMask = new bool?[0];
@@ -73,7 +73,7 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            string[] lines = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             //could be a bit shorter but eh who cares, this is the max length
             Dictionary<long, long> mem = new Dictionary<long, long>(lines.Length - 1);
             bool?[] currentMask = new bool?[0];

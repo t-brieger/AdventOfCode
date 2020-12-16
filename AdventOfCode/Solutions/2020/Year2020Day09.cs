@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            long[] numbers = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            long[] numbers = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(long.Parse).ToArray();
 
             for (int i = 25; i < numbers.Length; i++)
@@ -44,7 +44,7 @@ namespace AdventOfCode.Solutions
             //lol
             long numberToSearch = long.Parse(Part1(input));
 
-            long[] numbers = input.Split(new[] {'\n', '\r'}, StringSplitOptions.RemoveEmptyEntries)
+            long[] numbers = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(long.Parse).ToArray();
 
             for (int start = 0; start < numbers.Length - 1; start++)

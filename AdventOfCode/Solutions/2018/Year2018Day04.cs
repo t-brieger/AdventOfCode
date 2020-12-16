@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] events = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] events = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             Array.Sort(events, StringComparer.InvariantCulture);
 
             int currentGuard = -1;
@@ -60,7 +60,7 @@ namespace AdventOfCode.Solutions
         
         public override string Part2(string input)
         {
-            string[] events = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] events = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             Array.Sort(events, StringComparer.InvariantCulture);
 
             int currentGuard = -1;

@@ -6,7 +6,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] strings = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] strings = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int count = 0;
 
@@ -37,7 +37,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] strings = input.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] strings = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int count = 0;
 

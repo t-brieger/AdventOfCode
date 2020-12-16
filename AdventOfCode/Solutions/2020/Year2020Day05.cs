@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            char[][] passes = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+            char[][] passes = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.ToCharArray()).ToArray();
 
             int highestId = -1;
@@ -40,7 +40,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            char[][] passes = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+            char[][] passes = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(s => s.ToCharArray()).ToArray();
 
             HashSet<int> possibleRows = new HashSet<int>();

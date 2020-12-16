@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            int[] adapters = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
+            int[] adapters = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
                 .OrderBy(i => i).Prepend(0).ToArray();
 
             //last adapter -> device
@@ -34,7 +34,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            int[] adapters = input.Split(new[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
+            int[] adapters = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse)
                 .OrderBy(i => i).ToArray();
 
             long[] cumulativeCombinations = new long[adapters[^1] + 1];
