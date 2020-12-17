@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AdventOfCode.Solutions
@@ -8,7 +9,6 @@ namespace AdventOfCode.Solutions
     {
         private static string GetMd5Hash(MD5 md5Hash, string input)
         {
-
             byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
             StringBuilder sBuilder = new StringBuilder();
 
@@ -16,7 +16,7 @@ namespace AdventOfCode.Solutions
             {
                 sBuilder.Append(b.ToString("x2"));
             }
-            
+
             return sBuilder.ToString();
         }
 
@@ -25,8 +25,22 @@ namespace AdventOfCode.Solutions
             input = input.Trim();
             using MD5 md5Hash = MD5.Create();
             long i = 0;
-            while (GetMd5Hash(md5Hash, input + i).Substring(0, 5) != "00000")
-                i++;
+            string currentHash;
+            while ((currentHash = GetMd5Hash(md5Hash, input + i++)).Substring(0, 5) != "00000")
+            {
+#if VIS
+                if (i % 13 != 0) //13 so that the last digit changes
+                    continue;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{i:00000000}: {currentHash}");
+                Console.CursorLeft = 0;
+#endif
+            }
+#if VIS
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{i:00000000}: {currentHash}");
+            Console.ResetColor();
+#endif
             return i.ToString();
         }
 
@@ -35,8 +49,22 @@ namespace AdventOfCode.Solutions
             input = input.Trim();
             using MD5 md5Hash = MD5.Create();
             long i = 0;
-            while (GetMd5Hash(md5Hash, input + i).Substring(0, 6) != "000000")
-                i++;
+            string currentHash;
+            while ((currentHash = GetMd5Hash(md5Hash, input + i++)).Substring(0, 6) != "000000")
+            {
+#if VIS
+                if (i % 133 != 0)
+                    continue;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write($"{i:00000000}: {currentHash}");
+                Console.CursorLeft = 0;
+#endif
+            }
+#if VIS
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"{i:00000000}: {currentHash}\n\n");
+            Console.ResetColor();
+#endif
             return i.ToString();
         }
     }
