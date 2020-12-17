@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace AdventOfCode.Solutions
 {
@@ -25,12 +26,50 @@ namespace AdventOfCode.Solutions
             }
 
             int error = 0;
+            int validCount = 0;
+            int totalCount = 0;
 
             foreach (int[] ticket in dataGroups[2].Skip(1).Select(line => line.Split(',').Select(int.Parse).ToArray()))
             {
-                error += ticket.Where(i => !validValues.Contains(i)).Sum();
-            }
+                bool isTicketValid = true;
+                totalCount++;
+#if VIS
+                Console.Write(new string(' ', Console.BufferWidth - 1));
+                Console.CursorLeft = 0;
+#endif
+                foreach (int field in ticket)
+                {
+                    bool isValid = validValues.Contains(field);
 
+                    if (!isValid)
+                    {
+                        error += field;
+                        isTicketValid = false;
+                    }
+#if VIS
+                    Console.ForegroundColor = isValid ? ConsoleColor.Green : ConsoleColor.Red;
+                    Console.Write(field + " ");
+#endif
+                }
+
+                if (isTicketValid)
+                    validCount++;
+#if VIS
+                Console.ResetColor();
+                Console.Write("\nCorrect: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(validCount);
+                Console.ResetColor();
+                Console.Write(
+                    $"/{totalCount}, {(int) ((float) validCount / totalCount * 100)}% - total error: {error}");
+                Thread.Sleep(70);
+                Console.CursorLeft = 0;
+                Console.CursorTop -= 1;
+#endif
+            }
+#if VIS
+            Console.WriteLine("\n\n\n");
+#endif
             return error.ToString();
         }
 
@@ -86,7 +125,8 @@ namespace AdventOfCode.Solutions
                 }
             }
 
-            return dataGroups[1][1].Split(',').Select(int.Parse).Where((val, i) => possibilities[i][0].StartsWith("departure"))
+            return dataGroups[1][1].Split(',').Select(int.Parse)
+                .Where((val, i) => possibilities[i][0].StartsWith("departure"))
                 .Aggregate(1L, (total, val) => total * val).ToString();
         }
     }
