@@ -7,345 +7,151 @@ namespace AdventOfCode.Solutions
 {
     public class Year2019Day03 : Solution
     {
-        private static int ManhattanDist(Point p) => Math.Abs(p.X) + Math.Abs(p.Y);
+        private static int ManhattanDist((int X, int Y) p) => Math.Abs(p.X) + Math.Abs(p.Y);
 
         public override string Part1(string input)
         {
             string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-            //null -> intersection; 0/1 -> wires[x]
-            Dictionary<Point, bool?> grid = new Dictionary<Point, bool?>();
+            HashSet<(int, int)> firstWire = new HashSet<(int, int)>();
 
-            HashSet<Point> collisions = new HashSet<Point>();
+            HashSet<(int, int)> collisions = new HashSet<(int, int)>();
 
-            for (byte wireIndex = 0; wireIndex < wires.Length; wireIndex++)
+            int x = 0, y = 0;
+            foreach (string direction in wires[0].Split(','))
             {
-                int x = 0;
-                int y = 0;
-                foreach (string modifier in wires[wireIndex].Split(','))
+                char dir = direction[0];
+                int amount = int.Parse(direction.Substring(1));
+
+                for (int i = 0; i < amount; i++)
                 {
-                    int steps = Int32.Parse(modifier.Substring(1));
-                    switch (modifier[0])
+                    switch (dir)
                     {
                         case 'U':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                y--;
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
-                                    grid[new Point(x, y)] = null;
-                                    collisions.Add(new Point(x, y));
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            y--;
                             break;
                         case 'D':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                y++;
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
-                                    grid[new Point(x, y)] = null;
-                                    collisions.Add(new Point(x, y));
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
-                            break;
-                        case 'L':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                x--;
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
-                                    grid[new Point(x, y)] = null;
-                                    collisions.Add(new Point(x, y));
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            y++;
                             break;
                         case 'R':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                x++;
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] == (wireIndex != 0)) continue;
-                                    grid[new Point(x, y)] = null;
-                                    collisions.Add(new Point(x, y));
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            x++;
                             break;
-                        default:
-                            throw new Exception("unrecognized direction: " + modifier[0]);
+                        case 'L':
+                            x--;
+                            break;
                     }
+
+                    firstWire.Add((x, y));
                 }
             }
 
+            x = 0;
+            y = 0;
+            foreach (string direction in wires[1].Split(','))
+            {
+                char dir = direction[0];
+                int amount = int.Parse(direction.Substring(1));
+
+                for (int i = 0; i < amount; i++)
+                {
+                    switch (dir)
+                    {
+                        case 'U':
+                            y--;
+                            break;
+                        case 'D':
+                            y++;
+                            break;
+                        case 'R':
+                            x++;
+                            break;
+                        case 'L':
+                            x--;
+                            break;
+                    }
+
+                    if (firstWire.Contains((x, y)))
+                        collisions.Add((x, y));
+                }
+            }
+            
             return collisions.Min(ManhattanDist).ToString();
         }
 
         public override string Part2(string input)
         {
-            // fuck this
-            //TODO: make this work
-            string[][] wireSegments = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(_ => _.Split(',')).ToArray();
+            string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-            int bestIntersection = Int32.MaxValue;
+            Dictionary<(int, int), int> firstWire = new Dictionary<(int, int), int>();
+            
+            int bestCollision = Int32.MaxValue;
 
-            Dictionary<Point, int> firstWirePoints = new Dictionary<Point, int> {{new Point(0, 0), 0}};
-
-            int delay = 0;
-            int x = 0;
-            int y = 0;
-
-            for (int i = 0; i < wireSegments[0].Length; i++)
+            int x = 0, y = 0;
+            int wireLen = 0;
+            foreach (string direction in wires[0].Split(','))
             {
-                void UpdateDelay()
+                char dir = direction[0];
+                int amount = int.Parse(direction.Substring(1));
+
+                for (int i = 0; i < amount; i++)
                 {
-                    if (firstWirePoints.ContainsKey(new Point(x, y)))
-                        delay = firstWirePoints[new Point(x, y)];
-                    else
-                    {
-                        delay++;
-                        firstWirePoints.Add(new Point(x, y), delay);
-                    }
-                }
-
-                int length = Int32.Parse(wireSegments[0][i].Substring(1));
-
-                switch (wireSegments[0][i][0])
-                {
-                    case 'U':
-                        for (int j = 0; j < length; j++)
-                        {
-                            y--;
-                            UpdateDelay();
-                        }
-
-                        break;
-                    case 'D':
-                        for (int j = 0; j < length; j++)
-                        {
-                            y++;
-                            UpdateDelay();
-                        }
-                        break;
-                    case 'L':
-                        for (int j = 0; j < length; j++)
-                        {
-                            x--;
-                            UpdateDelay();
-                        }
-                        break;
-                    case 'R':
-                        for (int j = 0; j < length; j++)
-                        {
-                            x++;
-                            UpdateDelay();
-                        }
-                        break;
-                }
-            }
-
-            firstWirePoints.Remove(new Point(0, 0));
-
-            delay = x = y = 0;
-            Dictionary<Point, int> delays = new Dictionary<Point, int>();
-            //delays.Add(new Point(0, 0), 0);
-
-            for (int i = 0; i < wireSegments[1].Length; i++)
-            {
-                int x1 = x;
-
-                void UpdateDelay()
-                {
-                    if (delays.ContainsKey(new Point(x1, y)))
-                        delay = delays[new Point(x1, y)];
-                    else
-                    {
-                        delay++;
-                        delays.Add(new Point(x1, y), delay);
-                        if (firstWirePoints.ContainsKey(new Point(x1, y)) && delays[new Point(x1, y)] + firstWirePoints[new Point(x1, y)] < bestIntersection) bestIntersection = delays[new Point(x1, y)] + firstWirePoints[new Point(x1, y)];
-                    }
-                }
-
-                int length = Int32.Parse(wireSegments[1][i].Substring(1));
-
-                switch (wireSegments[1][i][0])
-                {
-                    case 'U':
-                        for (int j = 0; j < length; j++)
-                        {
-                            y--;
-                            UpdateDelay();
-                        }
-
-                        break;
-                    case 'D':
-                        for (int j = 0; j < length; j++)
-                        {
-                            y++;
-                            UpdateDelay();
-                        }
-                        break;
-                    case 'L':
-                        for (int j = 0; j < length; j++)
-                        {
-                            x--;
-                            UpdateDelay();
-                        }
-                        break;
-                    case 'R':
-                        for (int j = 0; j < length; j++)
-                        {
-                            x++;
-                            UpdateDelay();
-                        }
-                        break;
-                }
-            }
-
-            return bestIntersection.ToString();
-
-            /* string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            Dictionary<Point, int>[] delaysGlobal = new Dictionary<Point, int>[2]; //I suck at naming things
-
-            //null -> intersection; 0/1 -> wires[x]
-            Dictionary<Point, bool?> grid = new Dictionary<Point, bool?>();
-
-            HashSet<(Point, int)> collisions = new HashSet<(Point, int)>();
-
-            for (byte wireIndex = 0; wireIndex < wires.Length; wireIndex++)
-            {
-                Dictionary<Point, int> delays;
-                delaysGlobal[wireIndex] = delays = new Dictionary<Point, int>();
-                delays.Add(new Point(0, 0), 0);
-                int delay = 0;
-                int x = 0;
-                int y = 0;
-                foreach (string modifier in wires[wireIndex].Split(','))
-                {
-                    int steps = int.Parse(modifier.Substring(1));
-
-                    switch (modifier[0])
+                    switch (dir)
                     {
                         case 'U':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                y--;
-
-                                delay++;
-                                if (delays.ContainsKey(new Point(x, y)))
-                                    delay = delays[new Point(x, y)];
-                                else
-                                    delays[new Point(x, y)] = delay;
-
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add((new Point(x, y), delaysGlobal[0][new Point(x, y)] + delays[new Point(x, y)]));
-                                    }
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            y--;
                             break;
                         case 'D':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                y++;
-
-                                delay++;
-                                if (delays.ContainsKey(new Point(x, y)))
-                                    delay = delays[new Point(x, y)];
-                                else
-                                    delays[new Point(x, y)] = delay;
-
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add((new Point(x, y), delaysGlobal[0][new Point(x, y)] + delays[new Point(x, y)]));
-                                    }
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
-                            break;
-                        case 'L':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                x--;
-
-                                delay++;
-                                if (delays.ContainsKey(new Point(x, y)))
-                                    delay = delays[new Point(x, y)];
-                                else
-                                    delays[new Point(x, y)] = delay;
-
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add((new Point(x, y), delaysGlobal[0][new Point(x, y)] + delays[new Point(x, y)]));
-                                    }
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            y++;
                             break;
                         case 'R':
-                            for (int i = 0; i < steps; i++)
-                            {
-                                x++;
-
-                                delay++;
-                                if (delays.ContainsKey(new Point(x, y)))
-                                    delay = delays[new Point(x, y)];
-                                else
-                                    delays[new Point(x, y)] = delay;
-
-                                if (grid.ContainsKey(new Point(x, y)))
-                                {
-                                    if (grid[new Point(x, y)] != (wireIndex != 0))
-                                    {
-                                        grid[new Point(x, y)] = null;
-                                        collisions.Add((new Point(x, y), delaysGlobal[0][new Point(x, y)] + delays[new Point(x, y)]));
-                                    }
-                                }
-                                else
-                                    grid.Add(new Point(x, y), wireIndex != 0);
-                            }
-
+                            x++;
                             break;
-                        default:
-                            throw new Exception("unrecognized direction: " + modifier[0]);
+                        case 'L':
+                            x--;
+                            break;
                     }
+
+                    wireLen++;
+
+                    firstWire.TryAdd((x, y), wireLen);
                 }
             }
 
-            return collisions.Min(x => x.Item2).ToString();
-            */
+            x = 0;
+            y = 0;
+            wireLen = 0;
+            foreach (string direction in wires[1].Split(','))
+            {
+                char dir = direction[0];
+                int amount = int.Parse(direction.Substring(1));
+
+                for (int i = 0; i < amount; i++)
+                {
+                    switch (dir)
+                    {
+                        case 'U':
+                            y--;
+                            break;
+                        case 'D':
+                            y++;
+                            break;
+                        case 'R':
+                            x++;
+                            break;
+                        case 'L':
+                            x--;
+                            break;
+                    }
+
+                    wireLen++;
+                    
+                    if (firstWire.ContainsKey((x, y)))
+                        if (wireLen + firstWire[(x, y)] < bestCollision)
+                            bestCollision = wireLen + firstWire[(x, y)];
+                }
+            }
+
+            return bestCollision.ToString();
         }
     }
 }
