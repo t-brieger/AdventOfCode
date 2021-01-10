@@ -16,10 +16,10 @@ namespace AdventOfCode.Solutions
 
             IEnumerable<int[]> possiblePhaseSettings = Util.GetPermutations(new[] {0, 1, 2, 3, 4});
 
-            int highestValue = int.MinValue;
+            long highestValue = int.MinValue;
             foreach (int[] phaseSettings in possiblePhaseSettings)
             {
-                int lastValue = 0;
+                long lastValue = 0;
                 for (int i = 0; i < 5; i++)
                 {
                     Computer c = new Computer(program);
@@ -45,7 +45,7 @@ namespace AdventOfCode.Solutions
 
             IEnumerable<int[]> possiblePhaseSettings = Util.GetPermutations(new[] {5, 6, 7, 8, 9});
 
-            int highestValue = int.MinValue;
+            long highestValue = int.MinValue;
             foreach (int[] phaseSettings in possiblePhaseSettings)
             {
                 Computer A = new Computer(program);
@@ -60,7 +60,7 @@ namespace AdventOfCode.Solutions
                 Computer E = new Computer(program);
                 E.input.Enqueue(phaseSettings[4]);
 
-                int lastEOutput = int.MinValue;
+                long lastEOutput = int.MinValue;
 
                 while (!A.hasHalted)
                 {
