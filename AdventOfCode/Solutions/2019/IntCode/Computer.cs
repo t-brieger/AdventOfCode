@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode.Solutions.IntCode
 {
@@ -62,6 +63,10 @@ namespace AdventOfCode.Solutions.IntCode
             opcodes.Add(99, ("HLT", 0, (_, _) => this.hasHalted = true));
         }
 
+        public Computer(string program) : this(program.Split(',').Select(long.Parse)) { }
+
+        public Computer(IEnumerable<long> program) : this(program.Select((x, i) => (i, x)).ToDictionary(t => (long)t.Item1, t => t.Item2)) {}
+        
         public Computer(Dictionary<long, long> memory)
         {
             this.memory = new Dictionary<long, long>(memory.Count);

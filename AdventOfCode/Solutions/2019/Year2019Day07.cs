@@ -62,7 +62,7 @@ namespace AdventOfCode.Solutions
 
                 long lastEOutput = int.MinValue;
 
-                while (!A.hasHalted)
+                while (!A.hasHalted && !B.hasHalted && !C.hasHalted && !D.hasHalted && !E.hasHalted)
                 {
                     do
                         A.Step();
