@@ -8,15 +8,14 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             (char, int)[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => (line[0], int.Parse(line.Substring(1)))).ToArray();
+                .Select(line => (line[0], int.Parse(line[1..]))).ToArray();
 
             int x = 0;
             int y = 0;
             //N, E, S, W
             int dir = 1;
-            
+
             foreach ((char ins, int amount) in instructions)
-            {
                 switch (ins)
                 {
                     case 'N':
@@ -58,7 +57,6 @@ namespace AdventOfCode.Solutions
 
                         break;
                 }
-            }
 
             return (Math.Abs(x) + Math.Abs(y)).ToString();
         }
@@ -66,15 +64,14 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             (char, int)[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => (line[0], int.Parse(line.Substring(1)))).ToArray();
+                .Select(line => (line[0], int.Parse(line[1..]))).ToArray();
 
             int x = 10;
             int y = -1;
             int xShip = 0;
             int yShip = 0;
-            
+
             foreach ((char ins, int amount) in instructions)
-            {
                 switch (ins)
                 {
                     case 'N':
@@ -102,7 +99,6 @@ namespace AdventOfCode.Solutions
                         yShip += y * amount;
                         break;
                 }
-            }
 
             return (Math.Abs(xShip) + Math.Abs(yShip)).ToString();
         }

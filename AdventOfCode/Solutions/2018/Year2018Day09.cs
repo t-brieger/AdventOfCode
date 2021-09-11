@@ -10,6 +10,7 @@ namespace AdventOfCode.Solutions
         {
             return node.Next ?? list.First;
         }
+
         private static LinkedListNode<T> Prev<T>(LinkedListNode<T> node, LinkedList<T> list)
         {
             return node.Previous ?? list.Last;
@@ -22,7 +23,7 @@ namespace AdventOfCode.Solutions
             int lastMarble = Int32.Parse(words[6]);
 
             int[] scores = new int[players];
-            LinkedList<int> marbles = new LinkedList<int>();
+            LinkedList<int> marbles = new();
             marbles.AddLast(0);
             marbles.AddLast(1);
             LinkedListNode<int> current = marbles.Last;
@@ -61,7 +62,7 @@ namespace AdventOfCode.Solutions
             int lastMarble = Int32.Parse(words[6]) * 100;
 
             long[] scores = new long[players];
-            LinkedList<int> marbles = new LinkedList<int>();
+            LinkedList<int> marbles = new();
             marbles.AddLast(0);
             marbles.AddLast(1);
             LinkedListNode<int> current = marbles.Last;

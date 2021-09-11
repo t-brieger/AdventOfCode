@@ -9,13 +9,10 @@ namespace AdventOfCode.Solutions
         //quite exactly day 9 pt 2 - reverse TSP
         public override string Part1(string input)
         {
-            Dictionary<(string, string), int> likeScores = new();
-            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-            {
-                string[] arr = line.Split(' ');
-                likeScores.Add((arr[0], arr[10].Substring(0, arr[10].Length - 1)), (arr[2][0] == 'l' ? -1 : 1) * int.Parse(arr[3]));
-            }
-            
+            Dictionary<(string, string), int> likeScores = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.Split(' ')).ToDictionary(arr => (arr[0], arr[10][..^1]),
+                    arr => (arr[2][0] == 'l' ? -1 : 1) * int.Parse(arr[3]));
+
             int maxDist = Int32.MinValue;
             foreach (string[] perm in Util.GetPermutations(likeScores.Keys.Select(x => x.Item1).Distinct()
                 .ToArray()))
@@ -29,17 +26,15 @@ namespace AdventOfCode.Solutions
 
                 maxDist = Math.Max(maxDist, dist);
             }
+
             return maxDist.ToString();
         }
 
         public override string Part2(string input)
         {
-            Dictionary<(string, string), int> likeScores = new();
-            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-            {
-                string[] arr = line.Split(' ');
-                likeScores.Add((arr[0], arr[10].Substring(0, arr[10].Length - 1)), (arr[2][0] == 'l' ? -1 : 1) * int.Parse(arr[3]));
-            }
+            Dictionary<(string, string), int> likeScores = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.Split(' ')).ToDictionary(arr => (arr[0], arr[10][..^1]),
+                    arr => (arr[2][0] == 'l' ? -1 : 1) * int.Parse(arr[3]));
 
             List<KeyValuePair<(string, string), int>> toAdd = new();
             foreach (string s in likeScores.Keys.Select(x => x.Item1).Distinct())
@@ -47,9 +42,10 @@ namespace AdventOfCode.Solutions
                 toAdd.Add(new KeyValuePair<(string, string), int>(("self", s), 0));
                 toAdd.Add(new KeyValuePair<(string, string), int>((s, "self"), 0));
             }
-            foreach (KeyValuePair<(string, string), int> yeet in toAdd)
-                likeScores.Add(yeet.Key, yeet.Value);
-            
+
+            foreach (((string, string) key, int value) in toAdd)
+                likeScores.Add(key, value);
+
             int maxDist = Int32.MinValue;
             foreach (string[] perm in Util.GetPermutations(likeScores.Keys.Select(x => x.Item1).Distinct()
                 .ToArray()))
@@ -63,6 +59,7 @@ namespace AdventOfCode.Solutions
 
                 maxDist = Math.Max(maxDist, dist);
             }
+
             return maxDist.ToString();
         }
     }

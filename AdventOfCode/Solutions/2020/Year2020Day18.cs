@@ -1,57 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace AdventOfCode.Solutions
 {
     public class Year2020Day18 : Solution
     {
-        private static long eval(string expr, bool strange_precedence = false)
+        private static long Eval(string expr, bool strangePrecedence = false)
         {
-            List<string> tokens = new List<string>();
-            Stack<char> operators = new Stack<char>();
-            for (int i = 0; i < expr.Length; i++)
-            {
-                if (char.IsNumber(expr[i])) //my input, at least, only has single-digit numbers
-                    tokens.Add(expr[i].ToString());
-                else if (expr[i] == '(')
-                    operators.Push(expr[i]);
-                else if (expr[i] == '*')
-                {
-                    while (operators.TryPeek(out char op) && !"()".Contains(op))
-                        tokens.Add(operators.Pop().ToString());
-                    operators.Push(expr[i]);
-                }
-                else if (expr[i] == '+')
-                {
-                    while (operators.TryPeek(out char op) && !(strange_precedence ? "()*" : "()").Contains(op))
-                        tokens.Add(operators.Pop().ToString());
-                    operators.Push(expr[i]);
-                }
-                else if (expr[i] == ')')
-                {
-                    while (operators.Peek() != '(')
-                        tokens.Add(operators.Pop().ToString());
-                    operators.Pop();
-                }
-            }
+            List<string> tokens = new();
+            Stack<char> operators = new();
+            foreach (char t in expr)
+                if (char.IsNumber(t)) //my input, at least, only has single-digit numbers
+                    tokens.Add(t.ToString());
+                else
+                    switch (t)
+                    {
+                        case '(':
+                            operators.Push(t);
+                            break;
+                        case '*':
+                        {
+                            while (operators.TryPeek(out char op) && !"()".Contains(op))
+                                tokens.Add(operators.Pop().ToString());
+                            operators.Push(t);
+                            break;
+                        }
+                        case '+':
+                        {
+                            while (operators.TryPeek(out char op) && !(strangePrecedence ? "()*" : "()").Contains(op))
+                                tokens.Add(operators.Pop().ToString());
+                            operators.Push(t);
+                            break;
+                        }
+                        case ')':
+                        {
+                            while (operators.Peek() != '(')
+                                tokens.Add(operators.Pop().ToString());
+                            operators.Pop();
+                            break;
+                        }
+                    }
 
             while (operators.Count > 0)
                 tokens.Add(operators.Pop().ToString());
 
-            Stack<long> evalStack = new Stack<long>();
+            Stack<long> evalStack = new();
             foreach (string s in tokens)
-            {
-                if (s.All(c => c >= '0' && c <= '9'))
+                if (s.All(c => c is >= '0' and <= '9'))
                     evalStack.Push(long.Parse(s));
-                else if (s == "*")
-                    evalStack.Push(evalStack.Pop() * evalStack.Pop());
-                else if (s == "+")
-                    evalStack.Push(evalStack.Pop() + evalStack.Pop());
                 else
-                    throw new Exception(s);
-            }
+                    switch (s)
+                    {
+                        case "*":
+                            evalStack.Push(evalStack.Pop() * evalStack.Pop());
+                            break;
+                        case "+":
+                            evalStack.Push(evalStack.Pop() + evalStack.Pop());
+                            break;
+                        default:
+                            throw new Exception(s);
+                    }
 
             return evalStack.Pop();
         }
@@ -59,11 +68,7 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             input = input.Replace(" ", "");
-            long total = 0;
-            foreach (string line in input.Split("\n", StringSplitOptions.RemoveEmptyEntries))
-            {
-                total += eval(line);
-            }
+            long total = input.Split("\n", StringSplitOptions.RemoveEmptyEntries).Sum(line => Eval(line));
 
             return total.ToString();
         }
@@ -71,11 +76,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             input = input.Replace(" ", "");
-            long total = 0;
-            foreach (string line in input.Split("\n", StringSplitOptions.RemoveEmptyEntries))
-            {
-                total += eval(line, true);
-            }
+            long total = input.Split("\n", StringSplitOptions.RemoveEmptyEntries).Sum(line => Eval(line, true));
 
             return total.ToString();
         }

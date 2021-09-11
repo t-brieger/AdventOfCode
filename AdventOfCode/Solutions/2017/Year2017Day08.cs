@@ -8,9 +8,10 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            Dictionary<string, int> registers = new Dictionary<string, int>();
+            Dictionary<string, int> registers = new();
 
-            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
+            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Split(' ')))
             {
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
@@ -49,12 +50,18 @@ namespace AdventOfCode.Solutions
 
                 int otherOperand = Int32.Parse(words[2]);
 
-                if (words[1] == "inc")
-                    registers[words[0]] += otherOperand;
-                else if (words[1] == "dec")
-                    registers[words[0]] -= otherOperand;
-                else
-                    Console.WriteLine($"invalid: {words[1]} (allowed: \"inc\"/\"dec\")");
+                switch (words[1])
+                {
+                    case "inc":
+                        registers[words[0]] += otherOperand;
+                        break;
+                    case "dec":
+                        registers[words[0]] -= otherOperand;
+                        break;
+                    default:
+                        Console.WriteLine($"invalid: {words[1]} (allowed: \"inc\"/\"dec\")");
+                        break;
+                }
             }
 
             return registers.OrderBy(kvp => kvp.Value).Last().Value.ToString();
@@ -62,11 +69,12 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            Dictionary<string, int> registers = new Dictionary<string, int>();
+            Dictionary<string, int> registers = new();
 
             int max = 0;
 
-            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(s => s.Split(' ')))
+            foreach (string[] words in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Split(' ')))
             {
                 if (!registers.ContainsKey(words[0]))
                     registers.Add(words[0], 0);
@@ -105,12 +113,19 @@ namespace AdventOfCode.Solutions
 
                 int otherOperand = Int32.Parse(words[2]);
 
-                if (words[1] == "inc")
-                    registers[words[0]] += otherOperand;
-                else if (words[1] == "dec")
-                    registers[words[0]] -= otherOperand;
-                else
-                    Console.WriteLine($"invalid: {words[1]} (allowed: \"inc\"/\"dec\")");
+                switch (words[1])
+                {
+                    case "inc":
+                        registers[words[0]] += otherOperand;
+                        break;
+                    case "dec":
+                        registers[words[0]] -= otherOperand;
+                        break;
+                    default:
+                        Console.WriteLine($"invalid: {words[1]} (allowed: \"inc\"/\"dec\")");
+                        break;
+                }
+
                 if (registers[words[0]] > max)
                     max = registers[words[0]];
             }

@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions
         {
             int[] startingNums = input.Split(',').Select(int.Parse).ToArray();
 
-            Dictionary<int, int> lastSpoken = new Dictionary<int, int>();
+            Dictionary<int, int> lastSpoken = new();
             int lastNum = -999;
             int thisNum = 0;
             int iter = 0;
@@ -24,18 +24,14 @@ namespace AdventOfCode.Solutions
             while (iter++ < 2019)
             {
                 if (lastSpoken.ContainsKey(lastNum))
-                {
                     thisNum = iter - lastSpoken[lastNum];
-                }
                 else
-                {
                     thisNum = 0;
-                }
 
                 lastSpoken[lastNum] = iter;
                 lastNum = thisNum;
             }
-        
+
             return lastNum.ToString();
         }
 
@@ -43,7 +39,7 @@ namespace AdventOfCode.Solutions
         {
             int[] startingNums = input.Split(',').Select(int.Parse).ToArray();
 
-            Dictionary<int, int> lastSpoken = new Dictionary<int, int>();
+            Dictionary<int, int> lastSpoken = new();
             int lastNum = -999;
             int thisNum = 0;
             int iter = 0;
@@ -58,18 +54,14 @@ namespace AdventOfCode.Solutions
             while (iter++ < 29999999)
             {
                 if (lastSpoken.ContainsKey(lastNum))
-                {
                     thisNum = iter - lastSpoken[lastNum];
-                }
                 else
-                {
                     thisNum = 0;
-                }
 
                 lastSpoken[lastNum] = iter;
                 lastNum = thisNum;
             }
-        
+
             return lastNum.ToString();
         }
     }

@@ -7,8 +7,6 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            
-
             int[] jumps = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
 
             int cycles = 0;

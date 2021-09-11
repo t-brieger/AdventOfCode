@@ -22,9 +22,9 @@ namespace AdventOfCode.Solutions
             //    - Move one slot to the [right,left].
             //    - Continue with state <X>.
             //)+
-            
+
             //state -> if 0: value, direction, next, if 1: value, direction, next
-            Dictionary<char, (bool, bool, char, bool, bool, char)> stateBehaviours = new Dictionary<char, (bool, bool, char, bool, bool, char)>();
+            Dictionary<char, (bool, bool, char, bool, bool, char)> stateBehaviours = new();
             int numIters = 0;
             for (int i = 54; input[i] >= '0' && input[i] <= '9'; i++)
             {
@@ -49,11 +49,12 @@ namespace AdventOfCode.Solutions
 
             char currentState = input[15];
             int pos = 0;
-            HashSet<int> onCells = new HashSet<int>();
+            HashSet<int> onCells = new();
 
             for (int i = 0; i < numIters; i++)
             {
-                (bool write0, bool dir0, char next0, bool write1, bool dir1, char next1) currentRules = stateBehaviours[currentState];
+                (bool write0, bool dir0, char next0, bool write1, bool dir1, char next1) currentRules =
+                    stateBehaviours[currentState];
                 if (onCells.Contains(pos))
                 {
                     //we dont do anything if we should write a 1, since there already is a 1 at this position
@@ -64,7 +65,8 @@ namespace AdventOfCode.Solutions
                     else
                         pos--;
                     currentState = currentRules.next1;
-                }else
+                }
+                else
                 {
                     //we dont do anything if we should write a 0, since there already is a 0 at this position
                     if (currentRules.write0)

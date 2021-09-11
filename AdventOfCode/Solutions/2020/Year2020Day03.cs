@@ -12,7 +12,7 @@ namespace AdventOfCode.Solutions
 
             int x = 0, y = 0;
             int treesEncountered = 0;
-            
+
             while (y < isTree.Length)
             {
                 if (isTree[y][x % isTree[0].Length])
@@ -30,7 +30,7 @@ namespace AdventOfCode.Solutions
                 .Select(line => line.Select(c => c == '#').ToArray()).ToArray();
 
             int x = 0, y = 0;
-            int[] treesEncountereds = {0, 0, 0, 0, 0};
+            int[] treesEncountereds = { 0, 0, 0, 0, 0 };
 
             for (int i = 0; i < treesEncountereds.Length; i++)
             {
@@ -49,11 +49,12 @@ namespace AdventOfCode.Solutions
                     if (i == treesEncountereds.Length - 1)
                         y++;
                 }
+
                 y = 0;
                 x = 0;
             }
 
-            return treesEncountereds.Aggregate(1, (int total, int i) => total * i).ToString();
+            return treesEncountereds.Aggregate(1, (total, i) => total * i).ToString();
         }
     }
 }

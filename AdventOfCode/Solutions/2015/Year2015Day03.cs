@@ -9,19 +9,26 @@ namespace AdventOfCode.Solutions
             int posX = 0;
             int posY = 0;
 
-            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)> {(0, 0)};
+            HashSet<(int x, int y)> visited = new() { (0, 0) };
 
 
             foreach (char direction in input)
             {
-                if (direction == '<')
-                    posX--;
-                else if (direction == '>')
-                    posX++;
-                else if (direction == 'v')
-                    posY++;
-                else if (direction == '^')
-                    posY--;
+                switch (direction)
+                {
+                    case '<':
+                        posX--;
+                        break;
+                    case '>':
+                        posX++;
+                        break;
+                    case 'v':
+                        posY++;
+                        break;
+                    case '^':
+                        posY--;
+                        break;
+                }
 
                 if (!visited.Contains((posX, posY)))
                     visited.Add((posX, posY));
@@ -40,31 +47,38 @@ namespace AdventOfCode.Solutions
 
             bool isRobosTurn = false;
 
-            HashSet<(int x, int y)> visited = new HashSet<(int x, int y)> {(0, 0)};
+            HashSet<(int x, int y)> visited = new() { (0, 0) };
 
 
             foreach (char direction in input)
             {
-                if (direction == '<')
-                    if (isRobosTurn)
+                switch (direction)
+                {
+                    case '<' when isRobosTurn:
                         posX1--;
-                    else
+                        break;
+                    case '<':
                         posX--;
-                else if (direction == '>')
-                    if (isRobosTurn)
+                        break;
+                    case '>' when isRobosTurn:
                         posX1++;
-                    else
+                        break;
+                    case '>':
                         posX++;
-                else if (direction == 'v')
-                    if (isRobosTurn)
+                        break;
+                    case 'v' when isRobosTurn:
                         posY1++;
-                    else
+                        break;
+                    case 'v':
                         posY++;
-                else if (direction == '^')
-                    if (isRobosTurn)
+                        break;
+                    case '^' when isRobosTurn:
                         posY1--;
-                    else
+                        break;
+                    case '^':
                         posY--;
+                        break;
+                }
 
                 if (isRobosTurn)
                 {

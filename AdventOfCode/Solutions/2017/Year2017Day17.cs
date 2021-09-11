@@ -4,28 +4,17 @@ namespace AdventOfCode.Solutions
 {
     public class Year2017Day17 : Solution
     {
-        private class Node<T>
-        {
-            public readonly T value;
-            public Node<T> next;
-
-            public Node(T val)
-            {
-                this.value = val;
-            }
-        }
-
         public override string Part1(string input)
         {
-            Node<int> head = new Node<int>(0);
+            Node<int> head = new(0);
             head.next = head;
 
-            int skipAmount = Int32.Parse(input); 
+            int skipAmount = Int32.Parse(input);
 
             for (int i = 1; i <= 2017; i++)
             {
                 for (int j = 0; j < skipAmount; j++) head = head.next;
-                Node<int> newNode = new Node<int>(i) {next = head.next};
+                Node<int> newNode = new(i) { next = head.next };
                 head.next = newNode;
                 head = newNode;
             }
@@ -53,6 +42,17 @@ namespace AdventOfCode.Solutions
             }
 
             return after0.ToString();
+        }
+
+        private class Node<T>
+        {
+            public readonly T value;
+            public Node<T> next;
+
+            public Node(T val)
+            {
+                this.value = val;
+            }
         }
     }
 }

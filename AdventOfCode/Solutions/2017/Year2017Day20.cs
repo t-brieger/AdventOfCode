@@ -6,28 +6,8 @@ namespace AdventOfCode.Solutions
 {
     public class Year2017Day20 : Solution
     {
-        private class Particle
-        {
-            public int x, y, z, xv, yv, zv;
-            public readonly int xa, ya, za, id;
-
-            public Particle(int x, int y, int z, int xv, int yv, int zv, int xa, int ya, int za, int id)
-            {
-                this.id = id;
-                this.x = x;
-                this.y = y;
-                this.z = z;
-                this.xv = xv;
-                this.yv = yv;
-                this.zv = zv;
-                this.xa = xa;
-                this.ya = ya;
-                this.za = za;
-            }
-        }
-
         /// <summary>
-        /// from 0
+        ///     from 0
         /// </summary>
         private static int ManhattanDistance(int x, int y, int z)
         {
@@ -42,7 +22,7 @@ namespace AdventOfCode.Solutions
 
             return input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(l => $"{i++} {l}").OrderBy(line =>
             {
-                string[] things = line.Substring(0, line.Length - 1).Split(',', '<');
+                string[] things = line[..^1].Split(',', '<');
                 return ManhattanDistance(Int32.Parse(things[9]), Int32.Parse(things[10]), Int32.Parse(things[11]));
             }).First().Split(' ')[0];
         }
@@ -51,7 +31,7 @@ namespace AdventOfCode.Solutions
         {
             int id = 0;
 
-            HashSet<Particle> particles = new HashSet<Particle>(input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(
+            HashSet<Particle> particles = new(input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(
                 line =>
                 {
                     string[] parts = line.Replace(">", "").Split('<', ',').ToArray();
@@ -59,7 +39,7 @@ namespace AdventOfCode.Solutions
                         Int32.Parse(parts[5]), Int32.Parse(parts[6]), Int32.Parse(parts[7]), Int32.Parse(parts[9]),
                         Int32.Parse(parts[10]), Int32.Parse(parts[11]), id++);
                 }));
-            
+
             for (int i = 0; i < 300; i++)
             {
                 foreach (Particle p in particles)
@@ -72,20 +52,36 @@ namespace AdventOfCode.Solutions
                     p.z += p.zv;
                 }
 
-                HashSet<Particle> toRemove = new HashSet<Particle>();
+                HashSet<Particle> toRemove = new();
 
                 foreach (Particle p in particles)
-                {
-                    toRemove.UnionWith(particles.Where(p1 => p.x == p1.x && p.y == p1.y && p.z == p1.z && p.id != p1.id));
-                }
+                    toRemove.UnionWith(
+                        particles.Where(p1 => p.x == p1.x && p.y == p1.y && p.z == p1.z && p.id != p1.id));
 
-                foreach (Particle particle in toRemove)
-                {
-                    particles.Remove(particle);
-                }
+                foreach (Particle particle in toRemove) particles.Remove(particle);
             }
 
             return particles.Count.ToString();
+        }
+
+        private class Particle
+        {
+            public readonly int xa, ya, za, id;
+            public int x, y, z, xv, yv, zv;
+
+            public Particle(int x, int y, int z, int xv, int yv, int zv, int xa, int ya, int za, int id)
+            {
+                this.id = id;
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.xv = xv;
+                this.yv = yv;
+                this.zv = zv;
+                this.xa = xa;
+                this.ya = ya;
+                this.za = za;
+            }
         }
     }
 }

@@ -12,8 +12,9 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            short[][] inputs;
-            inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
+            short[][] inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line =>
+                    line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray())
+                .ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;
@@ -23,47 +24,39 @@ namespace AdventOfCode.Solutions
             int[] area = new int[inputs.Length];
 
             foreach (int x in Enumerable.Range(minX, maxX - minX + 1))
+            foreach (int y in Enumerable.Range(minY, maxY - minX + 1))
             {
-                foreach (int y in Enumerable.Range(minY, maxY - minX + 1))
-                {
-                    int d = inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Min();
-                    int[] closest = Enumerable.Range(0, inputs.Length).Where(i => ManhattanDistance(x, y, inputs[i][0], inputs[i][1]) == d).ToArray();
+                int d = inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Min();
+                int[] closest = Enumerable.Range(0, inputs.Length)
+                    .Where(i => ManhattanDistance(x, y, inputs[i][0], inputs[i][1]) == d).ToArray();
 
-                    if (closest.Length != 1)
-                    {
-                        continue;
-                    }
+                if (closest.Length != 1) continue;
 
-                    if (x == minX || x == maxX || y == minY || y == maxY)
-                    {
-                        foreach (int icoord in closest)
-                        {
-                            area[icoord] = -1;
-                        }
-                    }
-                    else
-                    {
-                        foreach (int icoord in closest.Where(icoord => area[icoord] != -1))
-                        {
-                            area[icoord]++;
-                        }
-                    }
-                }
+                if (x == minX || x == maxX || y == minY || y == maxY)
+                    foreach (int icoord in closest)
+                        area[icoord] = -1;
+                else
+                    foreach (int icoord in closest.Where(icoord => area[icoord] != -1))
+                        area[icoord]++;
             }
+
             return area.Max().ToString();
         }
 
         public override string Part2(string input)
         {
-            short[][] inputs;
-            inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray()).ToArray();
+            short[][] inputs = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line =>
+                    line.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Int16.Parse).ToArray())
+                .ToArray();
 
             int minX = inputs.Min(coord => coord[0]) - 1;
             int maxX = inputs.Max(coord => coord[0]) + 1;
             int minY = inputs.Min(coord => coord[1]) - 1;
             int maxY = inputs.Max(coord => coord[1]) + 1;
 
-            int area = (from x in Enumerable.Range(minX, maxX - minX + 1) from y in Enumerable.Range(minY, maxY - minX + 1) select inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Sum()).Count(d => d < 10000);
+            int area = (from x in Enumerable.Range(minX, maxX - minX + 1)
+                from y in Enumerable.Range(minY, maxY - minX + 1)
+                select inputs.Select(coord => ManhattanDistance(x, y, coord[0], coord[1])).Sum()).Count(d => d < 10000);
 
             return area.ToString();
         }

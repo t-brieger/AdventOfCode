@@ -12,19 +12,15 @@ namespace AdventOfCode.Solutions
             int actualTextLength = 0;
 
             foreach (string s in strings)
-            {
                 for (int i = 0; i < s.Length; i++)
                 {
                     actualTextLength++;
-                    if (s[i] == '\\')
-                    {
-                        if (s[i + 1] == '\\' || s[i + 1] == '"')
-                            i++;
-                        else
-                            i += 3;
-                    }
+                    if (s[i] != '\\') continue;
+                    if (s[i + 1] == '\\' || s[i + 1] == '"')
+                        i++;
+                    else
+                        i += 3;
                 }
-            }
 
             return (strings.Sum(s => s.Length + 2) - actualTextLength).ToString();
         }

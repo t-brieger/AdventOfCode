@@ -17,21 +17,16 @@ namespace AdventOfCode.Solutions
                 {
                     for (int k = j + 1; k < i; k++)
                     {
-                        if (numbers[j] + numbers[k] == numbers[i])
-                        {
-                            combinationFound = true;
-                            break;
-                        }
+                        if (numbers[j] + numbers[k] != numbers[i]) continue;
+                        combinationFound = true;
+                        break;
                     }
 
                     if (combinationFound)
                         break;
                 }
 
-                if (!combinationFound)
-                {
-                    return numbers[i].ToString();
-                }
+                if (!combinationFound) return numbers[i].ToString();
             }
 
             return null;
@@ -39,23 +34,19 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            
-            
             //lol
-            long numberToSearch = long.Parse(Part1(input));
+            long numberToSearch = long.Parse(this.Part1(input));
 
             long[] numbers = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(long.Parse).ToArray();
 
             for (int start = 0; start < numbers.Length - 1; start++)
+            for (int end = start + 1; end < numbers.Length; end++)
             {
-                for (int end = start + 1; end < numbers.Length; end++)
-                {
-                    long[] slice = numbers.Skip(start).Take(end - start + 1).ToArray();
+                long[] slice = numbers.Skip(start).Take(end - start + 1).ToArray();
 
-                    if (slice.Sum() == numberToSearch)
-                        return (slice.Min() + slice.Max()).ToString();
-                }
+                if (slice.Sum() == numberToSearch)
+                    return (slice.Min() + slice.Max()).ToString();
             }
 
             return null;

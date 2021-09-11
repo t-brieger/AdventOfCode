@@ -31,7 +31,6 @@ namespace AdventOfCode.Solutions
             int skip = 0;
 
             for (int i = 0; i < 64; i++)
-            {
                 foreach (int length in lengths)
                 {
                     Array.Copy(numbers, 0, numbers, 256, 255);
@@ -46,17 +45,13 @@ namespace AdventOfCode.Solutions
                     skip++;
                     pos %= 256;
                 }
-            }
 
             byte[] denseHash = new byte[16];
 
             for (int i = 0; i < denseHash.Length; i++)
             {
                 denseHash[i] = numbers[i * 16];
-                for (int j = 1; j < 16; j++)
-                {
-                    denseHash[i] ^= numbers[i * 16 + j];
-                }
+                for (int j = 1; j < 16; j++) denseHash[i] ^= numbers[i * 16 + j];
             }
 
             return denseHash;
@@ -67,7 +62,7 @@ namespace AdventOfCode.Solutions
             int[] lengths = input.Split(',').Select(Int32.Parse).ToArray();
             byte[] numbers = new byte[511];
             for (short i = 0; i < numbers.Length; i++)
-                numbers[i] = (byte) (i % 256);
+                numbers[i] = (byte)(i % 256);
 
             // pos + len - 256
             short pos = 0;
@@ -83,13 +78,13 @@ namespace AdventOfCode.Solutions
                 if (affectedInSecondPart > 0)
                     Array.Copy(numbers, 256, numbers, 0, affectedInSecondPart);
 
-                pos += (short) (length + skip);
+                pos += (short)(length + skip);
                 skip++;
                 pos %= 256;
             }
 
             return (numbers[0] * numbers[1]).ToString();
-    }
+        }
 
         public override string Part2(string input)
         {

@@ -26,13 +26,20 @@
                         isInGarbage = false;
                     else
                         continue;
-                if (c == '<')
-                    isInGarbage = true;
-                if (c == '{')
-                    nestingLevel++;
-                if (c == '}')
-                    totalScore += nestingLevel--;
+                switch (c)
+                {
+                    case '<':
+                        isInGarbage = true;
+                        break;
+                    case '{':
+                        nestingLevel++;
+                        break;
+                    case '}':
+                        totalScore += nestingLevel--;
+                        break;
+                }
             }
+
             return totalScore.ToString();
         }
 
@@ -56,23 +63,27 @@
 
                 else if (isInGarbage)
                     if (c == '>')
+                    {
                         isInGarbage = false;
+                    }
                     else
                     {
                         trashChars++;
                         continue;
                     }
 
-                if (c == '<')
-                    isInGarbage = true;
-                if (c == '{')
+                switch (c)
                 {
-                }
-
-                if (c == '}')
-                {
+                    case '<':
+                        isInGarbage = true;
+                        break;
+                    case '{':
+                        break;
+                    case '}':
+                        break;
                 }
             }
+
             return trashChars.ToString();
         }
     }

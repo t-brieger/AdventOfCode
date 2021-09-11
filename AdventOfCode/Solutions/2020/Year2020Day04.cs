@@ -10,24 +10,13 @@ namespace AdventOfCode.Solutions
             string[] entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
 
             string[][] includedFields = entries
-                .Select(entry => entry.Split(new[] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(entry => entry.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries))
                 .Select(fieldValues => fieldValues.Select(fieldValue => fieldValue.Split(':')[0]).ToArray()).ToArray();
 
-            int validCount = 0;
-
-            foreach (string[] fields in includedFields)
-            {
-                if (fields.Length > 8 || fields.Length < 7)
-                    continue;
-                
-                int numFields = 0;
-
-                foreach (string field in fields)
-                {
-                    if (field == "cid")
-                        continue;
-
-                    numFields += field switch
+            int validCount = (from fields in includedFields
+                where fields.Length is <= 8 and >= 7
+                select fields.Where(field => field != "cid")
+                    .Sum(field => field switch
                     {
                         "byr" => 1,
                         "iyr" => 1,
@@ -37,23 +26,18 @@ namespace AdventOfCode.Solutions
                         "ecl" => 1,
                         "pid" => 1,
                         _ => -20
-                    };
-                }
-
-                if (numFields == 7)
-                    validCount++;
-            }
+                    })).Count(numFields => numFields == 7);
 
 
-            return (validCount).ToString();
+            return validCount.ToString();
         }
 
         public override string Part2(string input)
         {
             string[] entries = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
-            
+
             (string, string)[][] includedFields = entries
-                .Select(entry => entry.Split(new[] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(entry => entry.Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries))
                 .Select(fieldValues =>
                     fieldValues.Select(fieldValue => (fieldValue.Split(':')[0], fieldValue.Split(':')[1])).ToArray())
                 .ToArray();
@@ -62,9 +46,9 @@ namespace AdventOfCode.Solutions
 
             foreach ((string, string)[] fields in includedFields)
             {
-                if (fields.Length > 8 || fields.Length < 7)
+                if (fields.Length is > 8 or < 7)
                     continue;
-                
+
                 int numFields = 0;
                 foreach ((string key, string val) in fields)
                 {
@@ -75,19 +59,19 @@ namespace AdventOfCode.Solutions
                     if (key == "eyr" && (int.Parse(val) < 2020 || int.Parse(val) > 2030)) break;
                     if (key == "hgt")
                     {
-                        bool goodUnits = val.Substring(val.Length - 2) == "cm";
-                        int numberPart = int.Parse(val.Substring(0, val.Length - 2));
-                        if (goodUnits && (numberPart < 150 || numberPart > 193) ||
-                            !goodUnits && (numberPart < 59 || numberPart > 76))
+                        bool goodUnits = val[^2..] == "cm";
+                        int numberPart = int.Parse(val[..^2]);
+                        if (goodUnits && numberPart is < 150 or > 193 ||
+                            !goodUnits && numberPart is < 59 or > 76)
                             break;
                     }
 
                     if (key == "hcl" && (val[0] != '#' ||
-                                              val.Substring(1).Any(c => (c < '0' || c > '9') && (c < 'a' || c > 'f'))))
+                                         val[1..].Any(c => c is (< '0' or > '9') and (< 'a' or > 'f'))))
                         break;
-                    if (key == "ecl" && !new[] {"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}.Contains(val))
+                    if (key == "ecl" && !new[] { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" }.Contains(val))
                         break;
-                    if (key == "pid" && (val.Length != 9 || val.Any(c => c < '0' || c > '9')))
+                    if (key == "pid" && (val.Length != 9 || val.Any(c => c is < '0' or > '9')))
                         break;
 
                     numFields++;
@@ -98,7 +82,7 @@ namespace AdventOfCode.Solutions
             }
 
 
-            return (validCount).ToString();
+            return validCount.ToString();
         }
     }
 }

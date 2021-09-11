@@ -5,19 +5,18 @@ namespace AdventOfCode.Solutions
 {
     class Year2017Day23 : Solution
     {
-        private int getValue(string s, Dictionary<char, int> registers)
+        private static int GetValue(string s, IReadOnlyDictionary<char, int> registers)
         {
             if (s[0] >= 'a' && s[0] <= 'z')
                 return registers[s[0]];
-            else
-                return Int32.Parse(s);
+            return Int32.Parse(s);
         }
 
         public override string Part1(string input)
         {
             string[] instructions = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-            Dictionary<char, int> registers = new Dictionary<char, int>(8);
+            Dictionary<char, int> registers = new(8);
             for (char c = 'a'; c <= 'h'; c++)
                 registers[c] = 0;
 
@@ -31,18 +30,18 @@ namespace AdventOfCode.Solutions
                 switch (split[0])
                 {
                     case "set":
-                        registers[split[1][0]] = getValue(split[2], registers);
+                        registers[split[1][0]] = GetValue(split[2], registers);
                         break;
                     case "sub":
-                        registers[split[1][0]] -= getValue(split[2], registers);
+                        registers[split[1][0]] -= GetValue(split[2], registers);
                         break;
                     case "mul":
                         mulCount++;
-                        registers[split[1][0]] *= getValue(split[2], registers);
+                        registers[split[1][0]] *= GetValue(split[2], registers);
                         break;
                     case "jnz":
-                        if (getValue(split[1], registers) != 0)
-                            i += getValue(split[2], registers) - 1;
+                        if (GetValue(split[1], registers) != 0)
+                            i += GetValue(split[2], registers) - 1;
                         break;
                     default:
                         throw new Exception("invalid instruction: " + split[0]);
@@ -66,13 +65,11 @@ namespace AdventOfCode.Solutions
             int h = 0;
 
             for (; b <= c; b += 17)
+            for (int i = 2; i * i <= b; i++)
             {
-                for (int i = 2; i * i <= b; i++)
-                {
-                    if (b % i != 0) continue;
-                    h++;
-                    break;
-                }
+                if (b % i != 0) continue;
+                h++;
+                break;
             }
 
             return h.ToString();

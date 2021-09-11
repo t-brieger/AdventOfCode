@@ -5,11 +5,6 @@ namespace AdventOfCode.Solutions
 {
     public class Year2018Day16 : Solution
     {
-        private enum Opcodes
-        {
-            ADDR, ADDI, MULR, MULI, BANR, BANI, BORR, BORI, SETR, SETI, GTIR, GTRI, GTRR, EQIR, EQRI, EQRR
-        }
-
         private static int[] ExecuteOpCode(Opcodes op, int[] registers, int a, int b, int c)
         {
             int[] r = new int[registers.Length];
@@ -17,22 +12,22 @@ namespace AdventOfCode.Solutions
 
             r[c] = op switch
             {
-                Opcodes.ADDR => (r[a] + r[b]),
-                Opcodes.ADDI => (r[a] + b),
-                Opcodes.MULR => (r[a] * r[b]),
-                Opcodes.MULI => (r[a] * b),
-                Opcodes.BANR => (r[a] & r[b]),
-                Opcodes.BANI => (r[a] & b),
-                Opcodes.BORR => (r[a] | r[b]),
-                Opcodes.BORI => (r[a] | b),
+                Opcodes.ADDR => r[a] + r[b],
+                Opcodes.ADDI => r[a] + b,
+                Opcodes.MULR => r[a] * r[b],
+                Opcodes.MULI => r[a] * b,
+                Opcodes.BANR => r[a] & r[b],
+                Opcodes.BANI => r[a] & b,
+                Opcodes.BORR => r[a] | r[b],
+                Opcodes.BORI => r[a] | b,
                 Opcodes.SETR => r[a],
                 Opcodes.SETI => a,
-                Opcodes.GTIR => (a > r[b] ? 1 : 0),
-                Opcodes.GTRI => (r[a] > b ? 1 : 0),
-                Opcodes.GTRR => (r[a] > r[b] ? 1 : 0),
-                Opcodes.EQIR => (a == r[b] ? 1 : 0),
-                Opcodes.EQRI => (r[a] == b ? 1 : 0),
-                Opcodes.EQRR => (r[a] == r[b] ? 1 : 0),
+                Opcodes.GTIR => a > r[b] ? 1 : 0,
+                Opcodes.GTRI => r[a] > b ? 1 : 0,
+                Opcodes.GTRR => r[a] > r[b] ? 1 : 0,
+                Opcodes.EQIR => a == r[b] ? 1 : 0,
+                Opcodes.EQRI => r[a] == b ? 1 : 0,
+                Opcodes.EQRR => r[a] == r[b] ? 1 : 0,
                 _ => r[c]
             };
 
@@ -51,28 +46,28 @@ namespace AdventOfCode.Solutions
             //[NUMBER,OPCODE]
             bool[,] opCodesPossible = new bool[16, 16];
             for (int i = 0; i < opCodesPossible.GetLength(0); i++)
-                for (int j = 0; j < opCodesPossible.GetLength(1); j++)
-                    opCodesPossible[i, j] = true;
+            for (int j = 0; j < opCodesPossible.GetLength(1); j++)
+                opCodesPossible[i, j] = true;
 
             string[] samples = input.Split("\n\n");
             foreach (string sample in samples)
             {
                 string[] lines = sample.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 int[] beforeRegisters = lines[0].Split(' ', 2)[1]
-                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse)
+                    .ToArray();
                 int[] afterRegisters = lines[2].Split(' ', 2)[1]
-                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse)
+                    .ToArray();
                 int[] instruction = lines[1].Split(' ').Select(Int32.Parse).ToArray();
 
-                byte sum = 0; 
+                byte sum = 0;
                 for (int i = 0; i < 16; i++)
-                {
-                    if (!ExecuteOpCode((Opcodes) i, beforeRegisters, instruction[1], instruction[2], instruction[3])
+                    if (!ExecuteOpCode((Opcodes)i, beforeRegisters, instruction[1], instruction[2], instruction[3])
                         .SequenceEqual(afterRegisters))
                         opCodesPossible[instruction[0], i] = false;
                     else
                         sum++;
-                }
 
                 if (sum >= 3)
                     moreThanThreePossibilities++;
@@ -110,25 +105,25 @@ namespace AdventOfCode.Solutions
             //[NUMBER,OPCODE]
             bool[,] opCodesPossible = new bool[16, 16];
             for (int i = 0; i < opCodesPossible.GetLength(0); i++)
-                for (int j = 0; j < opCodesPossible.GetLength(1); j++)
-                    opCodesPossible[i, j] = true;
+            for (int j = 0; j < opCodesPossible.GetLength(1); j++)
+                opCodesPossible[i, j] = true;
 
             string[] samples = inputFirstPart.Split("\n\n");
             foreach (string sample in samples)
             {
                 string[] lines = sample.Split('\n', StringSplitOptions.RemoveEmptyEntries);
                 int[] beforeRegisters = lines[0].Split(' ', 2)[1]
-                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse)
+                    .ToArray();
                 int[] afterRegisters = lines[2].Split(' ', 2)[1]
-                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToArray();
+                    .Split(new[] { '[', ']', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse)
+                    .ToArray();
                 int[] instruction = lines[1].Split(' ').Select(Int32.Parse).ToArray();
-                
+
                 for (int i = 0; i < 16; i++)
-                {
                     if (!ExecuteOpCode((Opcodes)i, beforeRegisters, instruction[1], instruction[2], instruction[3])
                         .SequenceEqual(afterRegisters))
                         opCodesPossible[instruction[0], i] = false;
-                }
             }
 
             while (!IsUnambiguous(opCodesPossible))
@@ -170,20 +165,39 @@ namespace AdventOfCode.Solutions
 
             Opcodes[] opCodes = new Opcodes[16];
             for (int i = 0; i < opCodesPossible.GetLength(0); i++)
-            {
-                for (int j = 0; j < opCodesPossible.GetLength(1); j++)
-                {
-                    if (opCodesPossible[i, j])
-                        opCodes[i] = (Opcodes) j;
-                }
-            }
+            for (int j = 0; j < opCodesPossible.GetLength(1); j++)
+                if (opCodesPossible[i, j])
+                    opCodes[i] = (Opcodes)j;
 
             string[] demoProgram = input.Split("\n\n\n\n", 2)[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
             int[] registers = new int[4];
-            registers = demoProgram.Select(i => i.Split(' ').Select(Int32.Parse).ToArray()).Aggregate(registers, (current, instruction) => ExecuteOpCode(opCodes[instruction[0]], current, instruction[1], instruction[2], instruction[3]));
+            registers = demoProgram.Select(i => i.Split(' ').Select(Int32.Parse).ToArray()).Aggregate(registers,
+                (current, instruction) => ExecuteOpCode(opCodes[instruction[0]], current, instruction[1],
+                    instruction[2], instruction[3]));
 
             return registers[0].ToString();
+        }
+
+        // ReSharper disable once InconsistentNaming
+        private enum Opcodes
+        {
+            ADDR,
+            ADDI,
+            MULR,
+            MULI,
+            BANR,
+            BANI,
+            BORR,
+            BORI,
+            SETR,
+            SETI,
+            GTIR,
+            GTRI,
+            GTRR,
+            EQIR,
+            EQRI,
+            EQRR
         }
     }
 }

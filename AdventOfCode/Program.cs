@@ -10,6 +10,7 @@ using AngleSharp.Dom;
 
 namespace AdventOfCode
 {
+    // ReSharper disable once InconsistentNaming
     static class Program
     {
         private static async Task<int> Main(string[] args)
@@ -18,7 +19,6 @@ namespace AdventOfCode
             int y = -1, d = -1;
 
             for (int i = 0; i < args.Length; i++)
-            {
                 switch (args[i])
                 {
                     case "-h":
@@ -64,7 +64,7 @@ namespace AdventOfCode
                             ShowUsage("--day needs an argument");
                         if (!Int32.TryParse(args[i + 1], out d))
                             ShowUsage("--day needs an integer argument");
-                        if (d < 1 || d > 31)
+                        if (d is < 1 or > 31)
                             ShowUsage("--day needs an argument between 1 and 31");
                         i++;
                         break;
@@ -72,7 +72,6 @@ namespace AdventOfCode
                         ShowUsage(args[i] + " was not recognized as a valid argument.");
                         break;
                 }
-            }
 
             if (pause && !all)
                 ShowUsage("--pause can't be used without --all");
@@ -83,12 +82,12 @@ namespace AdventOfCode
             {
                 foreach (Solution s in Assembly.GetExecutingAssembly().GetTypes()
                     .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution)).Select(t =>
-                        (Solution) Activator.CreateInstance(t)))
+                        (Solution)Activator.CreateInstance(t)))
                 {
                     //gets called on an instance of all children of Solution
-                    string[] yearday = s.GetType().Name.Replace("Year", "").Split("Day", 2);
-                    byte day = Byte.Parse(yearday[1]);
-                    ushort year = UInt16.Parse(yearday[0]);
+                    string[] yearday = s?.GetType().Name.Replace("Year", "").Split("Day", 2);
+                    byte day = Byte.Parse(yearday?[1]!);
+                    ushort year = UInt16.Parse(yearday?[0]!);
 
                     if (y != -1 && year != y)
                         continue;
@@ -99,13 +98,8 @@ namespace AdventOfCode
                         await DisplayText(day, year);
                     Console.WriteLine();
 
-#if !VIS
-                    Console.WriteLine($"{year}/{day:00}/1: {s.Part1(input)}");
-                    Console.WriteLine($"{year}/{day:00}/2: {s.Part2(input)}");
-#else
-                    s.Part1(input);
-                    s.Part2(input);
-#endif
+                    Console.WriteLine($"{year}/{day:00}/1: {s?.Part1(input)}");
+                    Console.WriteLine($"{year}/{day:00}/2: {s?.Part2(input)}");
 
                     if (!pause) continue;
                     Console.ReadKey();
@@ -121,8 +115,8 @@ namespace AdventOfCode
                 Solution s = null;
                 try
                 {
-                    s = (Solution) Activator.CreateInstance(Assembly.GetExecutingAssembly()
-                        .GetType($"AdventOfCode.Solutions.Year{y}Day{d:00}", true));
+                    s = (Solution)Activator.CreateInstance(Assembly.GetExecutingAssembly()
+                        .GetType($"AdventOfCode.Solutions.Year{y}Day{d:00}", true)!);
                 }
                 catch (ArgumentException)
                 {
@@ -134,17 +128,12 @@ namespace AdventOfCode
                 }
 
                 if (showdesc)
-                    await DisplayText((byte) d, (ushort) y);
+                    await DisplayText((byte)d, (ushort)y);
                 Console.WriteLine();
 
-                string input = await GetInput((byte) d, (ushort) y, test);
-#if !VIS
+                string input = await GetInput((byte)d, (ushort)y, test);
                 Console.WriteLine($"{y}/{d:00}/1: {s.Part1(input)}");
                 Console.WriteLine($"{y}/{d:00}/2: {s.Part2(input)}");
-#else
-                s.Part1(input);
-                s.Part2(input);
-#endif
             }
 
             return 0;
@@ -178,7 +167,8 @@ namespace AdventOfCode
         {
             try
             {
-                return File.ReadAllText($"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in")
+                return (await File.ReadAllTextAsync(
+                        $"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in"))
                     .Replace("\r\n", "\n");
             }
             catch (DirectoryNotFoundException)
@@ -196,9 +186,9 @@ namespace AdventOfCode
 
         private static async Task DownloadSolution(string session, byte day, ushort year)
         {
-            CookieContainer cookieContainer = new CookieContainer();
+            CookieContainer cookieContainer = new();
 
-            using HttpClient client = new HttpClient(
+            using HttpClient client = new(
                 new HttpClientHandler
                 {
                     CookieContainer = cookieContainer,
@@ -213,9 +203,9 @@ namespace AdventOfCode
 
         private static async Task<string> DownloadText(string session, byte day, ushort year)
         {
-            CookieContainer cookieContainer = new CookieContainer();
+            CookieContainer cookieContainer = new();
 
-            using HttpClient client = new HttpClient(
+            using HttpClient client = new(
                 new HttpClientHandler
                 {
                     CookieContainer = cookieContainer,
@@ -288,17 +278,16 @@ namespace AdventOfCode
                     Console.WriteLine();
                     goto case "p";
                 case "p":
-                    if (((IElement) n).ClassList.Contains("day-success"))
+                    if (((IElement)n).ClassList.Contains("day-success"))
                     {
-                        while (n.NextSibling != null)
-                        {
-                            n.NextSibling.RemoveFromParent();
-                        }
+                        while (n.NextSibling != null) n.NextSibling.RemoveFromParent();
 
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
                     else
+                    {
                         Console.ForegroundColor = ConsoleColor.Gray;
+                    }
 
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (int i = 0; i < n.ChildNodes.Length; i++)
@@ -312,7 +301,7 @@ namespace AdventOfCode
                         await RenderNode(n.ChildNodes[i], true);
                     break;
                 case "em":
-                    Console.ForegroundColor = ((IElement) n).ClassList.Contains("star")
+                    Console.ForegroundColor = ((IElement)n).ClassList.Contains("star")
                         ? ConsoleColor.Yellow
                         : ConsoleColor.White;
                     // ReSharper disable once ForCanBeConvertedToForeach

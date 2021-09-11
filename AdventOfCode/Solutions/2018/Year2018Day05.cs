@@ -32,15 +32,13 @@ namespace AdventOfCode.Solutions
 
             return input; //takes a few minutes */
 
-            Stack<char> s = new Stack<char>();
+            Stack<char> s = new();
 
             foreach (char p in input)
-            {
                 if (s.Count > 0 && opposite_polarity(p, s.Peek()))
                     s.Pop();
                 else
                     s.Push(p);
-            }
 
             return new string(s.ToArray());
         }

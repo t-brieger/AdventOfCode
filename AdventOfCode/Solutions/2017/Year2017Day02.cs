@@ -31,19 +31,17 @@ namespace AdventOfCode.Solutions
             int Foo(int[] row)
             {
                 for (int j = 0; j < row.Length; j++)
+                for (int k = j + 1; k < row.Length; k++)
                 {
-                    for (int k = j + 1; k < row.Length; k++)
-                    {
-                        if (row[j] % row[k] == 0 && row[j] != row[k])
-                            return row[j] / row[k];
-                        if (row[k] % row[j] == 0 && row[j] != row[k])
-                            return row[k] / row[j];
-                    }
+                    if (row[j] % row[k] == 0 && row[j] != row[k])
+                        return row[j] / row[k];
+                    if (row[k] % row[j] == 0 && row[j] != row[k])
+                        return row[k] / row[j];
                 }
 
                 return 0;
             }
-            
+
             int[][] grid = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Split('\t').Select(Int32.Parse).ToArray()).ToArray();
 

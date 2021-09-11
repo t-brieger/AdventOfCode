@@ -9,8 +9,8 @@ namespace AdventOfCode.Solutions
             string currStr = input.Replace("\n", "");
             for (int i = 0; i < 40; i++)
             {
-                StringBuilder newStr = new StringBuilder();
-                
+                StringBuilder newStr = new();
+
                 for (int j = 0; j < currStr.Length; j++)
                 {
                     int repetitions = 1;
@@ -23,9 +23,10 @@ namespace AdventOfCode.Solutions
                     newStr.Append(repetitions);
                     newStr.Append(currStr[j]);
                 }
-                    
+
                 currStr = newStr.ToString();
             }
+
             return currStr.Length.ToString();
         }
 
@@ -34,8 +35,8 @@ namespace AdventOfCode.Solutions
             string currStr = input.Replace("\n", "");
             for (int i = 0; i < 50; i++)
             {
-                StringBuilder newStr = new StringBuilder();
-                
+                StringBuilder newStr = new();
+
                 for (int j = 0; j < currStr.Length; j++)
                 {
                     int repetitions = 1;
@@ -48,9 +49,10 @@ namespace AdventOfCode.Solutions
                     newStr.Append(repetitions);
                     newStr.Append(currStr[j]);
                 }
-                    
+
                 currStr = newStr.ToString();
             }
+
             return currStr.Length.ToString();
         }
     }

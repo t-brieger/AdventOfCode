@@ -18,7 +18,8 @@ namespace AdventOfCode.Solutions
             int target = Int32.Parse(input);
 
             //OEIS A141481
-            int[] values = {
+            int[] values =
+            {
                 1,
                 1,
                 2,
@@ -109,7 +110,7 @@ namespace AdventOfCode.Solutions
                 7619304,
                 8001525,
                 8260383,
-                8391037,
+                8391037
             };
 
             int i = 0;

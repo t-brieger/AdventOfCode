@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Security;
 
 namespace AdventOfCode.Solutions
 {
@@ -40,19 +39,20 @@ namespace AdventOfCode.Solutions
                         if (y != 0 && x != 0)
                             adjacent += seats[y - 1][x - 1] == '#' ? 1 : 0;
 
-                        if (seats[y][x] == 'L' && adjacent == 0)
+                        switch (seats[y][x])
                         {
-                            hasChanged = true;
-                            newSeats[y][x] = '#';
-                        }
-                        else if (seats[y][x] == '#' && adjacent >= 4)
-                        {
-                            hasChanged = true;
-                            newSeats[y][x] = 'L';
-                        }
-                        else if (seats[y][x] == 'L' || seats[y][x] == '#')
-                        {
-                            newSeats[y][x] = seats[y][x];
+                            case 'L' when adjacent == 0:
+                                hasChanged = true;
+                                newSeats[y][x] = '#';
+                                break;
+                            case '#' when adjacent >= 4:
+                                hasChanged = true;
+                                newSeats[y][x] = 'L';
+                                break;
+                            case 'L':
+                            case '#':
+                                newSeats[y][x] = seats[y][x];
+                                break;
                         }
                     }
                 }
@@ -83,10 +83,7 @@ namespace AdventOfCode.Solutions
 
                         //north
                         int posY = y - 1, posX = x;
-                        while (posY > 0 && seats[posY][posX] == '.')
-                        {
-                            posY--;
-                        }
+                        while (posY > 0 && seats[posY][posX] == '.') posY--;
 
                         try
                         {
@@ -116,10 +113,7 @@ namespace AdventOfCode.Solutions
                         //E
                         posY = y;
                         posX = x + 1;
-                        while (posX < seats[posY].Length - 1 && seats[posY][posX] == '.')
-                        {
-                            posX++;
-                        }
+                        while (posX < seats[posY].Length - 1 && seats[posY][posX] == '.') posX++;
 
                         try
                         {
@@ -149,10 +143,7 @@ namespace AdventOfCode.Solutions
                         //S
                         posY = y + 1;
                         posX = x;
-                        while (posY < seats.Length - 1 && seats[posY][posX] == '.')
-                        {
-                            posY++;
-                        }
+                        while (posY < seats.Length - 1 && seats[posY][posX] == '.') posY++;
 
                         try
                         {
@@ -182,10 +173,7 @@ namespace AdventOfCode.Solutions
                         //W
                         posY = y;
                         posX = x - 1;
-                        while (posX > 0 && seats[posY][posX] == '.')
-                        {
-                            posX--;
-                        }
+                        while (posX > 0 && seats[posY][posX] == '.') posX--;
 
                         try
                         {
@@ -213,23 +201,23 @@ namespace AdventOfCode.Solutions
                         }
 
 
-                        if (seats[y][x] == 'L' && adjacent == 0)
+                        switch (seats[y][x])
                         {
-                            hasChanged = true;
-                            newSeats[y][x] = '#';
-                        }
-                        else if (seats[y][x] == '#' && adjacent >= 5)
-                        {
-                            hasChanged = true;
-                            newSeats[y][x] = 'L';
-                        }
-                        else if (seats[y][x] == 'L' || seats[y][x] == '#')
-                        {
-                            newSeats[y][x] = seats[y][x];
-                        }
-                        else
-                        {
-                            newSeats[y][x] = '.';
+                            case 'L' when adjacent == 0:
+                                hasChanged = true;
+                                newSeats[y][x] = '#';
+                                break;
+                            case '#' when adjacent >= 5:
+                                hasChanged = true;
+                                newSeats[y][x] = 'L';
+                                break;
+                            case 'L':
+                            case '#':
+                                newSeats[y][x] = seats[y][x];
+                                break;
+                            default:
+                                newSeats[y][x] = '.';
+                                break;
                         }
                     }
                 }

@@ -12,10 +12,10 @@ namespace AdventOfCode.Solutions
 
             foreach (string s in strings)
             {
-                if (s.IndexOf("ab", StringComparison.Ordinal) >= 0 ||
-                    s.IndexOf("cd", StringComparison.Ordinal) >= 0 ||
-                    s.IndexOf("pq", StringComparison.Ordinal) >= 0 ||
-                    s.IndexOf("xy", StringComparison.Ordinal) >= 0)
+                if (s.Contains("ab") ||
+                    s.Contains("cd") ||
+                    s.Contains("pq") ||
+                    s.Contains("xy"))
                     continue;
                 int vowelCount = s[^1] == 'a' || s[^1] == 'e' || s[^1] == 'i' || s[^1] == 'o' || s[^1] == 'u' ? 1 : 0;
                 bool hasDoubleLetter = false;
@@ -26,6 +26,7 @@ namespace AdventOfCode.Solutions
                     if (s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u')
                         vowelCount++;
                 }
+
                 if (vowelCount < 3 || !hasDoubleLetter)
                     continue;
 
@@ -45,10 +46,8 @@ namespace AdventOfCode.Solutions
             {
                 bool hasDoubleLetter = false;
                 for (int i = 0; i < s.Length - 2; i++)
-                {
                     if (s[i] == s[i + 2])
                         hasDoubleLetter = true;
-                }
 
                 bool canBreak = false;
                 //not efficient, but meh, there arent that many strings
@@ -64,6 +63,7 @@ namespace AdventOfCode.Solutions
                         canBreak = true;
                         break;
                     }
+
                     if (canBreak)
                         break;
                 }

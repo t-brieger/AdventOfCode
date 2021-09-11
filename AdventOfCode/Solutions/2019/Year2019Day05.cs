@@ -9,11 +9,11 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             int[] nums = input.Split(',').Select(int.Parse).ToArray();
-            Dictionary<int, int> program = new Dictionary<int, int>();
+            Dictionary<int, int> program = new();
             for (int i = 0; i < nums.Length; i++)
                 program.Add(i, nums[i]);
 
-            Computer c = new Computer(program);
+            Computer c = new(program);
             c.input.Enqueue(1);
             c.RunUntilHalted();
             while (c.output.Peek() == 0)
@@ -25,11 +25,11 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             int[] nums = input.Split(',').Select(int.Parse).ToArray();
-            Dictionary<int, int> program = new Dictionary<int, int>();
+            Dictionary<int, int> program = new();
             for (int i = 0; i < nums.Length; i++)
                 program.Add(i, nums[i]);
 
-            Computer c = new Computer(program);
+            Computer c = new(program);
             c.input.Enqueue(5);
             c.RunUntilHalted();
             while (c.output.Peek() == 0)

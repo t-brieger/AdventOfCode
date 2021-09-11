@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions
     {
         private static IEnumerable<int> Cycle(IEnumerable<int> source)
         {
-            List<int> elementBuffer = new List<int>(((ICollection)source).Count);
+            List<int> elementBuffer = new(((ICollection)source).Count);
             elementBuffer.AddRange(source);
 
             ushort index = 0;
@@ -21,7 +21,7 @@ namespace AdventOfCode.Solutions
             }
             // ReSharper disable once IteratorNeverReturns
         }
-        
+
         public override string Part1(string s)
         {
             List<int> inputs = s.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
@@ -33,9 +33,9 @@ namespace AdventOfCode.Solutions
             List<int> inputs = s.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(Int32.Parse).ToList();
 
             int tmpSum = 0;
-            HashSet<int> reachedSums = new HashSet<int>();
+            HashSet<int> reachedSums = new();
 
-            foreach (int i in Cycle(inputs).TakeWhile(i => !reachedSums.Contains(tmpSum)))
+            foreach (int i in Cycle(inputs).TakeWhile(_ => !reachedSums.Contains(tmpSum)))
             {
                 reachedSums.Add(tmpSum);
                 tmpSum += i;

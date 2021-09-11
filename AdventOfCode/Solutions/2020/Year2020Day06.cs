@@ -8,11 +8,11 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             string[] groups = input.Split("\n\n", StringSplitOptions.RemoveEmptyEntries);
-            
+
             int[] x = groups.Select(g =>
                 g.Split('\n', StringSplitOptions.RemoveEmptyEntries).SelectMany(x => x).Distinct()
                     .Count()).ToArray();
-            
+
             return x.Sum().ToString();
         }
 
@@ -25,6 +25,7 @@ namespace AdventOfCode.Solutions
             {
                 int letterCount = 0;
                 for (char c = 'a'; c <= 'z'; c++)
+                    // ReSharper disable once AccessToModifiedClosure
                     if (group.All(s => s.Contains(c)))
                         letterCount++;
 

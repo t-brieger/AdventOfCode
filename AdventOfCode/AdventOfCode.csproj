@@ -1,46 +1,39 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <Configurations>Debug;Release;Release-VIS</Configurations>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <Platforms>AnyCPU</Platforms>
-    <LangVersion>9</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <Configurations>Debug;Release</Configurations>
+        <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+        <Platforms>AnyCPU</Platforms>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <PlatformTarget>x64</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <PlatformTarget>x64</PlatformTarget>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Optimize>false</Optimize>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
-    <DefineConstants />
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <PlatformTarget>x64</PlatformTarget>
+        <DefineConstants />
+    </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release-VIS' ">
-    <DefineConstants>VIS</DefineConstants>
-    <Optimize>true</Optimize>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.0.0-alpha-825" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <ItemGroup>
-      <_Test Include="Input/test/**/*.*" />
+        <PackageReference Include="AngleSharp" Version="1.0.0-alpha-825" />
+        <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+        <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
     </ItemGroup>
-    <Copy SourceFiles="@(_Test)" DestinationFolder="$(OutDir)/Input/test/%(RecursiveDir)" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="session" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
-  </Target>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <ItemGroup>
+            <_Test Include="Input/test/**/*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(_Test)" DestinationFolder="$(OutDir)/Input/test/%(RecursiveDir)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="session" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+    </Target>
 
 </Project>

@@ -1,101 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace AdventOfCode.Solutions._2015
+namespace AdventOfCode.Solutions
 {
     class Year2015Day07 : Solution
     {
-        private class AST
+        private Ast BuildAst(IReadOnlyDictionary<string, (byte, string, string)> wireToOperation, string which,
+            Dictionary<string, Ast> previous = null)
         {
-            public AST left;
-            public AST right;
-            public string id;
-        }
-
-        private class ASTLiteral : AST
-        {
-            public ushort value;
-        }
-
-        private class ASTAnd : AST
-        {
-        }
-
-        private class ASTOr : AST
-        {
-        }
-
-        private class ASTShift : AST
-        {
-            public bool isLeft;
-        }
-
-        private class ASTNot : AST
-        {
-        }
-
-        private AST buildAST(Dictionary<string, (byte, string, string)> wireToOperation, string which,
-            Dictionary<string, AST> previous = null)
-        {
-            if (previous == null)
-                previous = new Dictionary<string, AST>();
+            previous ??= new Dictionary<string, Ast>();
 
             if (previous.ContainsKey(which))
                 return previous[which];
 
             if (ushort.TryParse(which, out ushort x))
-                return new ASTLiteral {value = x, id = which};
+                return new AstLiteral { value = x, id = which };
 
-            (byte, string, string) Operation = wireToOperation[which];
+            (byte op, string w1, string w2) = wireToOperation[which];
 
-            AST ast = null;
+            Ast ast = null;
 
-            switch (Operation.Item1)
+            switch (op)
             {
                 case 0:
-                    ast = new ASTLiteral {value = ushort.Parse(Operation.Item2)};
+                    ast = new AstLiteral { value = ushort.Parse(w1) };
                     break;
                 case 1:
-                    ast = new ASTAnd();
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
-                    ast.right = buildAST(wireToOperation, Operation.Item3, previous);
+                    ast = new AstAnd();
+                    ast.left = this.BuildAst(wireToOperation, w1, previous);
+                    ast.right = this.BuildAst(wireToOperation, w2, previous);
                     break;
                 case 2:
-                    ast = new ASTOr();
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
-                    ast.right = buildAST(wireToOperation, Operation.Item3, previous);
+                    ast = new AstOr();
+                    ast.left = this.BuildAst(wireToOperation, w1, previous);
+                    ast.right = this.BuildAst(wireToOperation, w2, previous);
                     break;
                 case 3:
-                    ast = new ASTShift();
-                    ((ASTShift) ast).isLeft = false;
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
-                    ast.right = buildAST(wireToOperation, Operation.Item3, previous);
+                    ast = new AstShift();
+                    ((AstShift)ast).isLeft = false;
+                    ast.left = this.BuildAst(wireToOperation, w1, previous);
+                    ast.right = this.BuildAst(wireToOperation, w2, previous);
                     break;
                 case 4:
-                    ast = new ASTShift();
-                    ((ASTShift) ast).isLeft = true;
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
-                    ast.right = buildAST(wireToOperation, Operation.Item3, previous);
+                    ast = new AstShift();
+                    ((AstShift)ast).isLeft = true;
+                    ast.left = this.BuildAst(wireToOperation, w1, previous);
+                    ast.right = this.BuildAst(wireToOperation, w2, previous);
                     break;
                 case 5:
-                    ast = new ASTNot();
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
+                    ast = new AstNot();
+                    ast.left = this.BuildAst(wireToOperation, w1, previous);
                     break;
                 case 6:
-                    ast = new AST();
-                    ast.left = buildAST(wireToOperation, Operation.Item2, previous);
+                    ast = new Ast
+                    {
+                        left = this.BuildAst(wireToOperation, w1, previous)
+                    };
                     break;
             }
 
             previous[which] = ast;
-            ast.id = which;
+            if (ast != null)
+                ast.id = which;
 
             return ast;
         }
 
-        private ushort evaluateAST(AST ast, Dictionary<string, ushort> evaluated = null)
+        private static ushort EvaluateAst(Ast ast, Dictionary<string, ushort> evaluated = null)
         {
             evaluated ??= new Dictionary<string, ushort>();
             if (evaluated.ContainsKey(ast.id))
@@ -103,20 +75,20 @@ namespace AdventOfCode.Solutions._2015
 
             ushort left = 0;
             if (ast.left != null)
-                left = evaluateAST(ast.left, evaluated);
+                left = EvaluateAst(ast.left, evaluated);
 
             ushort right = 0;
             if (ast.right != null)
-                right = evaluateAST(ast.right, evaluated);
+                right = EvaluateAst(ast.right, evaluated);
 
             ushort result = ast switch
             {
-                ASTLiteral asLiteral => asLiteral.value,
-                ASTAnd _ => (ushort) (left & right),
-                ASTOr _ => (ushort) (left | right),
-                ASTShift {isLeft: true} => (ushort) (left << right),
-                ASTShift _ => (ushort) (left >> right),
-                ASTNot _ => (ushort) ~left,
+                AstLiteral asLiteral => asLiteral.value,
+                AstAnd => (ushort)(left & right),
+                AstOr => (ushort)(left | right),
+                AstShift { isLeft: true } => (ushort)(left << right),
+                AstShift => (ushort)(left >> right),
+                AstNot => (ushort)~left,
                 _ => left
             };
 
@@ -137,36 +109,41 @@ namespace AdventOfCode.Solutions._2015
             //Assignment: 6
             //                  op,   val1,   val2
             Dictionary<string, (byte, string, string)> wiresToOperations =
-                new Dictionary<string, (byte, string, string)>();
+                new();
 
             foreach (string line in lines)
             {
                 string[] inOut = line.Split(" -> ");
-                byte operation = (byte) (line.Contains("AND") ? 1 :
+                byte operation = (byte)(line.Contains("AND") ? 1 :
                     line.Contains("OR") ? 2 :
                     line.Contains("RSHIFT") ? 3 :
                     line.Contains("LSHIFT") ? 4 :
                     line.Contains("NOT") ? 5 : 0);
-                if (inOut[0].Any(x => x < '0' || x > '9') && operation == 0)
+                if (inOut[0].Any(x => x is < '0' or > '9') && operation == 0)
                     operation = 6;
                 string[] inSplit = inOut[0].Split(' ');
                 string left, right = null;
-                if (operation == 0 || operation == 6)
-                    left = inSplit[0];
-                else if (operation == 5)
-                    left = inSplit[1];
-                else
+                switch (operation)
                 {
-                    left = inSplit[0];
-                    right = inSplit[2];
+                    case 0:
+                    case 6:
+                        left = inSplit[0];
+                        break;
+                    case 5:
+                        left = inSplit[1];
+                        break;
+                    default:
+                        left = inSplit[0];
+                        right = inSplit[2];
+                        break;
                 }
 
                 wiresToOperations.Add(inOut[1], (operation, left, right));
             }
 
-            AST ast = buildAST(wiresToOperations, "a");
+            Ast ast = this.BuildAst(wiresToOperations, "a");
 
-            return evaluateAST(ast).ToString();
+            return EvaluateAst(ast).ToString();
         }
 
         public override string Part2(string input)
@@ -182,41 +159,75 @@ namespace AdventOfCode.Solutions._2015
             //Assignment: 6
             //                  op,   val1,   val2
             Dictionary<string, (byte, string, string)> wiresToOperations =
-                new Dictionary<string, (byte, string, string)>();
+                new();
 
             foreach (string line in lines)
             {
                 string[] inOut = line.Split(" -> ");
-                byte operation = (byte) (line.Contains("AND") ? 1 :
+                byte operation = (byte)(line.Contains("AND") ? 1 :
                     line.Contains("OR") ? 2 :
                     line.Contains("RSHIFT") ? 3 :
                     line.Contains("LSHIFT") ? 4 :
                     line.Contains("NOT") ? 5 : 0);
-                if (inOut[0].Any(x => x < '0' || x > '9') && operation == 0)
+                if (inOut[0].Any(x => x is < '0' or > '9') && operation == 0)
                     operation = 6;
                 string[] inSplit = inOut[0].Split(' ');
                 string left, right = null;
-                if (operation == 0 || operation == 6)
-                    left = inSplit[0];
-                else if (operation == 5)
-                    left = inSplit[1];
-                else
+                switch (operation)
                 {
-                    left = inSplit[0];
-                    right = inSplit[2];
+                    case 0:
+                    case 6:
+                        left = inSplit[0];
+                        break;
+                    case 5:
+                        left = inSplit[1];
+                        break;
+                    default:
+                        left = inSplit[0];
+                        right = inSplit[2];
+                        break;
                 }
 
                 wiresToOperations.Add(inOut[1], (operation, left, right));
             }
 
-            AST ast = buildAST(wiresToOperations, "a");
-            ushort aVal = evaluateAST(ast);
+            Ast ast = this.BuildAst(wiresToOperations, "a");
+            ushort aVal = EvaluateAst(ast);
             wiresToOperations = wiresToOperations.Where(kvp => kvp.Key != "b")
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             wiresToOperations.Add("b", (0, aVal.ToString(), null));
-            
-            ast = buildAST(wiresToOperations, "a");
-            return evaluateAST(ast).ToString();
+
+            ast = this.BuildAst(wiresToOperations, "a");
+            return EvaluateAst(ast).ToString();
+        }
+
+        private class Ast
+        {
+            public string id;
+            public Ast left;
+            public Ast right;
+        }
+
+        private class AstLiteral : Ast
+        {
+            public ushort value;
+        }
+
+        private class AstAnd : Ast
+        {
+        }
+
+        private class AstOr : Ast
+        {
+        }
+
+        private class AstShift : Ast
+        {
+            public bool isLeft;
+        }
+
+        private class AstNot : Ast
+        {
         }
     }
 }

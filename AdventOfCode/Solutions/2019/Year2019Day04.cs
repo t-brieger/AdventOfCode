@@ -49,9 +49,10 @@ namespace AdventOfCode.Solutions
                 int len = 0;
 
                 foreach (char c in str)
-                {
                     if (c == last)
+                    {
                         len++;
+                    }
                     else
                     {
                         if (len == 2)
@@ -59,10 +60,10 @@ namespace AdventOfCode.Solutions
                             hasDouble = true;
                             break;
                         }
+
                         len = 1;
                         last = c;
                     }
-                }
 
                 if (!hasDouble && len != 2)
                     continue;

@@ -5,7 +5,7 @@ namespace AdventOfCode.Solutions
 {
     public class Year2017Day18 : Solution
     {
-        private long getValueOfString(string s, long[] registers)
+        private static long GetValueOfString(string s, IReadOnlyList<long> registers)
         {
             return s[0] >= 'a' ? registers[s[0] - 'a'] : Int64.Parse(s);
         }
@@ -29,27 +29,27 @@ namespace AdventOfCode.Solutions
                 switch (arguments[0])
                 {
                     case "snd":
-                        lastFrequency = getValueOfString(arguments[1], registers);
+                        lastFrequency = GetValueOfString(arguments[1], registers);
                         break;
                     case "set":
-                        registers[arguments[1][0] - 'a'] = getValueOfString(arguments[2], registers);
+                        registers[arguments[1][0] - 'a'] = GetValueOfString(arguments[2], registers);
                         break;
                     case "add":
-                        registers[arguments[1][0] - 'a'] += getValueOfString(arguments[2], registers);
+                        registers[arguments[1][0] - 'a'] += GetValueOfString(arguments[2], registers);
                         break;
                     case "mul":
-                        registers[arguments[1][0] - 'a'] *= getValueOfString(arguments[2], registers);
+                        registers[arguments[1][0] - 'a'] *= GetValueOfString(arguments[2], registers);
                         break;
                     case "mod":
-                        registers[arguments[1][0] - 'a'] %= getValueOfString(arguments[2], registers);
+                        registers[arguments[1][0] - 'a'] %= GetValueOfString(arguments[2], registers);
                         break;
                     case "rcv":
-                        if (getValueOfString(arguments[1], registers) != 0)
+                        if (GetValueOfString(arguments[1], registers) != 0)
                             return lastFrequency.ToString();
                         break;
                     case "jgz":
-                        if (getValueOfString(arguments[1], registers) > 0)
-                            i += getValueOfString(arguments[2], registers) - 1;
+                        if (GetValueOfString(arguments[1], registers) > 0)
+                            i += GetValueOfString(arguments[2], registers) - 1;
                         break;
                     default:
                         return "unrecognized instruction: " + instruction;
@@ -75,8 +75,8 @@ namespace AdventOfCode.Solutions
             long i0 = 0;
             long i1 = 0;
 
-            Queue<long> queue0 = new Queue<long>();
-            Queue<long> queue1 = new Queue<long>();
+            Queue<long> queue0 = new();
+            Queue<long> queue1 = new();
 
             long oneSendCount = 0;
 
@@ -96,20 +96,20 @@ namespace AdventOfCode.Solutions
                     switch (arguments[0])
                     {
                         case "snd":
-                            queue1.Enqueue(getValueOfString(arguments[1], registers0));
+                            queue1.Enqueue(GetValueOfString(arguments[1], registers0));
                             twoWaiting = false;
                             break;
                         case "set":
-                            registers0[arguments[1][0] - 'a'] = getValueOfString(arguments[2], registers0);
+                            registers0[arguments[1][0] - 'a'] = GetValueOfString(arguments[2], registers0);
                             break;
                         case "add":
-                            registers0[arguments[1][0] - 'a'] += getValueOfString(arguments[2], registers0);
+                            registers0[arguments[1][0] - 'a'] += GetValueOfString(arguments[2], registers0);
                             break;
                         case "mul":
-                            registers0[arguments[1][0] - 'a'] *= getValueOfString(arguments[2], registers0);
+                            registers0[arguments[1][0] - 'a'] *= GetValueOfString(arguments[2], registers0);
                             break;
                         case "mod":
-                            registers0[arguments[1][0] - 'a'] %= getValueOfString(arguments[2], registers0);
+                            registers0[arguments[1][0] - 'a'] %= GetValueOfString(arguments[2], registers0);
                             break;
                         case "rcv":
                             if (queue0.Count == 0)
@@ -121,10 +121,11 @@ namespace AdventOfCode.Solutions
                             {
                                 registers0[arguments[1][0] - 'a'] = queue0.Dequeue();
                             }
+
                             break;
                         case "jgz":
-                            if (getValueOfString(arguments[1], registers0) > 0)
-                                i0 += getValueOfString(arguments[2], registers0) - 1;
+                            if (GetValueOfString(arguments[1], registers0) > 0)
+                                i0 += GetValueOfString(arguments[2], registers0) - 1;
                             break;
                         default:
                             return "unrecognized instruction: " + instruction;
@@ -149,20 +150,20 @@ namespace AdventOfCode.Solutions
                     {
                         case "snd":
                             oneSendCount++;
-                            queue0.Enqueue(this.getValueOfString(arguments[1], registers1));
+                            queue0.Enqueue(GetValueOfString(arguments[1], registers1));
                             oneWaiting = false;
                             break;
                         case "set":
-                            registers1[arguments[1][0] - 'a'] = this.getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] = GetValueOfString(arguments[2], registers1);
                             break;
                         case "add":
-                            registers1[arguments[1][0] - 'a'] += this.getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] += GetValueOfString(arguments[2], registers1);
                             break;
                         case "mul":
-                            registers1[arguments[1][0] - 'a'] *= this.getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] *= GetValueOfString(arguments[2], registers1);
                             break;
                         case "mod":
-                            registers1[arguments[1][0] - 'a'] %= this.getValueOfString(arguments[2], registers1);
+                            registers1[arguments[1][0] - 'a'] %= GetValueOfString(arguments[2], registers1);
                             break;
                         case "rcv":
                             if (queue1.Count == 0)
@@ -174,10 +175,11 @@ namespace AdventOfCode.Solutions
                             {
                                 registers1[arguments[1][0] - 'a'] = queue1.Dequeue();
                             }
+
                             break;
                         case "jgz":
-                            if (this.getValueOfString(arguments[1], registers1) > 0)
-                                i1 += this.getValueOfString(arguments[2], registers1) - 1;
+                            if (GetValueOfString(arguments[1], registers1) > 0)
+                                i1 += GetValueOfString(arguments[2], registers1) - 1;
                             break;
                         default:
                             return "unrecognized instruction: " + instruction;

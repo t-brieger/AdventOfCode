@@ -13,7 +13,6 @@ namespace AdventOfCode.Solutions
             int z = 0;
 
             foreach (string direction in directions)
-            {
                 switch (direction)
                 {
                     case "n":
@@ -43,7 +42,6 @@ namespace AdventOfCode.Solutions
                     default:
                         throw new Exception("Malformed input: " + direction);
                 }
-            }
 
             return ((Math.Abs(x) + Math.Abs(y) + Math.Abs(z)) / 2).ToString();
         }

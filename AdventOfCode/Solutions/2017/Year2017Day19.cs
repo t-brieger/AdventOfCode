@@ -7,7 +7,8 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
+            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length,
+                input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
             char[,] extraChars = new char[grid.GetLength(0), grid.GetLength(1)];
 
             for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
@@ -19,7 +20,7 @@ namespace AdventOfCode.Solutions
                     char c = line[j];
 
                     grid[j, i] = !Char.IsWhiteSpace(c);
-                    if (c >= 'A' && c <= 'Z')
+                    if (c is >= 'A' and <= 'Z')
                         extraChars[j, i] = c;
                 }
             }
@@ -66,11 +67,13 @@ namespace AdventOfCode.Solutions
                         {
                             positionX += 1;
                             direction = 0;
-                        }else if (positionY > 0 && grid[positionX, positionY - 1])
+                        }
+                        else if (positionY > 0 && grid[positionX, positionY - 1])
                         {
                             positionY -= 1;
                             direction = 3;
-                        }else if (positionY < grid.GetLength(1) - 1 && grid[positionX, positionY + 1])
+                        }
+                        else if (positionY < grid.GetLength(1) - 1 && grid[positionX, positionY + 1])
                         {
                             positionY += 1;
                             direction = 1;
@@ -82,26 +85,31 @@ namespace AdventOfCode.Solutions
                         {
                             positionY += 1;
                             direction = 1;
-                        }else if (positionX > 0 && grid[positionX - 1, positionY])
+                        }
+                        else if (positionX > 0 && grid[positionX - 1, positionY])
                         {
                             positionX -= 1;
                             direction = 2;
-                        }else if (positionX < grid.GetLength(0) - 1 && grid[positionX + 1, positionY])
+                        }
+                        else if (positionX < grid.GetLength(0) - 1 && grid[positionX + 1, positionY])
                         {
                             positionX += 1;
                             direction = 0;
                         }
+
                         break;
                     case 2:
                         if (positionX > 0 && grid[positionX - 1, positionY])
                         {
                             positionX -= 1;
                             direction = 2;
-                        }else if (positionY > 0 && grid[positionX, positionY - 1])
+                        }
+                        else if (positionY > 0 && grid[positionX, positionY - 1])
                         {
                             positionY -= 1;
                             direction = 3;
-                        }else if (positionY < grid.GetLength(1) - 1 && grid[positionX, positionY + 1])
+                        }
+                        else if (positionY < grid.GetLength(1) - 1 && grid[positionX, positionY + 1])
                         {
                             positionY += 1;
                             direction = 1;
@@ -113,11 +121,13 @@ namespace AdventOfCode.Solutions
                         {
                             positionY -= 1;
                             direction = 3;
-                        }else if (positionX < grid.GetLength(0) - 1 && grid[positionX + 1, positionY])
+                        }
+                        else if (positionX < grid.GetLength(0) - 1 && grid[positionX + 1, positionY])
                         {
                             positionX += 1;
                             direction = 0;
-                        }else if (positionX > 0 && grid[positionX - 1, positionY])
+                        }
+                        else if (positionX > 0 && grid[positionX - 1, positionY])
                         {
                             positionX -= 1;
                             direction = 2;
@@ -130,7 +140,8 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length, input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
+            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length,
+                input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
 
             for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
             {
@@ -157,7 +168,6 @@ namespace AdventOfCode.Solutions
 
             while (true)
             {
-
                 do
                 {
                     if (direction != 0)
@@ -213,6 +223,7 @@ namespace AdventOfCode.Solutions
                             positionX += 1;
                             direction = 0;
                         }
+
                         break;
                     case 2:
                         if (positionX > 0 && grid[positionX - 1, positionY])

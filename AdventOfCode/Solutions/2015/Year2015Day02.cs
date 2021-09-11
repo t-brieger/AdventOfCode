@@ -13,8 +13,10 @@ namespace AdventOfCode.Solutions
 
             foreach (int[] measurements in lines.Select(line => line.Split('x').Select(Int32.Parse).ToArray()))
             {
-                totalArea += 2 * (measurements[0] * measurements[1] + measurements[1] * measurements[2] + measurements[0] * measurements[2]);
-                totalArea += Math.Min(Math.Min(measurements[0] * measurements[1], measurements[1] * measurements[2]), measurements[0] * measurements[2]);
+                totalArea += 2 * (measurements[0] * measurements[1] + measurements[1] * measurements[2] +
+                                  measurements[0] * measurements[2]);
+                totalArea += Math.Min(Math.Min(measurements[0] * measurements[1], measurements[1] * measurements[2]),
+                    measurements[0] * measurements[2]);
             }
 
             return totalArea.ToString();

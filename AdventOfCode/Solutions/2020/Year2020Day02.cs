@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AngleSharp.Html;
 
 namespace AdventOfCode.Solutions
 {
@@ -10,7 +9,7 @@ namespace AdventOfCode.Solutions
         {
             (int min, int max, char letter, string pass)[] lines = input
                 .Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x.Split(new[] {'-', ' ', ':'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => x.Split(new[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries))
                 .Select(x => (int.Parse(x[0]), int.Parse(x[1]), x[2][0], x[3])).ToArray();
             int valid = 0;
             foreach ((int min, int max, char letter, string pass) in lines)
@@ -19,6 +18,7 @@ namespace AdventOfCode.Solutions
                 if (count <= max && count >= min)
                     valid++;
             }
+
             return valid.ToString();
         }
 
@@ -26,14 +26,12 @@ namespace AdventOfCode.Solutions
         {
             (int, int, char, string)[] lines = input
                 .Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => x.Split(new[] {'-', ' ', ':'}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(x => x.Split(new[] { '-', ' ', ':' }, StringSplitOptions.RemoveEmptyEntries))
                 .Select(x => (int.Parse(x[0]), int.Parse(x[1]), x[2][0], x[3])).ToArray();
             int valid = 0;
             foreach ((int pos1, int pos2, char letter, string pass) in lines)
-            {
-                if (pass[pos1 - 1] == letter ^ pass[pos2 - 1] == letter)
+                if ((pass[pos1 - 1] == letter) ^ (pass[pos2 - 1] == letter))
                     valid++;
-            }
             return valid.ToString();
         }
     }

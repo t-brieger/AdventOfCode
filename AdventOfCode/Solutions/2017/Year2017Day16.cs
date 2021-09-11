@@ -6,27 +6,16 @@ namespace AdventOfCode.Solutions
 {
     public class Year2017Day16 : Solution
     {
-        private class Node<T>
-        {
-            public T value;
-            public Node<T> next;
-
-            public Node(T v)
-            {
-                this.value = v;
-            }
-        }
-
         public override string Part1(string input)
         {
             /*
             int length = 5;
             input = "s1,x3/4,pe/b";
             /*/
-            int length = 16;
+            const int length = 16;
             //*/
 
-            Node<byte> head = new Node<byte>(0);
+            Node<byte> head = new(0);
             Node<byte> originalHead = head;
             for (byte i = 1; i < length; i++)
             {
@@ -40,45 +29,49 @@ namespace AdventOfCode.Solutions
             foreach (string instruction in input.Split(','))
             {
                 originalHead = head;
-                if (instruction[0] == 's')
+                switch (instruction[0])
                 {
-                    int spinSize = Int32.Parse(instruction.Substring(1));
-                    for (int i = 0; i < length - spinSize; i++)
-                        head = head.next;
-                }else if (instruction[0] == 'x')
-                {
-                    byte register0 = Byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
-                    byte register1 = Byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
-
-                    for (int i = 0; i < register0; i++)
-                        head = head.next;
-                    Node<byte> register0Node = head;
-                    head = originalHead;
-                    for (int i = 0; i < register1; i++)
-                        head = head.next;
-                    byte tmp = register0Node.value;
-                    register0Node.value = head.value;
-                    head.value = tmp;
-                    head = originalHead;
-                }
-                else if (instruction[0] == 'p')
-                {
-                    byte swap0 = (byte) (instruction.Substring(1).Split('/', 2)[0][0] - 'a');
-                    byte swap1 = (byte) (instruction.Substring(1).Split('/', 2)[1][0] - 'a');
-
-                    for (int i = 0; i < length; i++)
+                    case 's':
                     {
-                        if (head.value == swap0)
-                            head.value = swap1;
-                        else if (head.value == swap1)
-                            head.value = swap0;
-
-                        head = head.next;
+                        int spinSize = Int32.Parse(instruction[1..]);
+                        for (int i = 0; i < length - spinSize; i++)
+                            head = head.next;
+                        break;
                     }
-                }
-                else
-                {
-                    return "unrecognized instruction: " + instruction;
+                    case 'x':
+                    {
+                        byte register0 = Byte.Parse(instruction[1..].Split('/', 2)[0]);
+                        byte register1 = Byte.Parse(instruction[1..].Split('/', 2)[1]);
+
+                        for (int i = 0; i < register0; i++)
+                            head = head.next;
+                        Node<byte> register0Node = head;
+                        head = originalHead;
+                        for (int i = 0; i < register1; i++)
+                            head = head.next;
+                        (register0Node.value, head.value) = (head.value, register0Node.value);
+                        head = originalHead;
+                        break;
+                    }
+                    case 'p':
+                    {
+                        byte swap0 = (byte)(instruction[1..].Split('/', 2)[0][0] - 'a');
+                        byte swap1 = (byte)(instruction[1..].Split('/', 2)[1][0] - 'a');
+
+                        for (int i = 0; i < length; i++)
+                        {
+                            if (head.value == swap0)
+                                head.value = swap1;
+                            else if (head.value == swap1)
+                                head.value = swap0;
+
+                            head = head.next;
+                        }
+
+                        break;
+                    }
+                    default:
+                        return "unrecognized instruction: " + instruction;
                 }
             }
 
@@ -87,7 +80,7 @@ namespace AdventOfCode.Solutions
 
         private static string StringifyLinkedList(Node<byte> head, int l)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             for (int i = 0; i < l; i++)
             {
                 sb.Append((char)(head.value + 'a'));
@@ -99,7 +92,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            Node<byte> head = new Node<byte>(0);
+            Node<byte> head = new(0);
             Node<byte> originalHead = head;
             for (byte i = 1; i < 16; i++)
             {
@@ -110,62 +103,77 @@ namespace AdventOfCode.Solutions
             head.next = originalHead;
             head = originalHead;
 
-            List<string> seenProgs = new List<string>(50);
+            List<string> seenProgs = new(50);
 
             for (int j = 0;; j++)
             {
                 string s = StringifyLinkedList(head, 16);
 
                 if (seenProgs.Contains(s))
-                    return seenProgs[1_000_000_000 % j];
+                    if (j != 0)
+                        return seenProgs[1_000_000_000 % j];
 
                 seenProgs.Add(s);
 
                 foreach (string instruction in input.Split(','))
                 {
                     originalHead = head;
-                    if (instruction[0] == 's')
+                    switch (instruction[0])
                     {
-                        int spinSize = Int32.Parse(instruction.Substring(1));
-                        for (int i = 0; i < 16 - spinSize; i++)
-                            head = head.next;
-                    }
-                    else if (instruction[0] == 'x')
-                    {
-                        byte register0 = Byte.Parse(instruction.Substring(1).Split('/', 2)[0]);
-                        byte register1 = Byte.Parse(instruction.Substring(1).Split('/', 2)[1]);
-
-                        for (int i = 0; i < register0; i++)
-                            head = head.next;
-                        Node<byte> register0Node = head;
-                        head = originalHead;
-                        for (int i = 0; i < register1; i++)
-                            head = head.next;
-                        byte tmp = register0Node.value;
-                        register0Node.value = head.value;
-                        head.value = tmp;
-                        head = originalHead;
-                    }
-                    else if (instruction[0] == 'p')
-                    {
-                        byte swap0 = (byte) (instruction.Substring(1).Split('/', 2)[0][0] - 'a');
-                        byte swap1 = (byte) (instruction.Substring(1).Split('/', 2)[1][0] - 'a');
-
-                        for (int i = 0; i < 16; i++)
+                        case 's':
                         {
-                            if (head.value == swap0)
-                                head.value = swap1;
-                            else if (head.value == swap1)
-                                head.value = swap0;
-
-                            head = head.next;
+                            int spinSize = Int32.Parse(instruction[1..]);
+                            for (int i = 0; i < 16 - spinSize; i++)
+                                head = head.next;
+                            break;
                         }
-                    }
-                    else
-                    {
-                        return "unrecognized instruction: " + instruction;
+                        case 'x':
+                        {
+                            byte register0 = Byte.Parse(instruction[1..].Split('/', 2)[0]);
+                            byte register1 = Byte.Parse(instruction[1..].Split('/', 2)[1]);
+
+                            for (int i = 0; i < register0; i++)
+                                head = head.next;
+                            Node<byte> register0Node = head;
+                            head = originalHead;
+                            for (int i = 0; i < register1; i++)
+                                head = head.next;
+                            (register0Node.value, head.value) = (head.value, register0Node.value);
+                            head = originalHead;
+                            break;
+                        }
+                        case 'p':
+                        {
+                            byte swap0 = (byte)(instruction[1..].Split('/', 2)[0][0] - 'a');
+                            byte swap1 = (byte)(instruction[1..].Split('/', 2)[1][0] - 'a');
+
+                            for (int i = 0; i < 16; i++)
+                            {
+                                if (head.value == swap0)
+                                    head.value = swap1;
+                                else if (head.value == swap1)
+                                    head.value = swap0;
+
+                                head = head.next;
+                            }
+
+                            break;
+                        }
+                        default:
+                            return "unrecognized instruction: " + instruction;
                     }
                 }
+            }
+        }
+
+        private class Node<T>
+        {
+            public Node<T> next;
+            public T value;
+
+            public Node(T v)
+            {
+                this.value = v;
             }
         }
     }

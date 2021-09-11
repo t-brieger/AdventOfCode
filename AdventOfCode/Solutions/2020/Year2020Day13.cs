@@ -12,23 +12,24 @@ namespace AdventOfCode.Solutions
             int[] busses = lines[1].Split(',').Where(s => s != "x").Select(int.Parse).ToArray();
             int origTimestamp = int.Parse(lines[0]);
             for (int timestamp = origTimestamp;; timestamp++)
-            {
-                foreach (int bus in busses)
-                    if (timestamp % bus == 0)
-                        return (bus * (timestamp - origTimestamp)).ToString();
-            }
+                foreach (int bus in busses.Where(bus => timestamp % bus == 0))
+                    return (bus * (timestamp - origTimestamp)).ToString();
         }
 
-        private static long ModInv(long a, long m) => (long) BigInteger.ModPow(a, m - 2, m);
+        private static long ModInv(long a, long m)
+        {
+            return (long)BigInteger.ModPow(a, m - 2, m);
+        }
 
         // https://rosettacode.org/wiki/Chinese_remainder_theorem#C.23
         private static long ChineseRemainderTheorem((long mod, long a)[] items)
         {
             long prod = items.Aggregate(1L, (acc, item) => acc * item.mod);
-            long sum = items.Select((item, i) =>
+            long sum = items.Select((item, _) =>
             {
-                long p = prod / item.mod;
-                return item.a * ModInv(p, item.mod) * p;
+                (long mod, long a) = item;
+                long p = prod / mod;
+                return a * ModInv(p, mod) * p;
             }).Sum();
 
             return sum % prod;

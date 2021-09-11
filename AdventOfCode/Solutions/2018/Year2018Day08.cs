@@ -1,31 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode.Solutions
 {
     public class Year2018Day08 : Solution
     {
-        public static int Part1RecursiveMethod(int[] tree, ref int len)
+        private static int Part1RecursiveMethod(IReadOnlyList<int> tree, ref int len)
         {
             int sum = 0;
 
             int children = tree[len++];
             int dataCount = tree[len++];
 
-            for (int i = 0; i < children; i++)
-            {
-                sum += Part1RecursiveMethod(tree, ref len);
-            }
+            for (int i = 0; i < children; i++) sum += Part1RecursiveMethod(tree, ref len);
 
-            for (int i = 0; i < dataCount; i++)
-            {
-                sum += tree[len++];
-            }
+            for (int i = 0; i < dataCount; i++) sum += tree[len++];
 
             return sum;
         }
 
-        public static int Part2RecursiveMethod(int[] tree, ref int len)
+        private static int Part2RecursiveMethod(IReadOnlyList<int> tree, ref int len)
         {
             int sum = 0;
 
@@ -34,19 +29,13 @@ namespace AdventOfCode.Solutions
 
             if (children == 0)
             {
-                for (int i = 0; i < dataCount; i++)
-                {
-                    sum += tree[len++];
-                }
+                for (int i = 0; i < dataCount; i++) sum += tree[len++];
             }
             else
             {
                 int[] childrenValues = new int[children];
 
-                for (int i = 0; i < children; i++)
-                {
-                    childrenValues[i] = Part2RecursiveMethod(tree, ref len);
-                }
+                for (int i = 0; i < children; i++) childrenValues[i] = Part2RecursiveMethod(tree, ref len);
 
                 for (int i = 0; i < dataCount; i++)
                 {
@@ -58,7 +47,6 @@ namespace AdventOfCode.Solutions
 
                     sum += childrenValues[tree[len++] - 1];
                 }
-
             }
 
             return sum;

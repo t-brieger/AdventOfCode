@@ -24,11 +24,9 @@ namespace AdventOfCode.Solutions
                     if (flying)
                         dist += speed;
 
-                    if (flying && secsInCurrentState >= secFly || !flying && secsInCurrentState >= secRest)
-                    {
-                        flying = !flying;
-                        secsInCurrentState = 0;
-                    }
+                    if ((!flying || secsInCurrentState < secFly) && (flying || secsInCurrentState < secRest)) continue;
+                    flying = !flying;
+                    secsInCurrentState = 0;
                 }
 
                 maxDist = Math.Max(maxDist, dist);
@@ -71,10 +69,8 @@ namespace AdventOfCode.Solutions
                 }
 
                 for (int j = 0; j < scores.Length; j++)
-                {
                     if (reindeerInfo[j].Item5 == reindeerInfo.Max(t => t.Item5))
                         scores[j]++;
-                }
             }
 
             return scores.Max().ToString();

@@ -11,18 +11,12 @@ namespace AdventOfCode.Solutions
             string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             int startingSize = lines[0].Length / 2;
 
-            HashSet<(int x, int y)> infected = new HashSet<(int x, int y)>();
+            HashSet<(int x, int y)> infected = new();
 
             for (int i = 0; i < lines.Length; i++)
-            {
-                for (int j = 0; j < lines[i].Length; j++)
-                {
-                    if (lines[i][j] == '#')
-                    {
-                        infected.Add((j - startingSize, i - startingSize));
-                    }
-                }
-            }
+            for (int j = 0; j < lines[i].Length; j++)
+                if (lines[i][j] == '#')
+                    infected.Add((j - startingSize, i - startingSize));
 
 
             int infectionCount = 0;
@@ -43,6 +37,7 @@ namespace AdventOfCode.Solutions
                     infected.Add(virusPos);
                     infectionCount++;
                 }
+
                 virusFacing %= 4;
                 virusPos = virusFacing switch
                 {
@@ -64,18 +59,12 @@ namespace AdventOfCode.Solutions
             int startingSize = lines[0].Length / 2;
 
             //0: weakened, 2: flagged, 1: infected
-            Dictionary<(int x, int y), byte> infected = new Dictionary<(int x, int y), byte>();
+            Dictionary<(int x, int y), byte> infected = new();
 
             for (int i = 0; i < lines.Length; i++)
-            {
-                for (int j = 0; j < lines[i].Length; j++)
-                {
-                    if (lines[i][j] == '#')
-                    {
-                        infected.Add((j - startingSize, i - startingSize), 1);
-                    }
-                }
-            }
+            for (int j = 0; j < lines[i].Length; j++)
+                if (lines[i][j] == '#')
+                    infected.Add((j - startingSize, i - startingSize), 1);
 
 
             int infectionCount = 0;
@@ -93,7 +82,8 @@ namespace AdventOfCode.Solutions
                         else
                             infectionCount++;
                         infected[virusPos]++;
-                    }else
+                    }
+                    else
                     {
                         infected.Remove(virusPos);
                         virusFacing += 2;
@@ -105,6 +95,7 @@ namespace AdventOfCode.Solutions
                     virusFacing--;
                     infected.Add(virusPos, 0);
                 }
+
                 virusFacing %= 4;
                 virusPos = virusFacing switch
                 {

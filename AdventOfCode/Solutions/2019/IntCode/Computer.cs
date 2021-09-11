@@ -4,94 +4,121 @@ using System.Linq;
 
 namespace AdventOfCode.Solutions.IntCode
 {
+    // ReSharper disable once InconsistentNaming
     public class Computer
     {
-        private ModeHelper mh = new ModeHelper();
-        private Dictionary<long, (string desc, int argNum, Action<long[], long[]> implementation)> opcodes;
+        private readonly Dictionary<long, long> memory;
+        private readonly ModeHelper mh = new();
 
-        public bool hasHalted = false;
-        public Dictionary<long, long> memory;
-        public Queue<long> output;
+        public bool hasHalted;
         public Queue<long> input;
-        public bool waitingForInput = false;
 
         private long ip;
+        private Dictionary<long, (string desc, int argNum, Action<long[], long[]> implementation)> opcodes;
+        public Queue<long> output;
+        public bool waitingForInput;
 
-        private void init()
+        public Computer(string program) : this(program.Split(',').Select(long.Parse))
         {
-            this.ip = 0;
-            this.input = new Queue<long>();
-            this.output = new Queue<long>();
-
-            opcodes = new();
-
-            //ARITHMETIC
-            opcodes.Add(1, ("ADD", 3, (args, modes) => this.memory[mh.getValue(args[2], modes[2], this.memory, true)] =
-                mh.getValue(args[0], modes[0], this.memory) +
-                mh.getValue(args[1], modes[1], this.memory)));
-            opcodes.Add(2, ("MUL", 3, (args, modes) => this.memory[mh.getValue(args[2], modes[2], this.memory, true)] =
-                mh.getValue(args[0], modes[0], this.memory) *
-                mh.getValue(args[1], modes[1], this.memory)));
-            opcodes.Add(7, ("LT", 3, (args, modes) => this.memory[mh.getValue(args[2], modes[2], this.memory, true)] =
-                mh.getValue(args[0], modes[0], this.memory) < mh.getValue(args[1], modes[1], this.memory) ? 1 : 0));
-            opcodes.Add(8, ("EQ", 3, (args, modes) => this.memory[mh.getValue(args[2], modes[2], this.memory, true)] =
-                mh.getValue(args[0], modes[0], this.memory) == mh.getValue(args[1], modes[1], this.memory) ? 1 : 0));
-
-            //I/O
-            opcodes.Add(3, ("IN", 1, (args, modes) =>
-                this.memory[mh.getValue(args[0], modes[0], this.memory, true)] = input.Dequeue()));
-            opcodes.Add(4, ("OUT", 1, (args, modes) =>
-                output.Enqueue(mh.getValue(args[0], modes[0], this.memory))));
-
-            //JUMPS
-            opcodes.Add(5, ("JT", 2, (args, modes) =>
-            {
-                if (mh.getValue(args[0], modes[0], this.memory) != 0)
-                    ip = mh.getValue(args[1], modes[1], this.memory);
-            }));
-            opcodes.Add(6, ("JF", 2, (args, modes) =>
-            {
-                if (mh.getValue(args[0], modes[0], this.memory) == 0)
-                    ip = mh.getValue(args[1], modes[1], this.memory);
-            }));
-
-            //?
-            opcodes.Add(9, ("REL", 1, (args, modes) =>
-                this.mh.relativeBase += this.mh.getValue(args[0], modes[0], this.memory)));
-
-            //HALT
-            opcodes.Add(99, ("HLT", 0, (_, _) => this.hasHalted = true));
         }
 
-        public Computer(string program) : this(program.Split(',').Select(long.Parse)) { }
+        private Computer(IEnumerable<long> program) : this(program.Select((x, i) => (i, x))
+            .ToDictionary(t => (long)t.Item1, t => t.Item2))
+        {
+        }
 
-        public Computer(IEnumerable<long> program) : this(program.Select((x, i) => (i, x)).ToDictionary(t => (long)t.Item1, t => t.Item2)) {}
-        
-        public Computer(Dictionary<long, long> memory)
+        private Computer(Dictionary<long, long> memory)
         {
             this.memory = new Dictionary<long, long>(memory.Count);
-            foreach (KeyValuePair<long, long> kvp in memory)
-                this.memory.Add(kvp.Key, kvp.Value);
+            foreach ((long key, long value) in memory)
+                this.memory.Add(key, value);
 
-            this.init();
+            this.Init();
         }
 
         public Computer(Dictionary<int, int> memory)
         {
             this.memory = new Dictionary<long, long>(memory.Count);
-            foreach (KeyValuePair<int, int> kvp in memory)
-                this.memory.Add(kvp.Key, kvp.Value);
+            foreach ((int key, int value) in memory)
+                this.memory.Add(key, value);
 
-            this.init();
+            this.Init();
+        }
+
+        private void Init()
+        {
+            this.ip = 0;
+            this.input = new Queue<long>();
+            this.output = new Queue<long>();
+
+            this.opcodes = new Dictionary<long, (string desc, int argNum, Action<long[], long[]> implementation)>
+            {
+                //ARITHMETIC
+                {
+                    1, ("ADD", 3, (args, modes) => this.memory[this.mh.GetValue(args[2], modes[2], this.memory, true)] =
+                        this.mh.GetValue(args[0], modes[0], this.memory) +
+                        this.mh.GetValue(args[1], modes[1], this.memory))
+                },
+                {
+                    2, ("MUL", 3, (args, modes) => this.memory[this.mh.GetValue(args[2], modes[2], this.memory, true)] =
+                        this.mh.GetValue(args[0], modes[0], this.memory) *
+                        this.mh.GetValue(args[1], modes[1], this.memory))
+                },
+                {
+                    7, ("LT", 3, (args, modes) => this.memory[this.mh.GetValue(args[2], modes[2], this.memory, true)] =
+                        this.mh.GetValue(args[0], modes[0], this.memory) <
+                        this.mh.GetValue(args[1], modes[1], this.memory)
+                            ? 1
+                            : 0)
+                },
+                {
+                    8, ("EQ", 3, (args, modes) => this.memory[this.mh.GetValue(args[2], modes[2], this.memory, true)] =
+                        this.mh.GetValue(args[0], modes[0], this.memory) ==
+                        this.mh.GetValue(args[1], modes[1], this.memory)
+                            ? 1
+                            : 0)
+                },
+                //I/O
+                {
+                    3, ("IN", 1, (args, modes) =>
+                        this.memory[this.mh.GetValue(args[0], modes[0], this.memory, true)] = this.input.Dequeue())
+                },
+                {
+                    4, ("OUT", 1, (args, modes) =>
+                        this.output.Enqueue(this.mh.GetValue(args[0], modes[0], this.memory)))
+                },
+                //JUMPS
+                {
+                    5, ("JT", 2, (args, modes) =>
+                    {
+                        if (this.mh.GetValue(args[0], modes[0], this.memory) != 0)
+                            this.ip = this.mh.GetValue(args[1], modes[1], this.memory);
+                    })
+                },
+                {
+                    6, ("JF", 2, (args, modes) =>
+                    {
+                        if (this.mh.GetValue(args[0], modes[0], this.memory) == 0)
+                            this.ip = this.mh.GetValue(args[1], modes[1], this.memory);
+                    })
+                },
+                //?
+                {
+                    9, ("REL", 1, (args, modes) =>
+                        this.mh.relativeBase += this.mh.GetValue(args[0], modes[0], this.memory))
+                },
+                //HALT
+                { 99, ("HLT", 0, (_, _) => this.hasHalted = true) }
+            };
         }
 
         public long GetMemoryAt(long pos)
         {
-            return memory.ContainsKey(pos) ? this.memory[pos] : 0;
+            return this.memory.ContainsKey(pos) ? this.memory[pos] : 0;
         }
 
         /// <summary>
-        /// Steps the program forward one instruction
+        ///     Steps the program forward one instruction
         /// </summary>
         public void Step()
         {
@@ -99,9 +126,8 @@ namespace AdventOfCode.Solutions.IntCode
                 return;
 
             this.waitingForInput = false;
-            long opcode = this.GetMemoryAt(ip++);
-            (string desc, int argNum, Action<long[], long[]> implementation) =
-                opcodes[opcode % 100];
+            long opcode = this.GetMemoryAt(this.ip++);
+            (string desc, int argNum, Action<long[], long[]> implementation) = this.opcodes[opcode % 100];
 
             opcode /= 100;
             long[] modes = new long[argNum];
@@ -112,24 +138,22 @@ namespace AdventOfCode.Solutions.IntCode
             }
 
             long[] arguments = new long[argNum];
-            for (int i = 0; i < arguments.Length; i++)
-            {
-                arguments[i] = this.GetMemoryAt(ip++);
-            }
+            for (int i = 0; i < arguments.Length; i++) arguments[i] = this.GetMemoryAt(this.ip++);
 
             try
             {
                 implementation(arguments, modes);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 //input queue is empty
                 this.waitingForInput = true;
-                ip -= argNum + 1;
+                this.ip -= argNum + 1;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"IntCodeComputer failed with exception: {e.GetType().Name} at {ip}, instruction:");
+                Console.WriteLine(
+                    $"IntCodeComputer failed with exception: {e.GetType().Name} at {this.ip}, instruction:");
                 Console.WriteLine($"{desc} {string.Join(' ', arguments)}");
                 Console.WriteLine(e.Message);
             }
@@ -137,8 +161,7 @@ namespace AdventOfCode.Solutions.IntCode
 
         public void RunUntilHalted()
         {
-            while (!this.hasHalted)
-                Step();
+            while (!this.hasHalted) this.Step();
         }
     }
 }

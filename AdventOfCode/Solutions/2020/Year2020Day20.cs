@@ -15,51 +15,51 @@ namespace AdventOfCode.Solutions
                 int tileId = int.Parse(lines[0].Substring(5, lines[0].Length - 6));
                 tiles.Add(tileId, lines.Skip(1).ToArray());
             }
-            
+
             Dictionary<string, int> edgeCount = new();
 
             //populate edgeCount
-            foreach (KeyValuePair<int, string[]> kvp in tiles)
+            foreach ((_, string[] value) in tiles)
             {
                 //UP
-                string edge = kvp.Value[0];
+                string edge = value[0];
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 edge = new string(edge.Reverse().ToArray());
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 //DOWN
-                edge = kvp.Value[^1];
+                edge = value[^1];
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 edge = new string(edge.Reverse().ToArray());
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 //LEFT
-                edge = string.Join("", kvp.Value.Select(x => x[0]));
+                edge = string.Join("", value.Select(x => x[0]));
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 edge = new string(edge.Reverse().ToArray());
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 //RIGHT
-                edge = string.Join("", kvp.Value.Select(x => x[^1]));
+                edge = string.Join("", value.Select(x => x[^1]));
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
                 edgeCount[edge]++;
-                
+
                 edge = new string(edge.Reverse().ToArray());
                 if (!edgeCount.ContainsKey(edge))
                     edgeCount.Add(edge, 0);
@@ -68,41 +68,39 @@ namespace AdventOfCode.Solutions
 
             int numCorners = 0;
             long product = 1L;
-            
+
             //find corners
-            foreach (KeyValuePair<int, string[]> kvp in tiles)
+            foreach ((int key, string[] value) in tiles)
             {
                 int unique = 0;
-                
+
                 //UP
-                string edge = kvp.Value[0];
-                if (edgeCount[edge] == 1)
-                    unique++;
-                        
-                //DOWN
-                edge = kvp.Value[^1];
-                if (edgeCount[edge] == 1)
-                    unique++;
-                
-                //LEFT
-                edge = string.Join("", kvp.Value.Select(x => x[0]));
-                if (edgeCount[edge] == 1)
-                    unique++;
-                
-                //RIGHT
-                edge = string.Join("", kvp.Value.Select(x => x[^1]));
+                string edge = value[0];
                 if (edgeCount[edge] == 1)
                     unique++;
 
-                if (unique == 2)
-                {
-                    product *= kvp.Key;
-                    numCorners++;
-                }
+                //DOWN
+                edge = value[^1];
+                if (edgeCount[edge] == 1)
+                    unique++;
+
+                //LEFT
+                edge = string.Join("", value.Select(x => x[0]));
+                if (edgeCount[edge] == 1)
+                    unique++;
+
+                //RIGHT
+                edge = string.Join("", value.Select(x => x[^1]));
+                if (edgeCount[edge] == 1)
+                    unique++;
+
+                if (unique != 2) continue;
+                product *= key;
+                numCorners++;
             }
 
             Console.WriteLine(numCorners);
-            
+
             return product.ToString();
         }
 

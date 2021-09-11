@@ -9,8 +9,8 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            Dictionary<char, List<char>> requirements = new Dictionary<char, List<char>>();
-            
+            Dictionary<char, List<char>> requirements = new();
+
             foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 if (!requirements.ContainsKey(line[36]))
@@ -20,10 +20,9 @@ namespace AdventOfCode.Solutions
                     requirements.Add(line[5], new List<char>(5));
             }
 
-            HashSet<char> done = new HashSet<char>();
-            StringBuilder output = new StringBuilder(requirements.Count);
+            HashSet<char> done = new();
+            StringBuilder output = new(requirements.Count);
             while (requirements.Count > 0)
-            {
                 for (char c = 'A'; c <= 'Z'; c++)
                 {
                     if (!requirements.TryGetValue(c, out List<char> val))
@@ -35,14 +34,13 @@ namespace AdventOfCode.Solutions
                     requirements.Remove(c);
                     break;
                 }
-            }
 
             return output.ToString();
         }
 
         public override string Part2(string input)
         {
-            Dictionary<char, List<char>> requirements = new Dictionary<char, List<char>>();
+            Dictionary<char, List<char>> requirements = new();
 
             foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
@@ -60,7 +58,7 @@ namespace AdventOfCode.Solutions
             for (int i = 0; i < working.Length; i++)
                 working[i] = ' ';
 
-            HashSet<char> done = new HashSet<char>();
+            HashSet<char> done = new();
             int time = 0;
             while (requirements.Count > 0)
             {
@@ -75,10 +73,8 @@ namespace AdventOfCode.Solutions
                         requirements.Remove(working[i]);
                         working[i] = ' ';
                     }
-                    if (working[i] != ' ')
-                    {
-                        timeLeft[i]--;
-                    }
+
+                    if (working[i] != ' ') timeLeft[i]--;
                 }
 
                 for (char c = 'A'; c <= 'Z'; c++)

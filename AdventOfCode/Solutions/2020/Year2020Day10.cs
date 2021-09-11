@@ -15,7 +15,6 @@ namespace AdventOfCode.Solutions
             int oneDiff = 0;
 
             for (int i = 1; i < adapters.Length; i++)
-            {
                 switch (adapters[i] - adapters[i - 1])
                 {
                     case 1:
@@ -27,7 +26,6 @@ namespace AdventOfCode.Solutions
                     case 2:
                         break;
                 }
-            }
 
             return (threeDiff * oneDiff).ToString();
         }
@@ -41,11 +39,9 @@ namespace AdventOfCode.Solutions
             cumulativeCombinations[0] = 1;
             cumulativeCombinations[1] = 1;
             cumulativeCombinations[2] = 2;
-            
-            for (int i = 0; i < adapters.Length; i++)
-            {
-                int j = adapters[i];
 
+            foreach (int j in adapters)
+            {
                 long cum = cumulativeCombinations[j - 1];
                 if (j >= 2)
                     cum += cumulativeCombinations[j - 2];

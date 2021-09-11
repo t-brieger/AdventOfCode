@@ -14,13 +14,14 @@ namespace AdventOfCode.Solutions
 
             Array.Copy(startState.Select(c => c == '#').ToArray(), 0, state, 50, startState.Length);
 
-            Dictionary<Tuple<bool, bool, bool, bool, bool>, bool> conversions = new Dictionary<Tuple<bool, bool, bool, bool, bool>, bool>(input
+            Dictionary<Tuple<bool, bool, bool, bool, bool>, bool> conversions = new(input
                 .Split('\n', StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(s =>
                 {
                     string[] parts = s.Split(" => ");
 
-                    KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool> kvp = new KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool>(
-                        new Tuple<bool, bool, bool, bool, bool>(parts[0][0] == '#', parts[0][1] == '#', parts[0][2] == '#', parts[0][3] == '#', parts[0][4] == '#'), parts[1] == "#");
+                    KeyValuePair<Tuple<bool, bool, bool, bool, bool>, bool> kvp = new(
+                        new Tuple<bool, bool, bool, bool, bool>(parts[0][0] == '#', parts[0][1] == '#',
+                            parts[0][2] == '#', parts[0][3] == '#', parts[0][4] == '#'), parts[1] == "#");
                     return kvp;
                 }));
 
@@ -28,19 +29,18 @@ namespace AdventOfCode.Solutions
             {
                 bool[] newState = new bool[state.Length];
                 for (int i = 2; i < state.Length - 2; i++)
-                {
-                    newState[i] = conversions[new Tuple<bool, bool, bool, bool, bool>(state[i - 2], state[i - 1], state[i], state[i + 1], state[i + 2])];
-                }
+                    newState[i] =
+                        conversions[
+                            new Tuple<bool, bool, bool, bool, bool>(state[i - 2], state[i - 1], state[i], state[i + 1],
+                                state[i + 2])];
 
                 state = newState;
             }
 
             int sum = 0;
             for (int i = -50; i < state.Length - 50; i++)
-            {
                 if (state[i + 50])
                     sum += i;
-            }
 
             return sum.ToString();
         }

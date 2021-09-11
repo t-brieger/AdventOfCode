@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace AdventOfCode.Solutions
@@ -10,10 +9,10 @@ namespace AdventOfCode.Solutions
         public override string Part1(string input)
         {
             //TSP sure is a novel problem
-            Dictionary<(string, string), int> distances = new Dictionary<(string, string), int>();
-            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+            Dictionary<(string, string), int> distances = new();
+            foreach (string[] arr in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.Split(' ')))
             {
-                string[] arr = line.Split(' ');
                 distances.Add((arr[0], arr[2]), int.Parse(arr[4]));
                 distances.Add((arr[2], arr[0]), int.Parse(arr[4]));
             }
@@ -23,22 +22,20 @@ namespace AdventOfCode.Solutions
                 .ToArray()))
             {
                 int dist = 0;
-                for (int i = 0; i < perm.Length - 1; i++)
-                {
-                    dist += distances[(perm[i], perm[i + 1])];
-                }
+                for (int i = 0; i < perm.Length - 1; i++) dist += distances[(perm[i], perm[i + 1])];
 
                 minDist = Math.Min(minDist, dist);
             }
+
             return minDist.ToString();
         }
 
         public override string Part2(string input)
         {
-            Dictionary<(string, string), int> distances = new Dictionary<(string, string), int>();
-            foreach (string line in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+            Dictionary<(string, string), int> distances = new();
+            foreach (string[] arr in input.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.Split(' ')))
             {
-                string[] arr = line.Split(' ');
                 distances.Add((arr[0], arr[2]), int.Parse(arr[4]));
                 distances.Add((arr[2], arr[0]), int.Parse(arr[4]));
             }
@@ -48,13 +45,11 @@ namespace AdventOfCode.Solutions
                 .ToArray()))
             {
                 int dist = 0;
-                for (int i = 0; i < perm.Length - 1; i++)
-                {
-                    dist += distances[(perm[i], perm[i + 1])];
-                }
+                for (int i = 0; i < perm.Length - 1; i++) dist += distances[(perm[i], perm[i + 1])];
 
                 maxDist = Math.Max(maxDist, dist);
             }
+
             return maxDist.ToString();
         }
     }

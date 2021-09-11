@@ -12,7 +12,7 @@ namespace AdventOfCode.Solutions
             int valid = passPhrases.Length;
             foreach (string s in passPhrases)
             {
-                HashSet<string> words = new HashSet<string>();
+                HashSet<string> words = new();
                 foreach (string word in s.Split(' '))
                 {
                     if (words.Contains(word))
@@ -34,7 +34,7 @@ namespace AdventOfCode.Solutions
             int valid = passPhrases.Length;
             foreach (string s in passPhrases)
             {
-                HashSet<string> words = new HashSet<string>();
+                HashSet<string> words = new();
                 foreach (string ordered in s.Split(' ').Select(word => new string(word.OrderBy(c => c).ToArray())))
                 {
                     if (words.Contains(ordered))

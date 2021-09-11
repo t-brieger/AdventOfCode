@@ -12,12 +12,12 @@ namespace AdventOfCode.Solutions
 
             foreach (string s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
-                int operation = s.Substring(0, 7) switch
+                int operation = s[..7] switch
                 {
                     "turn on" => 0,
                     "turn of" => 1,
                     "toggle " => 2,
-                    _ => throw new Exception("unrecognized instruction: " + s.Substring(0, 7))
+                    _ => throw new Exception("unrecognized instruction: " + s[..7])
                 };
 
                 string[] parts = s.Split(' ');
@@ -25,21 +25,17 @@ namespace AdventOfCode.Solutions
                 string[] point2 = parts[^1].Split(',');
 
                 (int x, int y) firstPoint = (Int32.Parse(point1[0]), Int32.Parse(point1[1]));
-                (int x, int y) secondPoint = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
+                (int x, int y) = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
 
-                for (int i = firstPoint.x; i <= secondPoint.x; i++)
-                {
-                    for (int j = firstPoint.y; j <= secondPoint.y; j++)
+                for (int i = firstPoint.x; i <= x; i++)
+                for (int j = firstPoint.y; j <= y; j++)
+                    grid[j * 1000 + i] = operation switch
                     {
-                        grid[j * 1000 + i] = operation switch
-                        {
-                            0 => true,
-                            1 => false,
-                            2 => !grid[j * 1000 + i],
-                            _ => throw new Exception()
-                        };
-                    }
-                }
+                        0 => true,
+                        1 => false,
+                        2 => !grid[j * 1000 + i],
+                        _ => throw new Exception()
+                    };
             }
 
             return grid.Count(x => x).ToString();
@@ -52,12 +48,12 @@ namespace AdventOfCode.Solutions
 
             foreach (string s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
-                int operation = s.Substring(0, 7) switch
+                int operation = s[..7] switch
                 {
                     "turn on" => 1,
                     "turn of" => -1,
                     "toggle " => 2,
-                    _ => throw new Exception("unrecognized instruction: " + s.Substring(0, 7))
+                    _ => throw new Exception("unrecognized instruction: " + s[..7])
                 };
 
                 string[] parts = s.Split(' ');
@@ -65,16 +61,14 @@ namespace AdventOfCode.Solutions
                 string[] point2 = parts[^1].Split(',');
 
                 (int x, int y) firstPoint = (Int32.Parse(point1[0]), Int32.Parse(point1[1]));
-                (int x, int y) secondPoint = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
+                (int x, int y) = (Int32.Parse(point2[0]), Int32.Parse(point2[1]));
 
-                for (int i = firstPoint.x; i <= secondPoint.x; i++)
+                for (int i = firstPoint.x; i <= x; i++)
+                for (int j = firstPoint.y; j <= y; j++)
                 {
-                    for (int j = firstPoint.y; j <= secondPoint.y; j++)
-                    {
-                        grid[j * 1000 + i] += operation;
-                        if (grid[j * 1000 + i] < 0)
-                            grid[j * 1000 + i] = 0;
-                    }
+                    grid[j * 1000 + i] += operation;
+                    if (grid[j * 1000 + i] < 0)
+                        grid[j * 1000 + i] = 0;
                 }
             }
 

@@ -15,7 +15,8 @@ namespace AdventOfCode.Solutions
                     return (Int32.Parse(y[0]), Int32.Parse(y[1]));
                 });
 
-            int severity = scanners.Where(scanner => scanner.Item1 % (2 * (scanner.Item2 - 1)) == 0).Sum(scanner => scanner.Item1 * scanner.Item2);
+            int severity = scanners.Where(scanner => scanner.Item1 % (2 * (scanner.Item2 - 1)) == 0)
+                .Sum(scanner => scanner.Item1 * scanner.Item2);
 
             return severity.ToString();
         }
@@ -28,12 +29,10 @@ namespace AdventOfCode.Solutions
                     string[] y = x.Split(':');
                     return (Int32.Parse(y[0]), Int32.Parse(y[1]));
                 }).ToArray();
-            
-            for (int i = 0; ; i++)
-            {
+
+            for (int i = 0;; i++)
                 if (scanners.All(scanner => (scanner.depth + i) % (2 * (scanner.range - 1)) != 0))
                     return i.ToString();
-            }
         }
     }
 }

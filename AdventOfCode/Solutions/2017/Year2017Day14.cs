@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -31,12 +32,10 @@ namespace AdventOfCode.Solutions
 
         private static string HexToBinary(string hex)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
-            foreach (int intValue in hex.Select(c => Int32.Parse(c.ToString(), System.Globalization.NumberStyles.HexNumber)))
-            {
+            foreach (int intValue in hex.Select(c => Int32.Parse(c.ToString(), NumberStyles.HexNumber)))
                 sb.Append(Convert.ToString(intValue, 2).PadLeft(4, '0'));
-            }
 
             return sb.ToString();
         }
@@ -49,12 +48,12 @@ namespace AdventOfCode.Solutions
 
                 seen.Add((x, y));
 
-                if (x != 0) FloodFill(seen, grid, (byte) (x - 1), y);
-                if (x != grid.GetLength(0) - 1) FloodFill(seen, grid, (byte) (x + 1), y);
-                if (y != 0) FloodFill(seen, grid, x, (byte) (y - 1));
+                if (x != 0) FloodFill(seen, grid, (byte)(x - 1), y);
+                if (x != grid.GetLength(0) - 1) FloodFill(seen, grid, (byte)(x + 1), y);
+                if (y != 0) FloodFill(seen, grid, x, (byte)(y - 1));
                 if (y != grid.GetLength(1) - 1)
                 {
-                    y = (byte) (y + 1);
+                    y = (byte)(y + 1);
                     continue;
                 }
 
@@ -68,23 +67,22 @@ namespace AdventOfCode.Solutions
 
             for (int i = 0; i < 128; i++)
             {
-                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.GetKnotHash($"{input.Trim()}-{i}")).Replace("-", ""));
+                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.GetKnotHash($"{input.Trim()}-{i}"))
+                    .Replace("-", ""));
                 for (int j = 0; j < hash.Length; j++)
                     grid[i, j] = hash[j] == '0';
             }
 
-            HashSet<(byte, byte)> seen = new HashSet<(byte, byte)>();
+            HashSet<(byte, byte)> seen = new();
 
             int regions = 0;
 
             for (byte i = 0; i < grid.GetLength(0); i++)
+            for (byte j = 0; j < grid.GetLength(1); j++)
             {
-                for (byte j = 0; j < grid.GetLength(1); j++)
-                {
-                    if (grid[i, j] || seen.Contains((i, j))) continue;
-                    regions++;
-                    FloodFill(seen, grid, i, j);
-                }
+                if (grid[i, j] || seen.Contains((i, j))) continue;
+                regions++;
+                FloodFill(seen, grid, i, j);
             }
 
             return regions.ToString();

@@ -20,7 +20,7 @@ namespace AdventOfCode.Solutions
 
             int warmup = Int32.Parse(input);
 
-            LinkedList<byte> recipes = new LinkedList<byte>();
+            LinkedList<byte> recipes = new();
 
             recipes.AddLast(3);
             recipes.AddLast(7);
@@ -33,7 +33,7 @@ namespace AdventOfCode.Solutions
                 byte combinedValue = (byte)(firstElf.Value + secondElf.Value);
                 if (combinedValue > 9)
                     recipes.AddLast(1);
-                recipes.AddLast((byte) (combinedValue % 10));
+                recipes.AddLast((byte)(combinedValue % 10));
 
                 byte oldValue = firstElf.Value;
                 for (byte b = 0; b < oldValue + 1; b++)
@@ -46,11 +46,9 @@ namespace AdventOfCode.Solutions
             if (recipes.Count > warmup + 10)
                 recipes.RemoveLast();
 
-            StringBuilder output = new StringBuilder();
-            foreach (byte b in recipes.Skip(warmup))
-            {
-                output.Append(b.ToString());
-            }
+            StringBuilder output = new();
+            foreach (byte b in recipes.Skip(warmup)) output.Append(b);
+
             return output.ToString();
         }
 
@@ -64,7 +62,7 @@ namespace AdventOfCode.Solutions
 
             input = target.ToString(); //to deal with any trailing/leading whitespace
 
-            LinkedList<byte> recipes = new LinkedList<byte>();
+            LinkedList<byte> recipes = new();
 
             recipes.AddLast(3);
             recipes.AddLast(7);

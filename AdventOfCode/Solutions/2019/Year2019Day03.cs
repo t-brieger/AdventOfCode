@@ -1,27 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace AdventOfCode.Solutions
 {
     public class Year2019Day03 : Solution
     {
-        private static int ManhattanDist((int X, int Y) p) => Math.Abs(p.X) + Math.Abs(p.Y);
+        private static int ManhattanDist((int X, int Y) p)
+        {
+            (int x, int y) = p;
+            return Math.Abs(x) + Math.Abs(y);
+        }
 
         public override string Part1(string input)
         {
             string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-            HashSet<(int, int)> firstWire = new HashSet<(int, int)>();
+            HashSet<(int, int)> firstWire = new();
 
-            HashSet<(int, int)> collisions = new HashSet<(int, int)>();
+            HashSet<(int, int)> collisions = new();
 
             int x = 0, y = 0;
             foreach (string direction in wires[0].Split(','))
             {
                 char dir = direction[0];
-                int amount = int.Parse(direction.Substring(1));
+                int amount = int.Parse(direction[1..]);
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -50,7 +53,7 @@ namespace AdventOfCode.Solutions
             foreach (string direction in wires[1].Split(','))
             {
                 char dir = direction[0];
-                int amount = int.Parse(direction.Substring(1));
+                int amount = int.Parse(direction[1..]);
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -74,7 +77,7 @@ namespace AdventOfCode.Solutions
                         collisions.Add((x, y));
                 }
             }
-            
+
             return collisions.Min(ManhattanDist).ToString();
         }
 
@@ -82,8 +85,8 @@ namespace AdventOfCode.Solutions
         {
             string[] wires = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
-            Dictionary<(int, int), int> firstWire = new Dictionary<(int, int), int>();
-            
+            Dictionary<(int, int), int> firstWire = new();
+
             int bestCollision = Int32.MaxValue;
 
             int x = 0, y = 0;
@@ -91,7 +94,7 @@ namespace AdventOfCode.Solutions
             foreach (string direction in wires[0].Split(','))
             {
                 char dir = direction[0];
-                int amount = int.Parse(direction.Substring(1));
+                int amount = int.Parse(direction[1..]);
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -123,7 +126,7 @@ namespace AdventOfCode.Solutions
             foreach (string direction in wires[1].Split(','))
             {
                 char dir = direction[0];
-                int amount = int.Parse(direction.Substring(1));
+                int amount = int.Parse(direction[1..]);
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -144,10 +147,10 @@ namespace AdventOfCode.Solutions
                     }
 
                     wireLen++;
-                    
-                    if (firstWire.ContainsKey((x, y)))
-                        if (wireLen + firstWire[(x, y)] < bestCollision)
-                            bestCollision = wireLen + firstWire[(x, y)];
+
+                    if (!firstWire.ContainsKey((x, y))) continue;
+                    if (wireLen + firstWire[(x, y)] < bestCollision)
+                        bestCollision = wireLen + firstWire[(x, y)];
                 }
             }
 

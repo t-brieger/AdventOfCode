@@ -7,7 +7,10 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => (
+                    (Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))),
+                    (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
             bool shouldLoop = true;
             ((int start, int end) x, (int start, int end) y) boundingBox = ((50001, -50001), (50001, -50001));
@@ -15,7 +18,6 @@ namespace AdventOfCode.Solutions
             while (true)
             {
                 if (!isFirstIter)
-                {
                     for (int i = 0; i < points.Length; i++)
                     {
                         if (points[i].position.x + points[i].velocity.x <= boundingBox.x.end &&
@@ -25,7 +27,6 @@ namespace AdventOfCode.Solutions
                         shouldLoop = false;
                         break;
                     }
-                }
 
                 isFirstIter = false;
 
@@ -53,31 +54,32 @@ namespace AdventOfCode.Solutions
                 }
             }
 
-            bool[,] result = new bool[boundingBox.x.end - boundingBox.x.start + 1, boundingBox.y.end - boundingBox.y.start + 1];
+            bool[,] result = new bool[boundingBox.x.end - boundingBox.x.start + 1,
+                boundingBox.y.end - boundingBox.y.start + 1];
             for (int i = 0; i < points.Length; i++)
             {
                 int y = points[i].position.y - boundingBox.y.start;
                 int x = points[i].position.x - boundingBox.x.start;
                 result[x, y] = true;
             }
+
             for (int x = 0; x < result.GetLength(0); x += 1)
             {
-                for (int y = 0; y < result.GetLength(1); y += 1)
-                {
-                    Console.Write(result[x, y] ? '#' : ' ');
-                }
+                for (int y = 0; y < result.GetLength(1); y += 1) Console.Write(result[x, y] ? '#' : ' ');
 
                 Console.Write('\n');
             }
 
             return "uncomment Writes in code - spam warning";
             //return "saved as output.png";
-
         }
 
         public override string Part2(string input)
         {
-            ((int x, int y) velocity, (int x, int y) position)[] points = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => ((Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))), (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
+            ((int x, int y) velocity, (int x, int y) position)[] points = input
+                .Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => (
+                    (Int32.Parse(line.Substring(36, 2)), Int32.Parse(line.Substring(40, 2))),
+                    (Int32.Parse(line.Substring(10, 6)), Int32.Parse(line.Substring(18, 6))))).ToArray();
 
 
             bool shouldLoop = true;
@@ -88,7 +90,6 @@ namespace AdventOfCode.Solutions
             {
                 secs++;
                 if (!isFirstIter)
-                {
                     for (int i = 0; i < points.Length; i++)
                     {
                         if (points[i].position.x + points[i].velocity.x <= boundingBox.x.end &&
@@ -98,7 +99,6 @@ namespace AdventOfCode.Solutions
                         shouldLoop = false;
                         break;
                     }
-                }
 
                 isFirstIter = false;
 

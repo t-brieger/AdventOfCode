@@ -40,11 +40,14 @@ namespace AdventOfCode.Solutions
             for (int i = 0; i < 5_000_000; i++)
             {
                 do
+                {
                     aValue = aValue * 16807 % 2147483647;
-                while (aValue % 4 != 0);
+                } while (aValue % 4 != 0);
+
                 do
+                {
                     bValue = bValue * 48271 % 2147483647;
-                while (bValue % 8 != 0);
+                } while (bValue % 8 != 0);
 
                 if ((aValue & 0xFFFF) == (bValue & 0xFFFF))
                     count++;

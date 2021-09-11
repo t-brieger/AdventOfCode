@@ -6,12 +6,15 @@
         {
             int floor = 0;
             foreach (char c in input)
-            {
-                if (c == '(')
-                    floor++;
-                else if (c == ')')
-                    floor--;
-            }
+                switch (c)
+                {
+                    case '(':
+                        floor++;
+                        break;
+                    case ')':
+                        floor--;
+                        break;
+                }
 
             return floor.ToString();
         }
@@ -21,13 +24,20 @@
             int floor = 0;
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i] == '(')
-                    floor++;
-                else if (input[i] == ')')
-                    floor--;
+                switch (input[i])
+                {
+                    case '(':
+                        floor++;
+                        break;
+                    case ')':
+                        floor--;
+                        break;
+                }
+
                 if (floor < 0)
                     return (i + 1).ToString();
             }
+
             return "-1";
         }
     }
