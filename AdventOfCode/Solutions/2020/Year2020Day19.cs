@@ -36,7 +36,7 @@ namespace AdventOfCode.Solutions
             {
                 string[] split = line.Split(": ");
                 int id = int.Parse(split[0]);
-                if (split[1].Contains("\""))
+                if (split[1].Contains('"'))
                 {
                     split = split[1].Split("\"");
                     rules.Add(id, new CharRule { value = split[1][0] });
@@ -65,7 +65,7 @@ namespace AdventOfCode.Solutions
             {
                 string[] split = line.Split(": ");
                 int id = int.Parse(split[0]);
-                if (split[1].Contains("\""))
+                if (split[1].Contains('"'))
                 {
                     split = split[1].Split("\"");
                     rules.Add(id, new CharRule { value = split[1][0] });
