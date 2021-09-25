@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
 
 namespace AdventOfCode.Solutions
@@ -8,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            (string, string)[] instructions = input.Trim().Split('\n').Select(l => (l[..3], l[4..])).ToArray();
+            (string, string)[] instructions = input.Split('\n').Select(l => (l[..3], l[4..])).ToArray();
             int ip = 0;
 
             Dictionary<char, uint> registers = new()
@@ -53,7 +52,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            (string, string)[] instructions = input.Trim().Split('\n').Select(l => (l[..3], l[4..])).ToArray();
+            (string, string)[] instructions = input.Split('\n').Select(l => (l[..3], l[4..])).ToArray();
             int ip = 0;
 
             Dictionary<char, uint> registers = new()

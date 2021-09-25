@@ -18,7 +18,6 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            input = input.Trim();
             using MD5 md5Hash = MD5.Create();
             long i = 0;
             while (GetMd5Hash(md5Hash, input + i)[..5] != "00000") i++;
@@ -28,7 +27,6 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            input = input.Trim();
             using MD5 md5Hash = MD5.Create();
             long i = 0;
             while (GetMd5Hash(md5Hash, input + i)[..6] != "000000") i++;

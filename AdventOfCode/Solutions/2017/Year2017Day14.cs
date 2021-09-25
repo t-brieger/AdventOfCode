@@ -13,7 +13,7 @@ namespace AdventOfCode.Solutions
             int bits = 0;
             for (int i = 0; i < 128; i++)
             {
-                byte[] hash = Year2017Day10.GetKnotHash(input.Trim() + "-" + i);
+                byte[] hash = Year2017Day10.GetKnotHash(input + "-" + i);
                 for (byte j = 0; j < hash.Length; j++)
                 {
                     bits += (hash[j] & (1 << 0)) >> 0;
@@ -67,7 +67,7 @@ namespace AdventOfCode.Solutions
 
             for (int i = 0; i < 128; i++)
             {
-                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.GetKnotHash($"{input.Trim()}-{i}"))
+                string hash = HexToBinary(BitConverter.ToString(Year2017Day10.GetKnotHash($"{input}-{i}"))
                     .Replace("-", ""));
                 for (int j = 0; j < hash.Length; j++)
                     grid[i, j] = hash[j] == '0';

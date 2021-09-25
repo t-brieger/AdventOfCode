@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace AdventOfCode
@@ -37,13 +38,14 @@ namespace AdventOfCode
             }
         }
 
-        public static IEnumerable<T[]> GetPermutations<T>(T[] values)
+        // https://stackoverflow.com/a/10629938
+        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+        public static IEnumerable<T[]> GetPermutations<T>(IEnumerable<T> list, int length = 2) where T : IComparable
         {
-            if (values.Length == 1)
-                return new[] { values };
-
-            return values.SelectMany(v => GetPermutations(values.Except(new[] { v }).ToArray()),
-                (v, p) => new[] { v }.Concat(p).ToArray());
+            if (length == 1) return list.Select(t => new[] { t });
+            return GetPermutations(list, length - 1)
+                .SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), 
+                    (t1, t2) => t1.Concat(new[] { t2 }).ToArray());
         }
     }
 }

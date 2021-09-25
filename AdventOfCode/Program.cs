@@ -132,8 +132,8 @@ namespace AdventOfCode
                 Console.WriteLine();
 
                 string input = await GetInput((byte)d, (ushort)y, test);
-                Console.WriteLine($"{y}/{d:00}/1: {s.Part1(input)}");
-                Console.WriteLine($"{y}/{d:00}/2: {s.Part2(input)}");
+                Console.WriteLine($"{y}/{d:00}/1: {s?.Part1(input)}");
+                Console.WriteLine($"{y}/{d:00}/2: {s?.Part2(input)}");
             }
 
             return 0;
@@ -169,7 +169,7 @@ namespace AdventOfCode
             {
                 return (await File.ReadAllTextAsync(
                         $"Input/{(test ? "test/" : "")}{year}/Day{day.ToString().PadLeft(2, '0')}.in"))
-                    .Replace("\r\n", "\n");
+                    .Replace("\r\n", "\n").Trim();
             }
             catch (DirectoryNotFoundException)
             {

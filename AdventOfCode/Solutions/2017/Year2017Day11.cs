@@ -6,7 +6,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            string[] directions = input.Trim().Split(',');
+            string[] directions = input.Split(',');
 
             int x = 0;
             int y = 0;
@@ -48,7 +48,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string[] directions = input.Trim().Split(',');
+            string[] directions = input.Split(',');
 
             int x = 0;
             int y = 0;

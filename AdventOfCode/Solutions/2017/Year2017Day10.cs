@@ -88,7 +88,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            byte[] denseHash = GetKnotHash(input.Trim());
+            byte[] denseHash = GetKnotHash(input);
 
             return BitConverter.ToString(denseHash).Replace("-", "").ToLowerInvariant();
         }

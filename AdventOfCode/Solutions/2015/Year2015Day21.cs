@@ -26,7 +26,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part1(string input)
         {
-            int[] bossStats = input.Trim().Split('\n').Select(line => int.Parse(line.Split(": ")[1])).ToArray();
+            int[] bossStats = input.Split('\n').Select(line => int.Parse(line.Split(": ")[1])).ToArray();
 
             (int cost, int atk)[] weapons = { (8, 4), (10, 5), (25, 6), (40, 7), (74, 8) };
             (int cost, int def)[] armours = { (0, 0), (13, 1), (31, 2), (53, 3), (75, 4), (102, 5) };
@@ -63,7 +63,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            int[] bossStats = input.Trim().Split('\n').Select(line => int.Parse(line.Split(": ")[1])).ToArray();
+            int[] bossStats = input.Split('\n').Select(line => int.Parse(line.Split(": ")[1])).ToArray();
 
             (int cost, int atk)[] weapons = { (8, 4), (10, 5), (25, 6), (40, 7), (74, 8) };
             (int cost, int def)[] armours = { (0, 0), (13, 1), (31, 2), (53, 3), (75, 4), (102, 5) };

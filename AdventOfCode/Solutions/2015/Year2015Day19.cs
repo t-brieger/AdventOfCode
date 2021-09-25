@@ -41,7 +41,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            string molec = input.Split("\n\n")[1].Trim();
+            string molec = input.Split("\n\n")[1];
             int movesNeeded = 0;
             for (int i = 0; i < molec.Length; i++)
             {
