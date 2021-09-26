@@ -42,10 +42,10 @@ namespace AdventOfCode
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static IEnumerable<T[]> GetPermutations<T>(IEnumerable<T> list, int length = 2) where T : IComparable
         {
-            if (length == 1) return list.Select(t => new[] { t });
+            if (length == 1) return list.Select(t => new T[] { t });
             return GetPermutations(list, length - 1)
-                .SelectMany(t => list.Where(o => o.CompareTo(t.Last()) > 0), 
-                    (t1, t2) => t1.Concat(new[] { t2 }).ToArray());
+                .SelectMany(t => list.Where(o => !t.Contains(o)),
+                    (t1, t2) => t1.Concat(new T[] { t2 }).ToArray());
         }
     }
 }
