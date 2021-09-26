@@ -1,251 +1,223 @@
-﻿namespace AdventOfCode.Solutions
+﻿using System.Collections.Generic;
+
+namespace AdventOfCode.Solutions
 {
     class Year2017Day21 : Solution
     {
-        /*private class SubGrid
+        //how the fuck does this work???
+        private static HashSet<(int, int)> EnhanceGrid(IReadOnlySet<(int, int)> enabled,
+            IReadOnlyDictionary<(bool, bool, bool, bool), bool[]> twos,
+            Dictionary<(bool, bool, bool, bool, bool, bool, bool, bool, bool), bool[]> threes, int size)
         {
-            public bool[] fields;
-
-            public SubGrid(SubGrid other)
+            HashSet<(int, int)> newEnabled = new();
+            if (size % 2 == 0)
             {
-                this.fields = new bool[other.fields.Length];
-                Buffer.BlockCopy(other.fields, 0, this.fields, 0, other.fields.Length);
+                for (int i = 0; i < size; i += 2)
+                {
+                    for (int j = 0; j < size; j += 2)
+                    {
+                        bool[] ourPattern = twos[
+                            (enabled.Contains((i, j + 1)), enabled.Contains((i + 1, j + 1)), enabled.Contains((i, j)),
+                                enabled.Contains((i + 1, j)))
+                        ];
+                        if (ourPattern[0])
+                            newEnabled.Add((i * 3 / 2, j * 3 / 2 + 2));
+                        if (ourPattern[1])
+                            newEnabled.Add((i * 3 / 2 + 1, j * 3 / 2 + 2));
+                        if (ourPattern[2])
+                            newEnabled.Add((i * 3 / 2 + 2, j * 3 / 2 + 2));
+
+                        if (ourPattern[3])
+                            newEnabled.Add((i * 3 / 2, j * 3 / 2 + 1));
+                        if (ourPattern[4])
+                            newEnabled.Add((i * 3 / 2 + 1, j * 3 / 2 + 1));
+                        if (ourPattern[5])
+                            newEnabled.Add((i * 3 / 2 + 2, j * 3 / 2 + 1));
+
+                        if (ourPattern[6])
+                            newEnabled.Add((i * 3 / 2, j * 3 / 2));
+                        if (ourPattern[7])
+                            newEnabled.Add((i * 3 / 2 + 1, j * 3 / 2));
+                        if (ourPattern[8])
+                            newEnabled.Add((i * 3 / 2 + 2, j * 3 / 2));
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < size; i += 3)
+                {
+                    for (int j = 0; j < size; j += 3)
+                    {
+                        bool[] ourPattern = threes[
+                            (enabled.Contains((i, j + 2)), enabled.Contains((i + 1, j + 2)),
+                                enabled.Contains((i + 2, j + 2)), enabled.Contains((i, j + 1)),
+                                enabled.Contains((i + 1, j + 1)), enabled.Contains((i + 2, j + 1)),
+                                enabled.Contains((i, j)), enabled.Contains((i + 1, j)), enabled.Contains((i + 2, j)))];
+                        if (ourPattern[0])
+                            newEnabled.Add((i * 4 / 3, j * 4 / 3 + 3));
+                        if (ourPattern[1])
+                            newEnabled.Add((i * 4 / 3 + 1, j * 4 / 3 + 3));
+                        if (ourPattern[2])
+                            newEnabled.Add((i * 4 / 3 + 2, j * 4 / 3 + 3));
+                        if (ourPattern[3])
+                            newEnabled.Add((i * 4 / 3 + 3, j * 4 / 3 + 3));
+                        
+                        if (ourPattern[4])
+                            newEnabled.Add((i * 4 / 3, j * 4 / 3 + 2));
+                        if (ourPattern[5])
+                            newEnabled.Add((i * 4 / 3 + 1, j * 4 / 3 + 2));
+                        if (ourPattern[6])
+                            newEnabled.Add((i * 4 / 3 + 2, j * 4 / 3 + 2));
+                        if (ourPattern[7])
+                            newEnabled.Add((i * 4 / 3 + 3, j * 4 / 3 + 2));
+                        
+                        if (ourPattern[8])
+                            newEnabled.Add((i * 4 / 3, j * 4 / 3 + 1));
+                        if (ourPattern[9])
+                            newEnabled.Add((i * 4 / 3 + 1, j * 4 / 3 + 1));
+                        if (ourPattern[10])
+                            newEnabled.Add((i * 4 / 3 + 2, j * 4 / 3 + 1));
+                        if (ourPattern[11])
+                            newEnabled.Add((i * 4 / 3 + 3, j * 4 / 3 + 1));
+                        
+                        if (ourPattern[12])
+                            newEnabled.Add((i * 4 / 3, j * 4 / 3));
+                        if (ourPattern[13])
+                            newEnabled.Add((i * 4 / 3 + 1, j * 4 / 3));
+                        if (ourPattern[14])
+                            newEnabled.Add((i * 4 / 3 + 2, j * 4 / 3));
+                        if (ourPattern[15])
+                            newEnabled.Add((i * 4 / 3 + 3, j * 4 / 3));
+                    }
+                }
             }
 
-            public SubGrid(params bool[] field)
+            return newEnabled;
+        }
+
+        public override string Part1(string input)
+        {
+            HashSet<(int, int)> grid = new()
             {
-                this.fields = field;
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (2, 1),
+                (1, 2)
+            };
+
+            string[] rules = input.Split('\n');
+
+            Dictionary<(bool, bool, bool, bool), bool[]> twoRules = new();
+            Dictionary<(bool, bool, bool, bool, bool, bool, bool, bool, bool), bool[]> threeRules = new();
+
+            foreach (string rule in rules)
+            {
+                string[] parts = rule.Replace("/", "").Split(" => ");
+                bool[] from = new bool[parts[0].Length];
+                bool[] to = new bool[parts[1].Length];
+                for (int i = 0; i < from.Length; i++)
+                    from[i] = parts[0][i] == '#';
+                for (int i = 0; i < to.Length; i++)
+                    to[i] = parts[1][i] == '#';
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (from.Length == 4)
+                    {
+                        twoRules.TryAdd((from[0], from[1], from[2], from[3]), to);
+                        from = new[] { from[3], from[1], from[2], from[0] };
+                        twoRules.TryAdd((from[0], from[1], from[2], from[3]), to);
+                        from = new[] { from[2], from[3], from[0], from[1] };
+                    }
+                    else
+                    {
+                        threeRules.TryAdd(
+                            (from[0], from[1], from[2], from[3], from[4], from[5], from[6], from[7], from[8]), to);
+                        from = new[]
+                            { from[8], from[5], from[2], from[7], from[4], from[1], from[6], from[3], from[0] };
+                        threeRules.TryAdd(
+                            (from[0], from[1], from[2], from[3], from[4], from[5], from[6], from[7], from[8]), to);
+                        from = new[]
+                            { from[6], from[7], from[8], from[3], from[4], from[5], from[0], from[1], from[2] };
+                    }
+                }
             }
 
-            public bool Equals(SubGrid sg)
+            int currentSize = 3;
+            for (int i = 0; i < 5; i++)
             {
-                for (int i = 0; i < fields.Length; i++)
-                    if (fields[i] != sg.fields[i])
-                        return false;
-                return true;
-            }
-
-            public override bool Equals(object o)
-            {
-                return this.Equals(o as SubGrid);
-            }
-
-            public override int GetHashCode()
-            {
-                int hash = 0;
-                for (int i = 0; i < fields.Length; i++)
-                    //this makes no sense in terms of ordering, but who cares, it only needs to be unique-ish
-                    hash |= fields[i] ? (1 << i) : 0;
-
-                hash |= fields.Length << 24;
-
-                return hash;
-            }
-
-            public string ToString()
-            {
-                int size;
-                if (fields.Length == 4)
-                    size = 2;
-                else if (fields.Length == 9)
-                    size = 3;
+                grid = EnhanceGrid(grid, twoRules, threeRules, currentSize);
+                if (currentSize % 2 == 0)
+                    currentSize = currentSize * 3 / 2;
                 else
-                    size = 4;
-
-                StringBuilder sb = new StringBuilder();
-
-                for (int i = 0; i < size; i++)
-                {
-                    for (int j = 0; j < size; j++)
-                    {
-                        sb.Append(fields[i * size + j] ? "#" : ".");
-                    }
-                    sb.Append("\n");
-                }
-                return sb.ToString();
-            }
-        }
-
-        private static void transpose(bool[] arr)
-        {
-            int size;
-            if (arr.Length == 4)
-                size = 2;
-            else if (arr.Length == 9)
-                size = 3;
-            else
-                size = 4;
-
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = i + 1; j < size; j++) {
-                    bool tmp = arr[size * i + j];
-                    arr[size * i + j] = arr[size * j + i];
-                    arr[size * j + i] = tmp;
-                }
-            }
-        }
-
-        private static void reverse_rows(bool[] arr)
-        {
-            int size;
-            if (arr.Length == 4)
-                size = 2;
-            else if (arr.Length == 9)
-                size = 3;
-            else
-                size = 4;
-
-            for (int i = 0; i < size; i++)
-            {
-                for (int j = 0; j < size / 2; j++)
-                {
-                    bool tmp = arr[i * size + j];
-                    arr[i * size + j] = arr[(i + 1) * size - 1 - j];
-                    arr[(i + 1) * size - 1 - j] = tmp;
-                }
-            }
-        }
-
-        private static bool[] flatStringToBoolArray(string s)
-        {
-            //ie: "##/##" -> indexOf returns 2
-            int size = s.IndexOf('/');
-            bool[,] ret = new bool[size, size];
-
-            int row = 0;
-            int col;
-            foreach (string line in s.Split('/'))
-            {
-                col = 0;
-                foreach (char c in line)
-                {
-                    ret[col++, row] = c == '#';
-                }
-                row++;
+                    currentSize = currentSize * 4 / 3;
             }
 
-            bool[] ret2 = new bool[ret.Length];
-            Buffer.BlockCopy(ret, 0, ret2, 0, ret.Length);
-
-            return ret2;
-        }
-
-        public override string Part1(string input)
-        {
-            string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-            Dictionary<SubGrid, SubGrid> transformations = new Dictionary<SubGrid, SubGrid>();
-
-            foreach (string s in lines)
-            {
-                string[] parts = s.Split(" => ");
-                SubGrid original = new SubGrid(flatStringToBoolArray(parts[0]));
-                SubGrid outcome = new SubGrid(flatStringToBoolArray(parts[1]));
-                transformations.Add(original, outcome);
-                for (int i = 0; i < 3; i++)
-                {
-                    transpose(original.fields);
-                    if (!transformations.ContainsKey(original))
-                        transformations.Add(new SubGrid(original), outcome);
-                    reverse_rows(original.fields);
-                    if (!transformations.ContainsKey(original))
-                        transformations.Add(new SubGrid(original), outcome);
-                }
-            }
-
-            bool[] grid = new[] { false, true, false, false, false, true, true, true, true };
-
-            //apply them
-            for (int _ = 0; _ < 5; _++)
-            {
-                int size = grid.Length == 4 ? 2 : grid.Length == 9 ? 3 : grid.Length == 16 ? 4 : grid.Length == 36 ? 6 : grid.Length == 64 ? 8 : grid.Length == 81 ? 9 : grid.Length == 100 ? 10 : grid.Length == 144 ? 12 : grid.Length == 324 ? 18 : -1;
-
-                int new_size = size % 2 == 0 ? (size + size / 2) : (size + size / 3);
-
-                bool[] new_grid = new bool[new_size * new_size];
-
-                for (int i = 0; i < size;)
-                {
-                    for (int j = 0; j < size;)
-                    {
-                        if (size % 2 == 0)
-                        {
-                            SubGrid replacement = transformations[new SubGrid(grid[i * size + j], grid[i * size + j + 1], grid[(i + 1) * size + j], grid[(i + 1) * size + j + 1])];
-
-                            new_grid[(i + i / 2 + 0) * new_size + (j + j / 2) + 0] = replacement.fields[0];
-                            new_grid[(i + i / 2 + 0) * new_size + (j + j / 2) + 1] = replacement.fields[1];
-                            new_grid[(i + i / 2 + 0) * new_size + (j + j / 2) + 2] = replacement.fields[2];
-
-                            new_grid[(i + i / 2 + 1) * new_size + (j + j / 2) + 0] = replacement.fields[3];
-                            new_grid[(i + i / 2 + 1) * new_size + (j + j / 2) + 1] = replacement.fields[4];
-                            new_grid[(i + i / 2 + 1) * new_size + (j + j / 2) + 2] = replacement.fields[5];
-
-                            new_grid[(i + i / 2 + 2) * new_size + (j + j / 2) + 0] = replacement.fields[6];
-                            new_grid[(i + i / 2 + 2) * new_size + (j + j / 2) + 1] = replacement.fields[7];
-                            new_grid[(i + i / 2 + 2) * new_size + (j + j / 2) + 2] = replacement.fields[8];
-
-                            i += 2;
-                            j += 2;
-                        } else
-                        {
-                            SubGrid replacement = transformations[new SubGrid(grid[i * size + j], grid[i * size + j + 1], grid[i * size + j + 2],
-                                                                              grid[(i + 1) * size + j], grid[(i + 1) * size + j + 1], grid[(i + 1) * size + j + 2],
-                                                                              grid[(i + 2) * size + j], grid[(i + 2) * size + j + 1], grid[(i + 2) * size + j + 2])];
-
-                            new_grid[(i + i / 3 + 0) * new_size + (j + j / 3) + 0] = replacement.fields[0];
-                            new_grid[(i + i / 3 + 0) * new_size + (j + j / 3) + 1] = replacement.fields[1];
-                            new_grid[(i + i / 3 + 0) * new_size + (j + j / 3) + 2] = replacement.fields[2];
-                            new_grid[(i + i / 3 + 0) * new_size + (j + j / 3) + 3] = replacement.fields[3];
-
-                            new_grid[(i + i / 3 + 1) * new_size + (j + j / 3) + 0] = replacement.fields[4];
-                            new_grid[(i + i / 3 + 1) * new_size + (j + j / 3) + 1] = replacement.fields[5];
-                            new_grid[(i + i / 3 + 1) * new_size + (j + j / 3) + 2] = replacement.fields[6];
-                            new_grid[(i + i / 3 + 1) * new_size + (j + j / 3) + 3] = replacement.fields[7];
-
-                            new_grid[(i + i / 3 + 2) * new_size + (j + j / 3) + 0] = replacement.fields[8];
-                            new_grid[(i + i / 3 + 2) * new_size + (j + j / 3) + 1] = replacement.fields[9];
-                            new_grid[(i + i / 3 + 2) * new_size + (j + j / 3) + 2] = replacement.fields[10];
-                            new_grid[(i + i / 3 + 2) * new_size + (j + j / 3) + 3] = replacement.fields[11];
-
-                            new_grid[(i + i / 3 + 3) * new_size + (j + j / 3) + 0] = replacement.fields[12];
-                            new_grid[(i + i / 3 + 3) * new_size + (j + j / 3) + 1] = replacement.fields[13];
-                            new_grid[(i + i / 3 + 3) * new_size + (j + j / 3) + 2] = replacement.fields[14];
-                            new_grid[(i + i / 3 + 3) * new_size + (j + j / 3) + 3] = replacement.fields[15];
-
-                            i += 3;
-                            j += 3;
-                        }
-                    }
-                }
-
-                grid = new_grid;
-            }
-
-
-            int cnt = 0;
-            for (int i = 0; i < grid.Length; i++)
-            {
-                if (grid[i])
-                    cnt++;
-            }
-            return cnt.ToString();
+            return grid.Count.ToString();
         }
 
         public override string Part2(string input)
         {
-            return "";
-        }*/
+            HashSet<(int, int)> grid = new()
+            {
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (2, 1),
+                (1, 2)
+            };
 
-        public override string Part1(string input)
-        {
-            //TODO !!
-            return "Not Implemented - this is a huge mess";
-        }
+            string[] rules = input.Split('\n');
 
-        public override string Part2(string input)
-        {
-            return "Not Implemented - this is a huge mess";
+            Dictionary<(bool, bool, bool, bool), bool[]> twoRules = new();
+            Dictionary<(bool, bool, bool, bool, bool, bool, bool, bool, bool), bool[]> threeRules = new();
+
+            foreach (string rule in rules)
+            {
+                string[] parts = rule.Replace("/", "").Split(" => ");
+                bool[] from = new bool[parts[0].Length];
+                bool[] to = new bool[parts[1].Length];
+                for (int i = 0; i < from.Length; i++)
+                    from[i] = parts[0][i] == '#';
+                for (int i = 0; i < to.Length; i++)
+                    to[i] = parts[1][i] == '#';
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (from.Length == 4)
+                    {
+                        twoRules.TryAdd((from[0], from[1], from[2], from[3]), to);
+                        from = new[] { from[3], from[1], from[2], from[0] };
+                        twoRules.TryAdd((from[0], from[1], from[2], from[3]), to);
+                        from = new[] { from[2], from[3], from[0], from[1] };
+                    }
+                    else
+                    {
+                        threeRules.TryAdd(
+                            (from[0], from[1], from[2], from[3], from[4], from[5], from[6], from[7], from[8]), to);
+                        from = new[]
+                            { from[8], from[5], from[2], from[7], from[4], from[1], from[6], from[3], from[0] };
+                        threeRules.TryAdd(
+                            (from[0], from[1], from[2], from[3], from[4], from[5], from[6], from[7], from[8]), to);
+                        from = new[]
+                            { from[6], from[7], from[8], from[3], from[4], from[5], from[0], from[1], from[2] };
+                    }
+                }
+            }
+
+            int currentSize = 3;
+            for (int i = 0; i < 18; i++)
+            {
+                grid = EnhanceGrid(grid, twoRules, threeRules, currentSize);
+                if (currentSize % 2 == 0)
+                    currentSize = currentSize * 3 / 2;
+                else
+                    currentSize = currentSize * 4 / 3;
+            }
+
+            return grid.Count.ToString();
         }
     }
 }

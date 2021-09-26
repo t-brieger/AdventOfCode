@@ -7,14 +7,19 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length,
-                input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
+            string[] splitInput = input.Split('\n');
+            
+            // x-size is length of 1st index, not 0th, the 0th may have leading whitespace cut off.
+            bool[,] grid = new bool[splitInput[1].Length, splitInput.Length];
             char[,] extraChars = new char[grid.GetLength(0), grid.GetLength(1)];
 
-            for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            for (int i = 0; i < grid.GetLength(1); i++)
             {
-                string line = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[i];
+                string line = splitInput[i];
 
+                if (i == 0)
+                    line = new string(' ', splitInput[1].Length - splitInput[0].Length) + line;
+                
                 for (int j = 0; j < line.Length; j++)
                 {
                     char c = line[j];
@@ -140,13 +145,18 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            bool[,] grid = new bool[input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[0].Length,
-                input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length];
-
-            for (int i = 0; i < input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Length; i++)
+            string[] splitInput = input.Split('\n');
+            
+            // x-size is length of 1st index, not 0th, the 0th may have leading whitespace cut off.
+            bool[,] grid = new bool[splitInput[1].Length, splitInput.Length];
+            
+            for (int i = 0; i < grid.GetLength(1); i++)
             {
-                string line = input.Split('\n', StringSplitOptions.RemoveEmptyEntries)[i];
+                string line = splitInput[i];
 
+                if (i == 0)
+                    line = new string(' ', splitInput[1].Length - splitInput[0].Length) + line;
+                
                 for (int j = 0; j < line.Length; j++)
                 {
                     char c = line[j];
