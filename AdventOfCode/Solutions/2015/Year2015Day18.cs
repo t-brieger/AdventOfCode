@@ -44,8 +44,7 @@ namespace AdventOfCode.Solutions
         {
             const int gridSize = 100;
             const int iterations = 100;
-
-            //TODO
+            
             HashSet<(int, int)> lit = new();
             string[] lines = input.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < lines.Length; i++)
