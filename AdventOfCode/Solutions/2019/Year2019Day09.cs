@@ -14,7 +14,7 @@ namespace AdventOfCode.Solutions
                 program.Add(i, nums[i]);
 
             Computer c = new(program);
-            c.input.Enqueue(1);
+            c.EnqueueInput(1);
             c.RunUntilHalted();
             return c.output.Dequeue().ToString();
         }
@@ -27,7 +27,7 @@ namespace AdventOfCode.Solutions
                 program.Add(i, nums[i]);
 
             Computer c = new(program);
-            c.input.Enqueue(2);
+            c.EnqueueInput(2);
             c.RunUntilHalted();
             return c.output.Dequeue().ToString();
         }

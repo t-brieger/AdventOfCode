@@ -14,7 +14,7 @@ namespace AdventOfCode.Solutions
                 program.Add(i, nums[i]);
 
             Computer c = new(program);
-            c.input.Enqueue(1);
+            c.EnqueueInput(1);
             c.RunUntilHalted();
             while (c.output.Peek() == 0)
                 c.output.Dequeue();
@@ -30,7 +30,7 @@ namespace AdventOfCode.Solutions
                 program.Add(i, nums[i]);
 
             Computer c = new(program);
-            c.input.Enqueue(5);
+            c.EnqueueInput(5);
             c.RunUntilHalted();
             while (c.output.Peek() == 0)
                 c.output.Dequeue();

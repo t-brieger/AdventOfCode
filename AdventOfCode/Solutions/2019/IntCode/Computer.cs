@@ -116,6 +116,17 @@ namespace AdventOfCode.Solutions.IntCode
         {
             return this.memory.ContainsKey(pos) ? this.memory[pos] : 0;
         }
+        
+        public void SetMemoryAt(long pos, long val)
+        {
+            this.memory[pos] = val;
+        }
+
+        public void EnqueueInput(long input)
+        {
+            this.input.Enqueue(input);
+            this.waitingForInput = false;
+        }
 
         /// <summary>
         ///     Steps the program forward one instruction
@@ -161,7 +172,7 @@ namespace AdventOfCode.Solutions.IntCode
 
         public void RunUntilHalted()
         {
-            while (!this.hasHalted) this.Step();
+            while (!this.hasHalted && !this.waitingForInput) this.Step();
         }
     }
 }

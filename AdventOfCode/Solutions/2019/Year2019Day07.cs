@@ -23,8 +23,8 @@ namespace AdventOfCode.Solutions
                 for (int i = 0; i < 5; i++)
                 {
                     Computer c = new(program);
-                    c.input.Enqueue(phaseSettings[i]);
-                    c.input.Enqueue(lastValue);
+                    c.EnqueueInput(phaseSettings[i]);
+                    c.EnqueueInput(lastValue);
                     while (c.output.Count == 0)
                         c.Step();
                     lastValue = c.output.Dequeue();
@@ -49,16 +49,16 @@ namespace AdventOfCode.Solutions
             foreach (int[] phaseSettings in possiblePhaseSettings)
             {
                 Computer a = new(program);
-                a.input.Enqueue(phaseSettings[0]);
-                a.input.Enqueue(0);
+                a.EnqueueInput(phaseSettings[0]);
+                a.EnqueueInput(0);
                 Computer b = new(program);
-                b.input.Enqueue(phaseSettings[1]);
+                b.EnqueueInput(phaseSettings[1]);
                 Computer c = new(program);
-                c.input.Enqueue(phaseSettings[2]);
+                c.EnqueueInput(phaseSettings[2]);
                 Computer d = new(program);
-                d.input.Enqueue(phaseSettings[3]);
+                d.EnqueueInput(phaseSettings[3]);
                 Computer e = new(program);
-                e.input.Enqueue(phaseSettings[4]);
+                e.EnqueueInput(phaseSettings[4]);
 
                 long lastEOutput = int.MinValue;
 
@@ -69,35 +69,35 @@ namespace AdventOfCode.Solutions
                         a.Step();
                     } while (!a.waitingForInput && !a.hasHalted);
 
-                    b.input.Enqueue(a.output.Dequeue());
+                    b.EnqueueInput(a.output.Dequeue());
 
                     do
                     {
                         b.Step();
                     } while (!b.waitingForInput && !b.hasHalted);
 
-                    c.input.Enqueue(b.output.Dequeue());
+                    c.EnqueueInput(b.output.Dequeue());
 
                     do
                     {
                         c.Step();
                     } while (!c.waitingForInput && !c.hasHalted);
 
-                    d.input.Enqueue(c.output.Dequeue());
+                    d.EnqueueInput(c.output.Dequeue());
 
                     do
                     {
                         d.Step();
                     } while (!d.waitingForInput && !d.hasHalted);
 
-                    e.input.Enqueue(d.output.Dequeue());
+                    e.EnqueueInput(d.output.Dequeue());
 
                     do
                     {
                         e.Step();
                     } while (!e.waitingForInput && !e.hasHalted);
 
-                    a.input.Enqueue(e.output.Dequeue());
+                    a.EnqueueInput(e.output.Dequeue());
 
                     lastEOutput = a.input.Peek();
                 }

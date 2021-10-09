@@ -22,7 +22,7 @@ namespace AdventOfCode.Solutions
 
             while (true)
             {
-                c.input.Enqueue(whitePanels.Contains((posX, posY)) ? 1 : 0);
+                c.EnqueueInput(whitePanels.Contains((posX, posY)) ? 1 : 0);
                 while (!c.hasHalted && c.output.Count != 2)
                     c.Step();
                 if (c.hasHalted)
@@ -81,7 +81,7 @@ namespace AdventOfCode.Solutions
 
             while (true)
             {
-                c.input.Enqueue(whitePanels.Contains((posX, posY)) ? 1 : 0);
+                c.EnqueueInput(whitePanels.Contains((posX, posY)) ? 1 : 0);
                 while (!c.hasHalted && c.output.Count != 2)
                     c.Step();
                 if (c.hasHalted)
