@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace AdventOfCode.Solutions
 {
@@ -63,15 +64,31 @@ namespace AdventOfCode.Solutions
                 result[x, y] = true;
             }
 
-            for (int x = 0; x < result.GetLength(0); x += 1)
-            {
-                for (int y = 0; y < result.GetLength(1); y += 1) Console.Write(result[x, y] ? '#' : ' ');
+            StringBuilder sb = new("\n");
 
-                Console.Write('\n');
+            int minX = Int32.MaxValue, minY = Int32.MaxValue, maxX = Int32.MinValue, maxY = Int32.MinValue;
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                for (int j = 0; j < result.GetLength(1); j++)
+                {
+                    if (result[i, j])
+                    {
+                        minX = Math.Min(minX, i);
+                        minY = Math.Min(minY, j);
+                        maxX = Math.Max(maxX, i);
+                        maxY = Math.Max(maxY, j);
+                    }
+                }
+            }
+            
+            for (int y = minY; y <= maxY; y++)
+            {
+                for (int x = minX; x <= maxX; x++) sb.Append(result[x, y] ? '#' : ' ');
+
+                sb.Append('\n');
             }
 
-            return "uncomment Writes in code - spam warning";
-            //return "saved as output.png";
+            return sb.ToString();
         }
 
         public override string Part2(string input)
