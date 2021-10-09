@@ -8,7 +8,17 @@ namespace AdventOfCode
     // ReSharper disable once InconsistentNaming
     public static class Util
     {
-        //https://stackoverflow.com/a/41766138
+        // https://stackoverflow.com/a/29717490
+        public static long Lcm(params long[] numbers)
+        {
+            return numbers.Aggregate(lcm);
+        }
+        private static long lcm(long a, long b)
+        {
+            return Math.Abs(a * b) / Gcd(a, b);
+        }
+        
+        // https://stackoverflow.com/a/41766138
         public static long Gcd(long a, long b)
         {
             while (true)
