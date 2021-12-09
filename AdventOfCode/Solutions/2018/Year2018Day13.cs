@@ -8,7 +8,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            input = this.RawInput;
+            input = this.rawInput;
             
             //y, then x
             char[][] map = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray())
@@ -131,7 +131,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            input = RawInput;
+            input = rawInput;
         
             //y, then x
             char[][] map = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select(line => line.ToCharArray())

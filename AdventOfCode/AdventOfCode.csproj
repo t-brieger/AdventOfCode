@@ -28,10 +28,6 @@
         <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Visualizations" />
-    </ItemGroup>
-
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
         <ItemGroup>
             <_Test Include="Input/test/**/*.*" />

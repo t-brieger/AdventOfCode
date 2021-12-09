@@ -15,8 +15,7 @@ namespace AdventOfCode
     {
         private static async Task<int> Main(string[] args)
         {
-            bool all = false, pause = false, showdesc = false, test = false, visual = false;
-            string visualPath = "./AoCVisuals";
+            bool all = false, pause = false, showdesc = false, test = false;
             int y = -1, d = -1;
 
             for (int i = 0; i < args.Length; i++)
@@ -37,16 +36,6 @@ namespace AdventOfCode
                     case "--pause":
                     case "--slow":
                         pause = true;
-                        break;
-                    case "--visual":
-                    case "-v":
-                        visual = true;
-                        break;
-                    case "--visual-path":
-                        if (i >= args.Length - 1)
-                            ShowUsage("--visual-path requires one argument.");
-                        visualPath = args[i + 1];
-                        i++;
                         break;
                     case "--showdesc":
                     case "--problems":
@@ -104,16 +93,8 @@ namespace AdventOfCode
                         continue;
 
                     string input = await GetInput(day, year, test);
-                    s.RawInput = input;
+                    s.rawInput = input;
                     input = input.Trim();
-
-                    if (visual)
-                    {
-                        Directory.CreateDirectory(visualPath);
-                        Directory.CreateDirectory(Path.Join(visualPath, "temp"));
-                        s.VisSw = new StreamWriter(new FileStream(
-                            Path.Join(visualPath, "temp", $"{year:0000}{day:00}.visdata"), FileMode.Create));
-                    }
 
                     if (showdesc)
                         await DisplayText(day, year);
@@ -121,25 +102,6 @@ namespace AdventOfCode
 
                     Console.WriteLine($"{year}/{day:00}/1: {s?.Part1(input)}");
                     Console.WriteLine($"{year}/{day:00}/2: {s?.Part2(input)}");
-
-                    if (visual)
-                    {
-                        await s.VisSw.FlushAsync();
-                        s.VisSw.Close();
-
-                        Type c = Assembly.GetExecutingAssembly()
-                            .GetType($"AdventOfCode.Visualizations.Vis{year}{day:00}", false);
-
-                        if (c != null)
-                        {
-                            Visualization v = (Visualization)Activator.CreateInstance(c);
-
-
-                            v.Generate(new StreamReader(new FileStream(Path.Join(visualPath, "temp",
-                                    $"{year:0000}{day:00}.visdata"), FileMode.Open)),
-                                Path.Join(visualPath, $"{year}, Day {day}"));
-                        }
-                    }
 
                     if (!pause) continue;
                     Console.ReadKey();
@@ -164,41 +126,15 @@ namespace AdventOfCode
                     ShowUsage("That solution does not exist");
                 }
 
-                if (visual)
-                {
-                    Directory.CreateDirectory(visualPath);
-                    Directory.CreateDirectory(Path.Join(visualPath, "temp"));
-                    s.VisSw = new StreamWriter(new FileStream(Path.Join(visualPath, "temp", $"{y:0000}{d:00}.visdata"),
-                        FileMode.Create));
-                }
-
                 if (showdesc)
                     await DisplayText((byte)d, (ushort)y);
                 Console.WriteLine();
 
                 string input = await GetInput((byte)d, (ushort)y, test);
-                s.RawInput = input;
+                s.rawInput = input;
                 input = input.Trim();
                 Console.WriteLine($"{y}/{d:00}/1: {s?.Part1(input)}");
                 Console.WriteLine($"{y}/{d:00}/2: {s?.Part2(input)}");
-
-                if (visual)
-                {
-                    await s.VisSw.FlushAsync();
-                    s.VisSw.Close();
-
-                    Type c = Assembly.GetExecutingAssembly()
-                        .GetType($"AdventOfCode.Visualizations.Vis{y}{d:00}", false);
-
-                    if (c != null)
-                    {
-                        Visualization v = (Visualization)Activator.CreateInstance(c);
-
-                        v.Generate(new StreamReader(new FileStream(Path.Join(visualPath, "temp",
-                                $"{y}{d:00}.visdata"), FileMode.Open)),
-                            Path.Join(visualPath, $"{y}, Day {d}"));
-                    }
-                }
             }
 
             return 0;
