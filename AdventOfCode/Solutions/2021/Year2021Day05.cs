@@ -13,14 +13,11 @@ namespace AdventOfCode.Solutions
             int[][] lines = input.Split('\n').Select(l => l.Split(",").Select(int.Parse).ToArray())
                 .ToArray();
 
-            HashSet<(int, int)> seen = new HashSet<(int, int)>();
-            HashSet<(int, int)> seenTwice = new HashSet<(int, int)>();
+            HashSet<(int, int)> seen = new();
+            HashSet<(int, int)> seenTwice = new();
 
-            foreach (int[] line in lines)
+            foreach (int[] line in lines.Where(line => line[0] == line[2] || line[1] == line[3]))
             {
-                if (line[0] != line[2] && line[1] != line[3])
-                    continue;
-
                 for (int x = Math.Min(line[0], line[2]); x <= Math.Max(line[0], line[2]); x++)
                 {
                     for (int y = Math.Min(line[1], line[3]); y <= Math.Max(line[1], line[3]); y++)
@@ -43,8 +40,8 @@ namespace AdventOfCode.Solutions
             int[][] lines = input.Split('\n').Select(l => l.Split(",").Select(int.Parse).ToArray())
                 .ToArray();
 
-            HashSet<(int, int)> seen = new HashSet<(int, int)>();
-            HashSet<(int, int)> seenTwice = new HashSet<(int, int)>();
+            HashSet<(int, int)> seen = new();
+            HashSet<(int, int)> seenTwice = new();
 
             foreach (int[] line in lines)
             {

@@ -50,10 +50,15 @@ namespace AdventOfCode.Solutions
                         continue;
                     }
 
-                    if (type == 3)
-                        paddleX = x;
-                    if (type == 4)
-                        ballX = x;
+                    switch (type)
+                    {
+                        case 3:
+                            paddleX = x;
+                            break;
+                        case 4:
+                            ballX = x;
+                            break;
+                    }
                 }
 
                 long dx = ballX - paddleX;

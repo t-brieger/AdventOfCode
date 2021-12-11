@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.Intrinsics.X86;
 
 namespace AdventOfCode.Solutions
 {
@@ -84,7 +83,7 @@ namespace AdventOfCode.Solutions
 
             #region x
 
-            for (long i = 0; true; i++)
+            for (long i = 0;; i++)
             {
                 for (int j = 0; j < positions.Length; j++)
                 {
@@ -127,7 +126,7 @@ namespace AdventOfCode.Solutions
 
             #region y
 
-            for (long i = 0; true; i++)
+            for (long i = 0;; i++)
             {
                 for (int j = 0; j < positions.Length; j++)
                 {
@@ -170,7 +169,7 @@ namespace AdventOfCode.Solutions
 
             #region z
 
-            for (long i = 0; true; i++)
+            for (long i = 0;; i++)
             {
                 for (int j = 0; j < positions.Length; j++)
                 {

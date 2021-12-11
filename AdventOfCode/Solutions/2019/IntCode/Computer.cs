@@ -122,9 +122,9 @@ namespace AdventOfCode.Solutions.IntCode
             this.memory[pos] = val;
         }
 
-        public void EnqueueInput(long input)
+        public void EnqueueInput(long newInput)
         {
-            this.input.Enqueue(input);
+            this.input.Enqueue(newInput);
             this.waitingForInput = false;
         }
 

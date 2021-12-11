@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using veryLongTuple =
-    System.Tuple<int, int, int, int, int, int, int,
-        System.Tuple<int, int, int, int, int, int, int, System.Tuple<int, int>>>;
+using veryLongTuple = System.Tuple<int, int, int, int, int, int, int, System.Tuple<int, int, int, int, int, int, int, System.Tuple<int, int>>>;
 
 namespace AdventOfCode.Solutions
 {

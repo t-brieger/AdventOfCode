@@ -13,7 +13,7 @@ namespace AdventOfCode.Solutions
 
         private static bool FlipNumberOnCard(int[][] card, int n)
         {
-            for (var row = 0; row < card.Length; row++)
+            for (int row = 0; row < card.Length; row++)
             {
                 for (int col = 0; col < card[row].Length; col++)
                 {
@@ -39,10 +39,9 @@ namespace AdventOfCode.Solutions
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (int n in drawnNumbers)
             {
-                foreach (int[][] card in bingoCards)
+                foreach (int[][] card in bingoCards.Where(card => FlipNumberOnCard(card, n)))
                 {
-                    if (FlipNumberOnCard(card, n))
-                        return (card.Sum(row => row.Sum(x => x <= 0 ? 0 : x)) * n).ToString();
+                    return (card.Sum(row => row.Sum(x => x <= 0 ? 0 : x)) * n).ToString();
                 }
             }
 
@@ -62,14 +61,13 @@ namespace AdventOfCode.Solutions
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (int n in drawnNumbers)
             {
-                List<int[][]> won = new List<int[][]>();
-                foreach (int[][] card in bingoCards)
+                List<int[][]> won = new();
+                foreach (int[][] card in bingoCards.Where(card => FlipNumberOnCard(card, n)))
                 {
-                    if (FlipNumberOnCard(card, n))
-                        if (bingoCards.Count > 1)
-                            won.Add(card);
-                        else
-                            return (card.Sum(row => row.Sum(x => x <= 0 ? 0 : x)) * n).ToString();
+                    if (bingoCards.Count > 1)
+                        won.Add(card);
+                    else
+                        return (card.Sum(row => row.Sum(x => x <= 0 ? 0 : x)) * n).ToString();
                 }
 
                 foreach (int[][] wonCard in won)

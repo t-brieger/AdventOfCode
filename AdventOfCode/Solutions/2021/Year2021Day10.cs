@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks.Sources;
 
 namespace AdventOfCode.Solutions
 {
@@ -15,7 +14,7 @@ namespace AdventOfCode.Solutions
             
             foreach (string s in input.Split('\n'))
             {
-                Stack<char> opened = new Stack<char>();
+                Stack<char> opened = new();
 
                 foreach (char c in s)
                 {
@@ -32,7 +31,7 @@ namespace AdventOfCode.Solutions
                         ']' => 57,
                         '}' => 1197,
                         '>' => 25137,
-                        _ => throw new ArgumentOutOfRangeException()
+                        _ => throw new ArgumentOutOfRangeException(nameof(input),"Non-Bracket Character Found.")
                     };
                     corrupted.Add(s);
                     break;
@@ -50,7 +49,7 @@ namespace AdventOfCode.Solutions
             {
                 if (corrupted.Contains(s)) continue;
                 
-                Stack<char> opened = new Stack<char>();
+                Stack<char> opened = new();
 
                 foreach (char c in s)
                 {

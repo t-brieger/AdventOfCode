@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            Dictionary<int, int> fishTimers = new Dictionary<int, int>();
+            Dictionary<int, int> fishTimers = new();
 
             for (int i = 0; i <= 8; i++)
             {
@@ -19,7 +19,7 @@ namespace AdventOfCode.Solutions
 
             for (int i = 0; i < 80; i++)
             {
-                Dictionary<int, int> newTimers = new Dictionary<int, int>
+                Dictionary<int, int> newTimers = new()
                 {
                     [8] = fishTimers[0],
                     [7] = fishTimers[8],
@@ -39,7 +39,7 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            Dictionary<int, long> fishTimers = new Dictionary<int, long>();
+            Dictionary<int, long> fishTimers = new();
 
             for (int i = 0; i <= 8; i++)
             {
@@ -51,7 +51,7 @@ namespace AdventOfCode.Solutions
 
             for (int i = 0; i < 256; i++)
             {
-                Dictionary<int, long> newTimers = new Dictionary<int, long>
+                Dictionary<int, long> newTimers = new()
                 {
                     [8] = fishTimers[0],
                     [7] = fishTimers[8],

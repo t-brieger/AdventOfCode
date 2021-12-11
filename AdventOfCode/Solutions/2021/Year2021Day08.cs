@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO.Compression;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
 
 namespace AdventOfCode.Solutions
 {
@@ -24,7 +21,7 @@ namespace AdventOfCode.Solutions
             {
                 (string[] test, string[] data) = display.Split(" | ").Select(x => x.Split(' ')).ToArray();
 
-                Dictionary<int, string> numbermap = new Dictionary<int, string>();
+                Dictionary<int, string> numbermap = new();
                 for (int i = 0; i <= 9; i++)
                     numbermap[i] = "";
 
@@ -33,10 +30,9 @@ namespace AdventOfCode.Solutions
                 while (changes)
                 {
                     changes = false;
-                    Dictionary<int, string> oldNumMap = new Dictionary<int, string>(numbermap);
-                    foreach (string rawcode in test)
+                    Dictionary<int, string> oldNumMap = new(numbermap);
+                    foreach (string code in test.Select(rawcode => new string(rawcode.ToCharArray().OrderByDescending(c => (int) c).ToArray())))
                     {
-                        string code = new string(rawcode.ToCharArray().OrderByDescending(c => (int) c).ToArray());
                         switch (code.Length)
                         {
                             case 2:
@@ -79,10 +75,8 @@ namespace AdventOfCode.Solutions
 
                 int tmpSum = 0;
                 
-                foreach (string rawcode in data)
+                foreach (string code in data.Select(rawcode => new string(rawcode.ToCharArray().OrderByDescending(c => (int) c).ToArray())))
                 {
-                    string code = new string(rawcode.ToCharArray().OrderByDescending(c => (int) c).ToArray());
-                    
                     tmpSum *= 10;
                     tmpSum += numbermap.First(kvp => kvp.Value == code).Key;
                 }

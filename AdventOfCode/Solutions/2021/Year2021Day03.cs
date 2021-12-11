@@ -28,7 +28,7 @@ namespace AdventOfCode.Solutions
         public override string Part2(string input)
         {
             string[] numbers = input.Split('\n');
-            HashSet<string> candidates = new HashSet<string>(numbers);
+            HashSet<string> candidates = new(numbers);
 
             for (int i = 0; i < numbers[0].Length && candidates.Count > 1; i++)
             {

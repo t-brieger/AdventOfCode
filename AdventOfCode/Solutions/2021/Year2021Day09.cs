@@ -7,7 +7,7 @@ namespace AdventOfCode.Solutions
     {
         public override string Part1(string input)
         {
-            Dictionary<(int, int), int> heightMap = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> heightMap = new();
             string[] lines = input.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             for (int j = 0; j < lines[i].Length; j++)
@@ -31,13 +31,13 @@ namespace AdventOfCode.Solutions
 
         public override string Part2(string input)
         {
-            Dictionary<(int, int), int> heightMap = new Dictionary<(int, int), int>();
+            Dictionary<(int, int), int> heightMap = new();
             string[] lines = input.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             for (int j = 0; j < lines[i].Length; j++)
                 heightMap.Add((i, j), lines[i][j] - '0');
 
-            HashSet<(int, int)> lows = new HashSet<(int, int)>();
+            HashSet<(int, int)> lows = new();
 
             foreach (KeyValuePair<(int, int), int> kvp in heightMap)
             {
@@ -50,11 +50,11 @@ namespace AdventOfCode.Solutions
                 lows.Add((x, y));
             }
 
-            List<int> basinSizes = new List<int>();
+            List<int> basinSizes = new();
 
             foreach ((int x, int y) in lows)
             {
-                HashSet<(int, int)> seen = new HashSet<(int, int)>();
+                HashSet<(int, int)> seen = new();
                 FindBasin(x, y, heightMap, seen);
                 basinSizes.Add(seen.Count);
             }

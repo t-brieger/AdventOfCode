@@ -43,7 +43,7 @@ namespace AdventOfCode.Solutions
             for (int i = 0; i < nums.Length; i++)
                 program.Add(i, nums[i]);
 
-            List<int[]> possiblePhaseSettings = new List<int[]>(Util.GetPermutations(new[] { 5, 6, 7, 8, 9 }, 5));
+            List<int[]> possiblePhaseSettings = new(Util.GetPermutations(new[] { 5, 6, 7, 8, 9 }, 5));
 
             long highestValue = int.MinValue;
             foreach (int[] phaseSettings in possiblePhaseSettings)

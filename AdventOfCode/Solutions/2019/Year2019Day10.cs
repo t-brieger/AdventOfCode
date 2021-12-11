@@ -6,7 +6,7 @@ namespace AdventOfCode.Solutions
 {
     public class Year2019Day10 : Solution
     {
-        private static ((long, long)[], int, int) findResearchStation(HashSet<(int, int)> asteroids)
+        private static ((long, long)[], int, int) FindResearchStation(HashSet<(int, int)> asteroids)
         {
             ((long, long)[], int, int)[] x = asteroids.Select(researchStation =>
                 (asteroids.Where(x =>
@@ -36,7 +36,7 @@ namespace AdventOfCode.Solutions
                 if (lines[i][j] == '#')
                     asteroids.Add((j, i));
 
-            return findResearchStation(asteroids).Item1.Distinct().Count().ToString();
+            return FindResearchStation(asteroids).Item1.Distinct().Count().ToString();
         }
 
         public override string Part2(string input)
@@ -50,18 +50,18 @@ namespace AdventOfCode.Solutions
                 if (lines[i][j] == '#')
                     asteroids.Add((j, i));
 
-            ((long, long)[], int, int) ourStation = findResearchStation(asteroids);
+            ((long, long)[] angle, int stationX, int stationY) = FindResearchStation(asteroids);
 
             Dictionary<(long, long), PriorityQueue<(long, long), long>> fractionsToAsteroidQueues = new();
 
-            foreach ((long x, long y) in ourStation.Item1)
+            foreach ((long x, long y) in angle)
             {
                 int gcd = (int)Util.Gcd(x, y);
                 (long, long) dividedTuple = (x / gcd, y / gcd);
                 if (!fractionsToAsteroidQueues.ContainsKey(dividedTuple))
                     fractionsToAsteroidQueues.Add(dividedTuple, new PriorityQueue<(long, long), long>());
 
-                fractionsToAsteroidQueues[dividedTuple].Enqueue((x + ourStation.Item2, y + ourStation.Item3), gcd);
+                fractionsToAsteroidQueues[dividedTuple].Enqueue((x + stationX, y + stationY), gcd);
             }
 
             (double, (long, long))[] keyOrder = fractionsToAsteroidQueues.Keys

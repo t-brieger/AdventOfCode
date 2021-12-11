@@ -26,7 +26,7 @@ namespace AdventOfCode.Solutions
                         loc = (loc.x - 1, loc.y);
                         break;
                     case '\n':
-                        output += (5 + 3 * loc.y) + loc.x;
+                        output += 5 + 3 * loc.y + loc.x;
                         break;
                 }
 
