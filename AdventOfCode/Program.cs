@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,7 +16,7 @@ namespace AdventOfCode
     {
         private static async Task<int> Main(string[] args)
         {
-            bool all = false, pause = false, showdesc = false, test = false;
+            bool all = false, pause = false, showdesc = false, test = false, time = true;
             int y = -1, d = -1;
 
             for (int i = 0; i < args.Length; i++)
@@ -36,6 +37,9 @@ namespace AdventOfCode
                     case "--pause":
                     case "--slow":
                         pause = true;
+                        break;
+                    case "--no-timing":
+                        time = false;
                         break;
                     case "--showdesc":
                     case "--problems":
@@ -92,16 +96,11 @@ namespace AdventOfCode
                     if (y != -1 && year != y)
                         continue;
 
-                    string input = await GetInput(day, year, test);
-                    s.rawInput = input;
-                    input = input.Trim();
-
                     if (showdesc)
                         await DisplayText(day, year);
                     Console.WriteLine();
 
-                    Console.WriteLine($"{year}/{day:00}/1: {s?.Part1(input)}");
-                    Console.WriteLine($"{year}/{day:00}/2: {s?.Part2(input)}");
+                    await RunSolution(s, time, day, year, test);
 
                     if (!pause) continue;
                     Console.ReadKey();
@@ -129,12 +128,8 @@ namespace AdventOfCode
                 if (showdesc)
                     await DisplayText((byte)d, (ushort)y);
                 Console.WriteLine();
-
-                string input = await GetInput((byte)d, (ushort)y, test);
-                s.rawInput = input;
-                input = input.Trim();
-                Console.WriteLine($"{y}/{d:00}/1: {s?.Part1(input)}");
-                Console.WriteLine($"{y}/{d:00}/2: {s?.Part2(input)}");
+                
+                await RunSolution(s, time, (byte)d, (ushort)y, test);
             }
 
             return 0;
@@ -157,8 +152,33 @@ namespace AdventOfCode
                 "--test,-t,\n" +
                 "--samples     run test inputs\n" +
                 "-y,--year     specify the year to run solutions from\n" +
-                "-d,--day      specify the day to run solutions from, not compatible with -a");
+                "-d,--day      specify the day to run solutions from, not compatible with -a\n" +
+                "--no-timing   disable timing the solutions");
             Environment.Exit(1);
+        }
+
+        private static async Task RunSolution(Solution s, bool time, byte d, ushort y, bool test) {
+            string input = await GetInput(d, y, test);
+            s.rawInput = input;
+            input = input.Trim();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            string p1 = s.Part1(input);
+            sw.Stop();
+            long elapsed1 = sw.ElapsedMilliseconds;
+            sw.Restart();
+            string p2 = s.Part2(input);
+            sw.Stop();
+            long elapsed2 = sw.ElapsedMilliseconds;
+            Console.WriteLine($"Running Day {y}/{d:00}...");
+            Console.WriteLine($"  Part 1: {p1}");
+            if (time)
+                Console.WriteLine($"    Took {elapsed1} ms.");
+            Console.WriteLine($"  Part 2: {p2}");
+            if (time)
+                Console.WriteLine($"    Took {elapsed2} ms.");
+            if (time)
+                Console.WriteLine($"  Took {elapsed1 + elapsed2} ms in total.");
         }
 
         private static string GetSession()
