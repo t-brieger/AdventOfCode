@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+
 namespace AdventOfCode.Solutions;
 
 public class Year2021Day12 : Solution
