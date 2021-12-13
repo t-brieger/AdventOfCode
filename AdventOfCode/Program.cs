@@ -163,12 +163,28 @@ namespace AdventOfCode
             input = input.Trim();
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            string p1 = s.Part1(input);
+            string p1 = null;
+            try
+            {
+                p1 = s.Part1(input);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
             sw.Stop();
             long elapsed1 = sw.ElapsedMilliseconds;
             sw.Restart();
-            string p2 = s.Part2(input);
-            sw.Stop();
+            string p2 = null;
+            try
+            {
+                p2 = s.Part2(input);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }sw.Stop();
             long elapsed2 = sw.ElapsedMilliseconds;
             Console.WriteLine($"Running Day {y}/{d:00}...");
             Console.WriteLine($"  Part 1: {p1}");
