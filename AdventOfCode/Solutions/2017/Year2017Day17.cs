@@ -1,58 +1,57 @@
 ﻿using System;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions;
+
+public class Year2017Day17 : Solution
 {
-    public class Year2017Day17 : Solution
+    public override string Part1(string input)
     {
-        public override string Part1(string input)
+        Node<int> head = new(0);
+        head.next = head;
+
+        int skipAmount = Int32.Parse(input);
+
+        for (int i = 1; i <= 2017; i++)
         {
-            Node<int> head = new(0);
-            head.next = head;
-
-            int skipAmount = Int32.Parse(input);
-
-            for (int i = 1; i <= 2017; i++)
-            {
-                for (int j = 0; j < skipAmount; j++) head = head.next;
-                Node<int> newNode = new(i) { next = head.next };
-                head.next = newNode;
-                head = newNode;
-            }
-
-            while (true)
-            {
-                if (head.value == 2017)
-                    return head.next.value.ToString();
-                head = head.next;
-            }
+            for (int j = 0; j < skipAmount; j++) head = head.next;
+            Node<int> newNode = new(i) { next = head.next };
+            head.next = newNode;
+            head = newNode;
         }
 
-        public override string Part2(string input)
+        while (true)
         {
-            int after0 = 0;
-            int i = 0;
+            if (head.value == 2017)
+                return head.next.value.ToString();
+            head = head.next;
+        }
+    }
 
-            int step = Int32.Parse(input);
+    public override string Part2(string input)
+    {
+        int after0 = 0;
+        int i = 0;
 
-            for (int listLength = 1; listLength < 50_000_000; listLength++)
-            {
-                i = (i + step) % listLength + 1;
-                if (i == 1)
-                    after0 = listLength;
-            }
+        int step = Int32.Parse(input);
 
-            return after0.ToString();
+        for (int listLength = 1; listLength < 50_000_000; listLength++)
+        {
+            i = (i + step) % listLength + 1;
+            if (i == 1)
+                after0 = listLength;
         }
 
-        private class Node<T>
-        {
-            public readonly T value;
-            public Node<T> next;
+        return after0.ToString();
+    }
 
-            public Node(T val)
-            {
-                this.value = val;
-            }
+    private class Node<T>
+    {
+        public readonly T value;
+        public Node<T> next;
+
+        public Node(T val)
+        {
+            this.value = val;
         }
     }
 }

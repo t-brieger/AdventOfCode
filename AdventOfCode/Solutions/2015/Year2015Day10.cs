@@ -1,59 +1,58 @@
 ﻿using System.Text;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions;
+
+public class Year2015Day10 : Solution
 {
-    public class Year2015Day10 : Solution
+    public override string Part1(string input)
     {
-        public override string Part1(string input)
+        string currStr = input.Replace("\n", "");
+        for (int i = 0; i < 40; i++)
         {
-            string currStr = input.Replace("\n", "");
-            for (int i = 0; i < 40; i++)
+            StringBuilder newStr = new();
+
+            for (int j = 0; j < currStr.Length; j++)
             {
-                StringBuilder newStr = new();
-
-                for (int j = 0; j < currStr.Length; j++)
+                int repetitions = 1;
+                while (j < currStr.Length - 1 && currStr[j + 1] == currStr[j])
                 {
-                    int repetitions = 1;
-                    while (j < currStr.Length - 1 && currStr[j + 1] == currStr[j])
-                    {
-                        repetitions++;
-                        j++;
-                    }
-
-                    newStr.Append(repetitions);
-                    newStr.Append(currStr[j]);
+                    repetitions++;
+                    j++;
                 }
 
-                currStr = newStr.ToString();
+                newStr.Append(repetitions);
+                newStr.Append(currStr[j]);
             }
 
-            return currStr.Length.ToString();
+            currStr = newStr.ToString();
         }
 
-        public override string Part2(string input)
+        return currStr.Length.ToString();
+    }
+
+    public override string Part2(string input)
+    {
+        string currStr = input.Replace("\n", "");
+        for (int i = 0; i < 50; i++)
         {
-            string currStr = input.Replace("\n", "");
-            for (int i = 0; i < 50; i++)
+            StringBuilder newStr = new();
+
+            for (int j = 0; j < currStr.Length; j++)
             {
-                StringBuilder newStr = new();
-
-                for (int j = 0; j < currStr.Length; j++)
+                int repetitions = 1;
+                while (j < currStr.Length - 1 && currStr[j + 1] == currStr[j])
                 {
-                    int repetitions = 1;
-                    while (j < currStr.Length - 1 && currStr[j + 1] == currStr[j])
-                    {
-                        repetitions++;
-                        j++;
-                    }
-
-                    newStr.Append(repetitions);
-                    newStr.Append(currStr[j]);
+                    repetitions++;
+                    j++;
                 }
 
-                currStr = newStr.ToString();
+                newStr.Append(repetitions);
+                newStr.Append(currStr[j]);
             }
 
-            return currStr.Length.ToString();
+            currStr = newStr.ToString();
         }
+
+        return currStr.Length.ToString();
     }
 }

@@ -2,52 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AdventOfCode.Solutions
+namespace AdventOfCode.Solutions;
+
+public class Year2017Day04 : Solution
 {
-    public class Year2017Day04 : Solution
+    public override string Part1(string input)
     {
-        public override string Part1(string input)
+        string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        int valid = passPhrases.Length;
+        foreach (string s in passPhrases)
         {
-            string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            int valid = passPhrases.Length;
-            foreach (string s in passPhrases)
+            HashSet<string> words = new();
+            foreach (string word in s.Split(' '))
             {
-                HashSet<string> words = new();
-                foreach (string word in s.Split(' '))
+                if (words.Contains(word))
                 {
-                    if (words.Contains(word))
-                    {
-                        valid--;
-                        break;
-                    }
-
-                    words.Add(word);
+                    valid--;
+                    break;
                 }
-            }
 
-            return valid.ToString();
+                words.Add(word);
+            }
         }
 
-        public override string Part2(string input)
+        return valid.ToString();
+    }
+
+    public override string Part2(string input)
+    {
+        string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        int valid = passPhrases.Length;
+        foreach (string s in passPhrases)
         {
-            string[] passPhrases = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            int valid = passPhrases.Length;
-            foreach (string s in passPhrases)
+            HashSet<string> words = new();
+            foreach (string ordered in s.Split(' ').Select(word => new string(word.OrderBy(c => c).ToArray())))
             {
-                HashSet<string> words = new();
-                foreach (string ordered in s.Split(' ').Select(word => new string(word.OrderBy(c => c).ToArray())))
+                if (words.Contains(ordered))
                 {
-                    if (words.Contains(ordered))
-                    {
-                        valid--;
-                        break;
-                    }
-
-                    words.Add(ordered);
+                    valid--;
+                    break;
                 }
-            }
 
-            return valid.ToString();
+                words.Add(ordered);
+            }
         }
+
+        return valid.ToString();
     }
 }
