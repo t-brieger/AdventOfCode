@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 
 namespace AdventOfCode.Solutions;
 
@@ -15,7 +13,7 @@ public class Year2021Day16 : Solution
 
     private class LiteralValuePacket : Packet
     {
-        public BigInteger Value;
+        public long Value;
     }
 
     private class OperatorPacket : Packet
@@ -45,8 +43,10 @@ public class Year2021Day16 : Solution
 
     private static OperatorPacket ParseOperatorBody(bool[] b, ref int ix)
     {
-        OperatorPacket p = new OperatorPacket();
-        p.SubPackets = new List<Packet>();
+        OperatorPacket p = new OperatorPacket
+        {
+            SubPackets = new List<Packet>()
+        };
 
         bool lengthType = b[ix++];
 
@@ -73,15 +73,15 @@ public class Year2021Day16 : Solution
     {
         // read until it the first bit of the group isnt 1 anymore, then 1 more time
 
-        BigInteger val = 0;
+        long val = 0;
         while (b[ix++])
         {
             for (int i = 0; i < 4; i++)
-                val = val << 1 | (b[ix++] ? 1 : 0);
+                val = val << 1 | (uint) (b[ix++] ? 1 : 0);
         }
 
         for (int i = 0; i < 4; i++)
-            val = val << 1 | (b[ix++] ? 1 : 0);
+            val = val << 1 | (uint) (b[ix++] ? 1 : 0);
 
         LiteralValuePacket p = new LiteralValuePacket
         {
@@ -105,8 +105,7 @@ public class Year2021Day16 : Solution
     
     public override string Part1(string input)
     {
-        bool[,] hexToBits = new bool[16, 4]
-        {
+        bool[,] hexToBits = {
             {false, false, false, false},
             {false, false, false, true},
             {false, false, true, false},
@@ -130,7 +129,7 @@ public class Year2021Day16 : Solution
         for (int i = 0; i < bits.Length; i += 4)
         {
             char c = input[i / 4];
-            int index = -1;
+            int index;
             if (c is <= '9' and >= '0')
                 index = c - '0';
             else
@@ -148,17 +147,16 @@ public class Year2021Day16 : Solution
 
         return AddVersions(p).ToString();
     }
-    
-    // yes, i hate bigint too, but oh well...
-    private static BigInteger GetValue(Packet p)
+
+    private static long GetValue(Packet p)
     {
         if (p is LiteralValuePacket lvp)
             return lvp.Value;
         OperatorPacket op = p as OperatorPacket;
         return op!.Type switch
         {
-            0 => op.SubPackets.Aggregate(new BigInteger(0), (sum, packet) => sum + GetValue(packet)),
-            1 => op.SubPackets.Aggregate(new BigInteger(1), (product, packet) => product * GetValue(packet)),
+            0 => op.SubPackets.Aggregate(0L, (sum, packet) => sum + GetValue(packet)),
+            1 => op.SubPackets.Aggregate(1L, (product, packet) => product * GetValue(packet)),
             2 => op.SubPackets.Min(GetValue),
             3 => op.SubPackets.Max(GetValue),
             5 => GetValue(op.SubPackets[0]) > GetValue(op.SubPackets[1]) ? 1 : 0,
@@ -170,8 +168,7 @@ public class Year2021Day16 : Solution
 
     public override string Part2(string input)
     {
-        bool[,] hexToBits = new bool[16, 4]
-        {
+        bool[,] hexToBits = {
             {false, false, false, false},
             {false, false, false, true},
             {false, false, true, false},
@@ -195,7 +192,7 @@ public class Year2021Day16 : Solution
         for (int i = 0; i < bits.Length; i += 4)
         {
             char c = input[i / 4];
-            int index = -1;
+            int index;
             if (c is <= '9' and >= '0')
                 index = c - '0';
             else
