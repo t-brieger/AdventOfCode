@@ -13,11 +13,12 @@ public static class Util
     {
         return numbers.Aggregate(lcm);
     }
+
     private static long lcm(long a, long b)
     {
         return Math.Abs(a * b) / Gcd(a, b);
     }
-        
+
     // https://stackoverflow.com/a/41766138
     public static long Gcd(long a, long b)
     {
@@ -52,9 +53,16 @@ public static class Util
     [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     public static IEnumerable<T[]> GetPermutations<T>(IEnumerable<T> list, int length = 2) where T : IComparable
     {
-        if (length == 1) return list.Select(t => new[] { t });
+        if (length == 1) return list.Select(t => new[] {t});
         return GetPermutations(list, length - 1)
             .SelectMany(t => list.Where(o => !t.Contains(o)),
-                (t1, t2) => t1.Concat(new[] { t2 }).ToArray());
+                (t1, t2) => t1.Concat(new[] {t2}).ToArray());
+    }
+
+    public static string Reverse(this string s)
+    {
+        char[] charArray = s.ToCharArray();
+        Array.Reverse(charArray);
+        return new string(charArray);
     }
 }
