@@ -49,18 +49,27 @@ public class Year2016Day14 : Solution
             }
         }
     }
-    
+
     public override string Part1(string input)
     {
         using MD5 md5Hash = MD5.Create();
 
-        Dictionary<int, string> hashes = new Dictionary<int, string>();
+        string[] hashes = new string[1001];
+        int[] lastWrites = new int[1001];
+        for (int i = 0; i < 1001; i++)
+        {
+            hashes[i] = null;
+            lastWrites[i] = -1;
+        }
 
         string GetHash(int x)
         {
-            if (hashes.ContainsKey(x)) return hashes[x];
+            if (lastWrites[x % 1001] == x)
+                return hashes[x % 1001];
+            
             string hash = GetMd5Hash(md5Hash, input + x);
-            hashes.Add(x, hash);
+            hashes[x % 1001] = hash;
+            lastWrites[x % 1001] = x;
             return hash;
         }
 
@@ -71,15 +80,24 @@ public class Year2016Day14 : Solution
     {
         using MD5 md5Hash = MD5.Create();
 
-        Dictionary<int, string> hashes = new Dictionary<int, string>();
+        string[] hashes = new string[1001];
+        int[] lastWrites = new int[1001];
+        for (int i = 0; i < 1001; i++)
+        {
+            hashes[i] = null;
+            lastWrites[i] = -1;
+        }
 
         string GetHash(int x)
         {
-            if (hashes.ContainsKey(x)) return hashes[x];
+            if (lastWrites[x % 1001] == x)
+                return hashes[x % 1001];
+            
             string hash = GetMd5Hash(md5Hash, input + x);
             for (int i = 0; i < 2016; i++)
                 hash = GetMd5Hash(md5Hash, hash);
-            hashes.Add(x, hash);
+            hashes[x % 1001] = hash;
+            lastWrites[x % 1001] = x;
             return hash;
         }
 
