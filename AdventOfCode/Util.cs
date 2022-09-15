@@ -65,4 +65,22 @@ public static class Util
         Array.Reverse(charArray);
         return new string(charArray);
     }
+
+    public static int FirstIndexOf<T>(this IEnumerable<T> e, Func<T, bool> f)
+    {
+        int i = 0;
+        foreach (T t in e)
+        {
+            if (f(t))
+                return i;
+            i++;
+        }
+
+        return -1;
+    }
+
+    public static int FirstIndexOf<T>(this IEnumerable<T> e, T what)
+    {
+        return e.FirstIndexOf(t => t.Equals(what));
+    }
 }
