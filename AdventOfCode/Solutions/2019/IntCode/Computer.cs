@@ -127,6 +127,12 @@ public class Computer
         this.input.Enqueue(newInput);
         this.waitingForInput = false;
     }
+    
+    public void EnqueueInput(char newInput)
+    {
+        this.input.Enqueue(newInput);
+        this.waitingForInput = false;
+    }
 
     /// <summary>
     ///     Steps the program forward one instruction
