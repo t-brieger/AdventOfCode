@@ -14,6 +14,7 @@ namespace AdventOfCode;
 // ReSharper disable once InconsistentNaming
 static class Program
 {
+    private static readonly string UserAgent = "https://github.com/t-brieger/AdventOfCode/ by <t-brieger at gmx.de>";
     private static async Task<int> Main(string[] args)
     {
         bool all = false, pause = false, showdesc = false, test = false, time = true;
@@ -233,6 +234,7 @@ static class Program
                 CookieContainer = cookieContainer,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
+        client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
         cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
         HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
@@ -250,6 +252,7 @@ static class Program
                 CookieContainer = cookieContainer,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
+        client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
         cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
         HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}");
