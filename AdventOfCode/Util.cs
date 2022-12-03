@@ -83,4 +83,31 @@ public static class Util
     {
         return e.FirstIndexOf(t => t.Equals(what));
     }
+
+    public static (TState, int) Djikstra<TState>(TState initial, Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal)
+    {
+        HashSet<TState> seen = new HashSet<TState>();
+        PriorityQueue<(TState, int), int> states = new PriorityQueue<(TState, int), int>();
+        states.Enqueue((initial, 0), 0);
+
+        while (states.Count > 0)
+        {
+            (TState currentState, int weight) = states.Dequeue();
+            if (seen.Contains(currentState))
+                continue;
+            seen.Add(currentState);
+
+            if (isGoal(currentState))
+                return (currentState, weight);
+
+            foreach ((TState, int) s in generateReachableStates(currentState, weight))
+            {
+                states.Enqueue(s, s.Item2);
+            }
+        }
+
+        // would be a little clearer to return "null" here instead of the initial state, but alas, it seems not to be
+        // possible to cast null to State (or even to "State?")
+        return (initial, -1);
+    }
 }
