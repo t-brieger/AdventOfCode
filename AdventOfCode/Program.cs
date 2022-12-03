@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using AngleSharp;
@@ -14,7 +15,8 @@ namespace AdventOfCode;
 // ReSharper disable once InconsistentNaming
 static class Program
 {
-    private static readonly string UserAgent = "https://github.com/t-brieger/AdventOfCode/ by <t-brieger at gmx.de>";
+    private static readonly string UserAgent = "https://github.com/t-brieger/AdventofCode by <t-brieger at gmx.de>";
+    
     private static async Task<int> Main(string[] args)
     {
         bool all = false, pause = false, showdesc = false, test = false, time = true;
@@ -214,17 +216,17 @@ static class Program
         catch (DirectoryNotFoundException)
         {
             Directory.CreateDirectory($"Input/{(test ? "test/" : "")}{year}");
-            await DownloadSolution(GetSession(), day, year);
+            await DownloadInput(GetSession(), day, year);
             return await GetInput(day, year, test);
         }
         catch (FileNotFoundException)
         {
-            await DownloadSolution(GetSession(), day, year);
+            await DownloadInput(GetSession(), day, year);
             return await GetInput(day, year, test);
         }
     }
 
-    private static async Task DownloadSolution(string session, byte day, ushort year)
+    private static async Task DownloadInput(string session, byte day, ushort year)
     {
         CookieContainer cookieContainer = new();
 
@@ -234,10 +236,13 @@ static class Program
                 CookieContainer = cookieContainer,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
-        client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+        HttpRequestMessage hrm = new HttpRequestMessage();
+        hrm.Headers.UserAgent.TryParseAdd(UserAgent);
+        hrm.Method = HttpMethod.Get;
+        hrm.RequestUri = new Uri($"https://adventofcode.com/{year}/day/{day}/input");
         cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
-        HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}/input");
+        HttpResponseMessage response = await client.SendAsync(hrm);
 
         await File.WriteAllTextAsync($"Input/{year}/Day{day:00}.in", await response.Content.ReadAsStringAsync());
     }
@@ -252,11 +257,14 @@ static class Program
                 CookieContainer = cookieContainer,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             });
-        client.DefaultRequestHeaders.Add("User-Agent", UserAgent);
+        HttpRequestMessage hrm = new HttpRequestMessage();
+        hrm.Headers.UserAgent.TryParseAdd(UserAgent);
+        hrm.Method = HttpMethod.Get;
+        hrm.RequestUri = new Uri($"https://adventofcode.com/{year}/day/{day}");
         cookieContainer.Add(new Uri("https://adventofcode.com"), new Cookie("session", session));
 
-        HttpResponseMessage response = await client.GetAsync($"https://adventofcode.com/{year}/day/{day}");
-
+        HttpResponseMessage response = await client.SendAsync(hrm);
+        
         return await response.Content.ReadAsStringAsync();
     }
 
