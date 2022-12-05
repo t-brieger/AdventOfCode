@@ -27,7 +27,7 @@
         <PackageReference Include="ILGPU" Version="1.0.0" />
         <PackageReference Include="ILGPU.Algorithms" Version="1.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-        <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
+        <PackageReference Include="System.Drawing.Common" Version="4.7.2" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
