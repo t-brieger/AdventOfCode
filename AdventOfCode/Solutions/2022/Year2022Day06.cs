@@ -4,7 +4,6 @@ namespace AdventOfCode.Solutions;
 
 public class Year2022Day06 : Solution
 {
-    // I would have been global lb #16 if I hadn't made a dumb off-by-one mistake (returning i instead of i+1)
     public override string Part1(string input)
     {
         for (int i = 3; i < input.Length; i++)
