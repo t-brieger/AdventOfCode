@@ -18,3 +18,9 @@ AdventOfCode/session
 AdventOfCode/AdventOfCode.csproj.DotSettings
 
 AdventOfCode.sln.DotSettings.user
+
+GeneralRunner/bin/
+
+GeneralRunner/obj/
+
+GeneralRunner/session
