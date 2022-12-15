@@ -139,13 +139,12 @@ public class Year2022Day15 : Solution
                     }
                 }
             }
+
+            if (emptyRanges[i]
+                .Any(range => range.Item1 is >= 0 and <= 4_000_000 || range.Item2 is >= 0 and <= 4_000_000))
+                return (4_000_000L * (emptyRanges[i][0].Item2 + 1) + i).ToString();
         }
 
-        int y = emptyRanges.FirstIndexOf(ranges =>
-            ranges.Any(range => range.Item1 is >= 0 and <= 4_000_000 || range.Item2 is >= 0 and <= 4_000_000));
-
-        int x = emptyRanges[y][0].Item2 + 1;
-
-        return ((4_000_000L * x) + y).ToString();
+        return null;
     }
 }
