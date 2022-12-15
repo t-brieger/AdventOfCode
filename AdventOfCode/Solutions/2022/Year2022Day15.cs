@@ -13,8 +13,9 @@ public class Year2022Day15 : Solution
         foreach (string sensorReading in input.Split('\n'))
         {
             string[] parts = sensorReading.Replace(",", "").Replace(":", "").Split(' ');
-            
-            sensors.Add((int.Parse(parts[2][2..]), int.Parse(parts[3][2..]), int.Parse(parts[8][2..]), int.Parse(parts[9][2..])));
+
+            sensors.Add((int.Parse(parts[2][2..]), int.Parse(parts[3][2..]), int.Parse(parts[8][2..]),
+                int.Parse(parts[9][2..])));
         }
 
         List<(int, int)> emptyRanges = new List<(int, int)>();
@@ -23,10 +24,10 @@ public class Year2022Day15 : Solution
         {
             int radius = Math.Abs(sensX - beacX) + Math.Abs(sensY - beacY);
             int range = radius - Math.Abs(sensY - 2_000_000);
-            
+
             if (range < 0)
                 continue;
-            
+
             emptyRanges.Add((sensX - range, sensX + range));
         }
 
@@ -45,7 +46,8 @@ public class Year2022Day15 : Solution
                 }
 
                 IEnumerable<(int, int)> otherPossibilities;
-                otherPossibilities = emptyRanges.Where(r => r != (start, end) && r.Item1 <= start && r.Item2 <= end && r.Item2 >= start);
+                otherPossibilities = emptyRanges.Where(r =>
+                    r != (start, end) && r.Item1 <= start && r.Item2 <= end && r.Item2 >= start);
                 if (otherPossibilities.Any())
                 {
                     (int, int) other = otherPossibilities.First();
@@ -54,8 +56,9 @@ public class Year2022Day15 : Solution
                     changed = true;
                     break;
                 }
-                
-                otherPossibilities = emptyRanges.Where(r => r != (start, end) && r.Item1 >= start && r.Item1 <= end && r.Item2 >= end);
+
+                otherPossibilities = emptyRanges.Where(r =>
+                    r != (start, end) && r.Item1 >= start && r.Item1 <= end && r.Item2 >= end);
                 if (otherPossibilities.Any())
                 {
                     (int, int) other = otherPossibilities.First();
@@ -67,7 +70,8 @@ public class Year2022Day15 : Solution
             }
         }
 
-        return (emptyRanges.Sum(r => (r.Item2 - r.Item1) + 1) - sensors.Where(sr => sr.beacY == 2_000_000).Select(b => b.beacX).Distinct().Count()).ToString();
+        return (emptyRanges.Sum(r => (r.Item2 - r.Item1) + 1) -
+                sensors.Where(sr => sr.beacY == 2_000_000).Select(b => b.beacX).Distinct().Count()).ToString();
     }
 
     public override string Part2(string input)
@@ -77,16 +81,18 @@ public class Year2022Day15 : Solution
         foreach (string sensorReading in input.Split('\n'))
         {
             string[] parts = sensorReading.Replace(",", "").Replace(":", "").Split(' ');
-            
-            sensors.Add((int.Parse(parts[2][2..]), int.Parse(parts[3][2..]), int.Parse(parts[8][2..]), int.Parse(parts[9][2..])));
+
+            sensors.Add((int.Parse(parts[2][2..]), int.Parse(parts[3][2..]), int.Parse(parts[8][2..]),
+                int.Parse(parts[9][2..])));
         }
 
         List<(int, int)>[] emptyRanges = new List<(int, int)>[4_000_001];
 
         foreach ((int sensX, int sensY, int beacX, int beacY) in sensors)
         {
-            for (int i = 0; i < 4_000_001; i++) {
-                int radius = Math.Abs(sensX - beacX) + Math.Abs(sensY - beacY);
+            int radius = Math.Abs(sensX - beacX) + Math.Abs(sensY - beacY);
+            for (int i = Math.Max(sensY - radius, 0); i <= Math.Min(sensY + radius, 4_000_000); i++)
+            {
                 int range = radius - Math.Abs(sensY - i);
 
                 if (range < 0)
@@ -94,7 +100,7 @@ public class Year2022Day15 : Solution
 
                 if (emptyRanges[i] == null)
                     emptyRanges[i] = new List<(int, int)>();
-                
+
                 emptyRanges[i].Add((sensX - range, sensX + range));
             }
         }
