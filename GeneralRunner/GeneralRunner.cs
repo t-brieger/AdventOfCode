@@ -18,7 +18,7 @@ public static class GeneralRunner
     private static async Task<int> Main(string[] args)
     {
         bool all = false, pause = false, showdesc = false, test = false;
-        int y = -1, d = -1;
+        int y = -1, d = -1, progressWidth = 12;
 
         for (int i = 0; i < args.Length; i++)
             switch (args[i])
@@ -70,6 +70,10 @@ public static class GeneralRunner
                         ShowUsage("--day needs an argument between 1 and 31");
                     i++;
                     break;
+                case "--bar-width":
+                    if (!int.TryParse(args[++i], out progressWidth) || progressWidth <= 0)
+                        ShowUsage("--bar-width's argument needs to be a positive integer");
+                    break;
                 default:
                     ShowUsage(args[i] + " was not recognized as a valid argument.");
                     break;
@@ -98,7 +102,7 @@ public static class GeneralRunner
                     await DisplayText(day, year);
                 Console.WriteLine();
 
-                await RunSolution(s, day, year, test);
+                await RunSolution(s, day, year, test, progressWidth);
 
                 if (!pause) continue;
                 Console.ReadKey();
@@ -127,7 +131,7 @@ public static class GeneralRunner
                 await DisplayText((byte)d, (ushort)y);
             Console.WriteLine();
                 
-            await RunSolution(s, (byte)d, (ushort)y, test);
+            await RunSolution(s, (byte)d, (ushort)y, test, progressWidth);
         }
 
         return 0;
@@ -154,7 +158,7 @@ public static class GeneralRunner
         Environment.Exit(1);
     }
 
-    public static async Task RunSolution(Solution s, byte d, ushort y, bool test) {
+    private static async Task RunSolution(Solution s, byte d, ushort y, bool test, int progressWidth) {
         string input = await GetInput(d, y, test);
         s!.rawInput = input;
         input = input.Trim();
@@ -164,24 +168,34 @@ public static class GeneralRunner
         string p1 = null;
         try
         {
+            (Action p1Inc, Action<int> p1Res, Action<int> p1Set, Func<int> p1Get) = MakeProgressBar(progressWidth, $"{y} / {d,2} Part 1");
+            s.IncreaseBar = p1Inc;
+            s.RescaleBar = p1Res;
+            s.SetBar = p1Set;
+            s.GetBarScale = p1Get;
             p1 = s.Part1(input);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
         }
-        Console.WriteLine($"  Part 1: {p1}");
+        Console.WriteLine("  " + p1);
 
         string p2 = null;
         try
         {
+            (Action p2Inc, Action<int> p2Res, Action<int> p2Set, Func<int> p2Get) = MakeProgressBar(progressWidth, $"{y} / {d,2} Part 2");
+            s.IncreaseBar = p2Inc;
+            s.RescaleBar = p2Res;
+            s.SetBar = p2Set;
+            s.GetBarScale = p2Get;
             p2 = s.Part2(input);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.ToString());
         }
-        Console.WriteLine($"  Part 2: {p2}");
+        Console.WriteLine("  " + p2);
     }
 
     private static string GetSession()
@@ -362,5 +376,50 @@ public static class GeneralRunner
         INode main = doc.Body.ChildNodes.First(n => n.NodeName.ToLower() == "main");
 
         await RenderNode(main);
+    }
+
+    private static (Action inc, Action<int> rescale, Action<int> set, Func<int> get) MakeProgressBar(int terminalWidth, string label)
+    {
+        int done = -1;
+        int max = 1;
+
+        Console.WriteLine();
+
+        int lastFilledCount = -1, lastPercentage = -1;
+        
+        Action inc = () =>
+        {
+            done++;
+            int percentage = (done * 100) / max;
+
+            // +0.5 to round instead of truncating
+            int filledCount = (int) ((float)done / max * terminalWidth + 0.5);
+
+            if (filledCount == lastFilledCount && percentage == lastPercentage)
+                return;
+            
+            Console.Write($"\r{label}: [{new string('#', filledCount)}{new string(' ', terminalWidth - filledCount)}] ({percentage,3}%)");
+        };
+
+        Action<int> rescale = x =>
+        {
+            max = x;
+            done--;
+            // redraw
+            inc();
+        };
+
+        Action<int> set = x =>
+        {
+            done = x;
+            done--;
+            inc();
+        };
+        
+        Func<int> get = () => max;
+
+        inc();
+        
+        return (inc, rescale, set, get);
     }
 }

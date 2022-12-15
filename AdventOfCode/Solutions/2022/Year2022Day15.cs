@@ -18,6 +18,8 @@ public class Year2022Day15 : Solution
                 int.Parse(parts[9][2..])));
         }
 
+        RescaleBar(2 * sensors.Count);
+
         List<(int, int)> emptyRanges = new List<(int, int)>();
 
         foreach ((int sensX, int sensY, int beacX, int beacY) in sensors)
@@ -25,8 +27,14 @@ public class Year2022Day15 : Solution
             int radius = Math.Abs(sensX - beacX) + Math.Abs(sensY - beacY);
             int range = radius - Math.Abs(sensY - 2_000_000);
 
+            IncreaseBar();
+
             if (range < 0)
+            {
+                RescaleBar(GetBarScale() - 1);
                 continue;
+            }
+
 
             emptyRanges.Add((sensX - range, sensX + range));
         }
@@ -68,6 +76,8 @@ public class Year2022Day15 : Solution
                     break;
                 }
             }
+
+            IncreaseBar();
         }
 
         return (emptyRanges.Sum(r => (r.Item2 - r.Item1) + 1) -
@@ -86,6 +96,8 @@ public class Year2022Day15 : Solution
                 int.Parse(parts[9][2..])));
         }
 
+        RescaleBar(4_000_001 + sensors.Count);
+        
         List<(int, int)>[] emptyRanges = new List<(int, int)>[4_000_001];
 
         foreach ((int sensX, int sensY, int beacX, int beacY) in sensors)
@@ -103,6 +115,8 @@ public class Year2022Day15 : Solution
 
                 emptyRanges[i].Add((sensX - range, sensX + range));
             }
+
+            IncreaseBar();
         }
 
         for (int i = 0; i < emptyRanges.Length; i++)
@@ -146,9 +160,14 @@ public class Year2022Day15 : Solution
                 }
             }
 
+            IncreaseBar();
+
             if (emptyRanges[i]
                 .Any(range => range.Item1 is >= 0 and <= 4_000_000 || range.Item2 is >= 0 and <= 4_000_000))
+            {
+                SetBar(GetBarScale());
                 return (4_000_000L * (emptyRanges[i][0].Item2 + 1) + i).ToString();
+            }
         }
 
         return null;
