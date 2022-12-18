@@ -86,7 +86,7 @@ public static class GeneralRunner
 
         if (all)
         {
-            foreach (Solution s in Assembly.GetExecutingAssembly().GetTypes()
+            foreach (Solution s in Assembly.GetAssembly(typeof(Solution))!.GetTypes()
                          .Where(t => typeof(Solution).IsAssignableFrom(t) && t != typeof(Solution)).Select(t =>
                              (Solution)Activator.CreateInstance(t)!))
             {
