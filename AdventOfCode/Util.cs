@@ -84,7 +84,7 @@ public static class Util
         return e.FirstIndexOf(t => t.Equals(what));
     }
 
-    public static (TState, int) Djikstra<TState>(TState initial, Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal)
+    public static (TState, int) Djikstra<TState>(TState initial, Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal, bool skipSeenStates = true)
     {
         HashSet<TState> seen = new HashSet<TState>();
         PriorityQueue<(TState, int), int> states = new PriorityQueue<(TState, int), int>();
@@ -93,9 +93,12 @@ public static class Util
         while (states.Count > 0)
         {
             (TState currentState, int weight) = states.Dequeue();
-            if (seen.Contains(currentState))
-                continue;
-            seen.Add(currentState);
+            if (skipSeenStates)
+            {
+                if (seen.Contains(currentState))
+                    continue;
+                seen.Add(currentState);
+            }
 
             if (isGoal(currentState))
                 return (currentState, weight);
