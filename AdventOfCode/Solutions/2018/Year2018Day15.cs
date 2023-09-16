@@ -90,6 +90,7 @@ public class Year2018Day15 : Solution
                 {
                     Entity attackee = entities.Values.FirstOrDefault(e =>
                         e.IsElf != turnEntity.IsElf &&
+                        e.Hitpoints > 0 &&
                         e.Position == (turnEntity.Position.x + ox, turnEntity.Position.y + oy));
                     if (attackee != null)
                     {
@@ -100,65 +101,43 @@ public class Year2018Day15 : Solution
 
                 if (!canAttack)
                 {
-                    ((int, int) TargetTile, int pathLength) = Util.Djikstra(turnEntity.Position, (pos, cost) =>
-                        {
-                            (int x, int y) = pos;
-                            List<((int, int), int)> ret = new();
-                            foreach ((int ox, int oy) in offsets)
-                            {
-                                if (!walls[x + ox, y + oy] && !entities.Values.Any(e => e.Position == (x + ox, y + oy)))
-                                    ret.Add(((x + ox, y + oy), cost + 1));
-                            }
-
-                            return ret;
-                        },
-                        pos =>
-                        {
-                            return entities.Values.Any(e =>
-                                e.IsElf != turnEntity.IsElf &&
-                                offsets.Any(o => pos == (e.Position.x + o.Item1, e.Position.y + o.Item2)));
-                        });
-
-                    if (pathLength == -1)
-                        // no attack target found; skip our turn.
-                        continue;
-
-                    foreach ((int, int) offset in offsets)
+                    ((int, int) move, int length) shortest = ((-1, -1), int.MaxValue);
+                    foreach ((int, int) firstMove in offsets)
                     {
-                        if (walls[turnEntity.Position.x + offset.Item1, turnEntity.Position.y + offset.Item2])
+                        if (walls[turnEntity.Position.x + firstMove.Item1, turnEntity.Position.y + firstMove.Item2])
                             continue;
-                        if (entities.Values.Any(e =>
-                                e.Position == (turnEntity.Position.x + offset.Item1,
-                                    turnEntity.Position.y + offset.Item2)))
-                            continue;
-
-                        // we expect the (best) path length here to be 1 less than pathLength, because we're starting
-                        // 1 tile closer to our target.
-                        (_, int length) = Util.Djikstra(
-                            (turnEntity.Position.x + offset.Item1, turnEntity.Position.y + offset.Item2),
+                        ((int, int) _, int pathLength) = Util.Djikstra(
+                            (turnEntity.Position.x + firstMove.Item1, turnEntity.Position.y + firstMove.Item2),
                             (pos, cost) =>
                             {
-                                if (cost >= pathLength - 1)
-                                    return new List<((int, int), int)>(Array.Empty<((int, int), int)>());
-
                                 (int x, int y) = pos;
                                 List<((int, int), int)> ret = new();
                                 foreach ((int ox, int oy) in offsets)
                                 {
                                     if (!walls[x + ox, y + oy] &&
-                                        !entities.Values.Any(e => e.Position == (x + ox, y + oy)))
+                                        !entities.Values.Any(e => e.Position == (x + ox, y + oy) && e.Hitpoints > 0))
                                         ret.Add(((x + ox, y + oy), cost + 1));
                                 }
 
                                 return ret;
-                            }, pos => pos == TargetTile);
-                        if (length == pathLength - 1)
-                        {
-                            turnEntity.Position = (turnEntity.Position.x + offset.Item1,
-                                turnEntity.Position.y + offset.Item2);
-                            break;
-                        }
+                            },
+                            pos =>
+                            {
+                                return entities.Values.Any(e =>
+                                    e.IsElf != turnEntity.IsElf && e.Hitpoints > 0 &&
+                                    offsets.Any(o => pos == (e.Position.x + o.Item1, e.Position.y + o.Item2)));
+                            });
+                        if (pathLength == -1)
+                            continue;
+                        if (pathLength < shortest.length)
+                            shortest = (firstMove, pathLength);
                     }
+
+                    if (shortest.length == int.MaxValue)
+                        // no attack target found; skip our turn.
+                        continue;
+                    turnEntity.Position = (turnEntity.Position.x + shortest.move.Item1,
+                        turnEntity.Position.y + shortest.move.Item2);
                 }
 
                 (int fewestHitpoints, Entity lowestHpEntity) = (int.MaxValue, null);
@@ -166,6 +145,7 @@ public class Year2018Day15 : Solution
                 {
                     Entity attackee = entities.Values.FirstOrDefault(e =>
                         e.IsElf != turnEntity.IsElf &&
+                        e.Hitpoints > 0 &&
                         e.Position == (turnEntity.Position.x + ox, turnEntity.Position.y + oy));
                     if (attackee != null)
                     {
