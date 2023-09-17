@@ -5,7 +5,27 @@ namespace AdventOfCode.Solutions;
 
 public class Year2018Day16 : Solution
 {
-    private static int[] ExecuteOpCode(Opcodes op, int[] registers, int a, int b, int c)
+    public enum Opcodes
+    {
+        ADDR,
+        ADDI,
+        MULR,
+        MULI,
+        BANR,
+        BANI,
+        BORR,
+        BORI,
+        SETR,
+        SETI,
+        GTIR,
+        GTRI,
+        GTRR,
+        EQIR,
+        EQRI,
+        EQRR
+    }
+
+    public static int[] ExecuteOpCode(Opcodes op, int[] registers, int a, int b, int c)
     {
         int[] r = new int[registers.Length];
         Array.Copy(registers, 0, r, 0, registers.Length);
@@ -180,23 +200,4 @@ public class Year2018Day16 : Solution
     }
 
     // ReSharper disable once InconsistentNaming
-    private enum Opcodes
-    {
-        ADDR,
-        ADDI,
-        MULR,
-        MULI,
-        BANR,
-        BANI,
-        BORR,
-        BORI,
-        SETR,
-        SETI,
-        GTIR,
-        GTRI,
-        GTRR,
-        EQIR,
-        EQRI,
-        EQRR
-    }
 }
