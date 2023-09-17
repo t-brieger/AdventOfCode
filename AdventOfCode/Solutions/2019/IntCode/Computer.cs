@@ -134,6 +134,12 @@ public class Computer
         this.waitingForInput = false;
     }
 
+    public void EnqueueInput(string newInput)
+    {
+        foreach (char c in newInput)
+            EnqueueInput(c);
+    }
+
     /// <summary>
     ///     Steps the program forward one instruction
     /// </summary>
