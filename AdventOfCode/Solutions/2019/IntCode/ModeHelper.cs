@@ -28,7 +28,7 @@ public class ModeHelper
             {
                 0 => mem.ContainsKey(param) ? mem[param] : 0,
                 1 => param,
-                _ => mem[this.relativeBase + param]
+                2 => mem.ContainsKey(this.relativeBase + param) ? mem[this.relativeBase + param] : 0
             };
 
         if (mode == 0)
