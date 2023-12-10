@@ -113,4 +113,19 @@ public static class Util
         // possible to cast null to State (or even to "State?")
         return (initial, -1);
     }
+
+    private static void DoFloodFill<TState>(HashSet<TState> hs, TState curr, Func<TState, IEnumerable<TState>> tr)
+    {
+        if (hs.Contains(curr))
+            return;
+        hs.Add(curr);
+        foreach (TState ts in tr(curr))
+            DoFloodFill(hs, ts, tr);
+    }
+    public static HashSet<TState> FloodFill<TState>(TState startLocation, Func<TState, IEnumerable<TState>> transitions)
+    {
+        HashSet<TState> hashset = new();
+        DoFloodFill(hashset, startLocation, transitions);
+        return hashset;
+    }
 }
