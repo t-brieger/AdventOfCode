@@ -7,71 +7,49 @@ namespace AdventOfCode.Solutions;
 
 public class Year2023Day12 : Solution
 {
-    private static void recursiveResolveQuestionmarks(string row, HashSet<string> found = null, string curr = "")
+    private static long recursiveCount(string row, int[] groups, Dictionary<(string, string), long> memorised)
     {
-        if (row.Length == 0)
-        {
-            found.Add(curr);
-            return;
-        }
+        string joinedGroups = string.Join(',', groups);
+        if (memorised.ContainsKey((row, joinedGroups)))
+            return memorised[(row, joinedGroups)];
 
-        if (row[0] == '?')
+
+        string[] rowParts = row.Split('.', StringSplitOptions.RemoveEmptyEntries);
+        if (row.Length == 0 || row.All(c => c == '.'))
+            return groups.Length == 0 ? 1 : 0;
+
+        long ret = 0;
+        if (rowParts[0].Contains('?'))
         {
-            recursiveResolveQuestionmarks(row[1..], found, curr + ".");
-            recursiveResolveQuestionmarks(row[1..], found, curr + "#");
+            int firstQuestionMark = rowParts[0].IndexOf('?');
+            rowParts[0] = rowParts[0][..firstQuestionMark] + '.' + rowParts[0][(firstQuestionMark + 1)..];
+            ret += recursiveCount(string.Join('.', rowParts), groups, memorised);
+            rowParts[0] = rowParts[0][..firstQuestionMark] + '#' + rowParts[0][(firstQuestionMark + 1)..];
+            ret += recursiveCount(string.Join('.', rowParts), groups, memorised);
         }
-        else
-            recursiveResolveQuestionmarks(row[1..], found, curr + row[0]);
+        else if (groups.Length != 0 && rowParts[0].Length == groups[0])
+            ret += recursiveCount(string.Join('.', rowParts.Skip(1)), groups.Skip(1).ToArray(), memorised);
+
+        memorised[(row, joinedGroups)] = ret;
+        return ret;
     }
-    
+
     public override string Part1(string input)
     {
         long possibilityCount = 0;
         string[] lines = input.Split('\n');
         RescaleBar(lines.Length);
-        
+
+        Dictionary<(string, string), long> memoization = new();
         foreach (string line in lines)
         {
             IncreaseBar();
-            HashSet<string> hs = new();
+
             string[] split = line.Split(" ");
             string row = split[0];
             int[] groups = split[1].Split(',').Select(int.Parse).ToArray();
-            
-            recursiveResolveQuestionmarks(row, hs);
 
-            foreach (string candidate in hs)
-            {
-                int rowIx = 0;
-                bool problem = false;
-                for (int i = 0; i < groups.Length; i++)
-                {
-                    if (rowIx == candidate.Length)
-                    {
-                        problem = true;
-                        break;
-                    }
-
-                    int groupLength = 0;
-                    while (rowIx < candidate.Length && candidate[rowIx] == '.')
-                        rowIx++;
-                    while (rowIx < candidate.Length && candidate[rowIx] == '#')
-                    {
-                        groupLength++;
-                        rowIx++;
-                    }
-                    while (rowIx < candidate.Length && candidate[rowIx] == '.')
-                        rowIx++;
-
-                    if (groupLength != groups[i])
-                        problem = true;
-                }
-
-                if (!problem && rowIx == candidate.Length)
-                {
-                    possibilityCount++;
-                }
-            }
+            possibilityCount += recursiveCount(row, groups, memoization);
         }
 
         return possibilityCount.ToString();
@@ -82,12 +60,12 @@ public class Year2023Day12 : Solution
         long possibilityCount = 0;
         string[] lines = input.Split('\n');
         RescaleBar(lines.Length);
-        
+
+        Dictionary<(string, string), long> memoization = new();
         foreach (string line in lines)
         {
             IncreaseBar();
 
-            HashSet<string> hs = new();
             string[] split = line.Split(" ");
             string rowRaw = split[0];
             string row = rowRaw;
@@ -97,41 +75,8 @@ public class Year2023Day12 : Solution
             int[] groups = new int[groupsRaw.Length * 5];
             for (int i = 0; i < groups.Length; i++)
                 groups[i] = groupsRaw[i % groupsRaw.Length];
-            
-            recursiveResolveQuestionmarks(row, hs);
 
-            foreach (string candidate in hs)
-            {
-                int rowIx = 0;
-                bool problem = false;
-                for (int i = 0; i < groups.Length; i++)
-                {
-                    if (rowIx == candidate.Length)
-                    {
-                        problem = true;
-                        break;
-                    }
-
-                    int groupLength = 0;
-                    while (rowIx < candidate.Length && candidate[rowIx] == '.')
-                        rowIx++;
-                    while (rowIx < candidate.Length && candidate[rowIx] == '#')
-                    {
-                        groupLength++;
-                        rowIx++;
-                    }
-                    while (rowIx < candidate.Length && candidate[rowIx] == '.')
-                        rowIx++;
-
-                    if (groupLength != groups[i])
-                        problem = true;
-                }
-
-                if (!problem && rowIx == candidate.Length)
-                {
-                    possibilityCount++;
-                }
-            }
+            possibilityCount += recursiveCount(row, groups, memoization);
         }
 
         return possibilityCount.ToString();
