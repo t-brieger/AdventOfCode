@@ -83,7 +83,7 @@ public class Year2023Day16 : Solution
 			};
 
 			beam = (newX, newY, beam.dir);
-            
+
 			if (beam.x < 0 || beam.y < 0 || beam.x >= map.GetLength(0) || beam.y >= map.GetLength(1))
 				continue;
 
@@ -96,7 +96,7 @@ public class Year2023Day16 : Solution
 
 		return energised.DistinctBy(b => (b.x, b.y)).Count();
 	}
-	
+
 	public override string Part1(string input)
 	{
 		string[] lines = input.Split('\n');
@@ -142,13 +142,16 @@ public class Year2023Day16 : Solution
 
 		int maxEnergised = 0;
 		for (int x = 0; x < map.GetLength(0); x++)
+		{
 			maxEnergised = Math.Max(maxEnergised, GetEnergisedCount(map, x, 0, 2));
-		for (int x = 0; x < map.GetLength(0); x++)
 			maxEnergised = Math.Max(maxEnergised, GetEnergisedCount(map, x, map.GetLength(1) - 1, 0));
+		}
+
 		for (int y = 0; y < map.GetLength(1); y++)
+		{
 			maxEnergised = Math.Max(maxEnergised, GetEnergisedCount(map, 0, y, 1));
-		for (int y = 0; y < map.GetLength(1); y++)
 			maxEnergised = Math.Max(maxEnergised, GetEnergisedCount(map, map.GetLength(0) - 1, y, 3));
+		}
 
 		return maxEnergised.ToString();
 	}

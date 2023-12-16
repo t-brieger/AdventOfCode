@@ -18,8 +18,9 @@ public class Year2015Day09 : Solution
         }
 
         int minDist = Int32.MaxValue;
-        foreach (string[] perm in Util.GetPermutations(distances.Keys.Select(x => x.Item1).Distinct()
-                     .ToArray()))
+
+        string[] cities = distances.Keys.Select(x => x.Item1).Distinct().ToArray();
+        foreach (string[] perm in Util.GetPermutations(cities, cities.Length))
         {
             int dist = 0;
             for (int i = 0; i < perm.Length - 1; i++) dist += distances[(perm[i], perm[i + 1])];
@@ -41,8 +42,9 @@ public class Year2015Day09 : Solution
         }
 
         int maxDist = Int32.MinValue;
-        foreach (string[] perm in Util.GetPermutations(distances.Keys.Select(x => x.Item1).Distinct()
-                     .ToArray()))
+        
+        string[] cities = distances.Keys.Select(x => x.Item1).Distinct().ToArray();
+        foreach (string[] perm in Util.GetPermutations(cities, cities.Length))
         {
             int dist = 0;
             for (int i = 0; i < perm.Length - 1; i++) dist += distances[(perm[i], perm[i + 1])];
