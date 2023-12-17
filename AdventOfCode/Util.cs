@@ -114,6 +114,12 @@ public static class Util
         return (initial, -1);
     }
 
+    public static (TState, int) Djikstra<TState>(TState initial,
+        Func<TState, int, IEnumerable<(TState, int)>> generateReachable, TState singleGoal, bool skipSeen = true)
+    {
+        return Djikstra(initial, generateReachable, candidate => singleGoal.Equals(candidate), skipSeen);
+    }
+    
     private static void DoFloodFill<TState>(HashSet<TState> hs, TState curr, Func<TState, IEnumerable<TState>> tr)
     {
         if (hs.Contains(curr))
