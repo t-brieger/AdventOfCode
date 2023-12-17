@@ -51,6 +51,7 @@ public class Year2015Day19 : Solution
                 element += molec[++i];
             }
 
+            // what?
             switch (element)
             {
                 case "Rn" or "Ar":

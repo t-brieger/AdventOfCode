@@ -5,75 +5,81 @@ namespace AdventOfCode.Solutions;
 
 public class Year2015Day15 : Solution
 {
-    public override string Part1(string input)
-    {
-        (int, int, int, int)[] ingredients = input.Split("\n", StringSplitOptions.RemoveEmptyEntries)
-            .Select(line => line.Replace(",", "").Split(' ')).Select(lineArr => (int.Parse(lineArr[2]),
-                int.Parse(lineArr[4]), int.Parse(lineArr[6]), int.Parse(lineArr[8]))).ToArray();
+	private static (long, int) CalculateScoreAndCalories((int cap, int dur, int fla, int tex, int cal)[] ingredients, int[] amounts)
+	{
+		if (amounts.Length != ingredients.Length)
+		{
+			int[] tmp = new int[ingredients.Length];
+			Array.Copy(amounts, 0, tmp, 0, amounts.Length);
+			amounts = tmp;
+		}
 
-        int maxScore = int.MinValue;
+		int resCap = ingredients.Select((ing, ix) => ing.cap * amounts[ix]).Sum();
+		int resDur = ingredients.Select((ing, ix) => ing.dur * amounts[ix]).Sum();
+		int resFla = ingredients.Select((ing, ix) => ing.fla * amounts[ix]).Sum();
+		int resTex = ingredients.Select((ing, ix) => ing.tex * amounts[ix]).Sum();
+		int resCal = ingredients.Select((ing, ix) => ing.cal * amounts[ix]).Sum();
 
-        //I tried for a solid hour now to make this work for a different amount of ingredient types, and I can't
-        //seem to do it - this may be due to it being 2am, me being a bad programmer, or a combination of the two.
-        for (int i1 = 0; i1 < 100; i1++)
-        for (int i2 = 0; i2 < 100 - i1; i2++)
-        for (int i3 = 0; i3 < 100 - i1 - i2; i3++)
-        {
-            int i4 = 100 - i1 - i2 - i3;
-            int capacity = i1 * ingredients[0].Item1 + i2 * ingredients[1].Item1 +
-                           i3 * ingredients[2].Item1 + i4 * ingredients[3].Item1;
-            int durability = i1 * ingredients[0].Item2 + i2 * ingredients[1].Item2 +
-                             i3 * ingredients[2].Item2 + i4 * ingredients[3].Item2;
-            int flavor = i1 * ingredients[0].Item3 + i2 * ingredients[1].Item3 +
-                         i3 * ingredients[2].Item3 + i4 * ingredients[3].Item3;
-            int texture = i1 * ingredients[0].Item4 + i2 * ingredients[1].Item4 +
-                          i3 * ingredients[2].Item4 + i4 * ingredients[3].Item4;
+		if (resCap < 0 || resDur < 0 || resFla < 0 || resTex < 0)
+			return (0, resCal);
 
-            int score = capacity * durability * flavor * texture;
-            if (capacity <= 0 || durability <= 0 || flavor <= 0 || texture <= 0)
-                score = 0;
+		return (resCap * resDur * resFla * resTex, resCal);
+	}
+	
+	private static void GetBestAmounts((int, int, int, int, int)[] ingredients, ref (long sc, int[] amounts) bestScore, bool p2 = false, int[] prevSteps = null)
+	{
+		prevSteps ??= new int[0];
+		
+		if (prevSteps.Length == ingredients.Length)
+		{
+			(long score, int calories) = CalculateScoreAndCalories(ingredients, prevSteps);
+			if (p2 && calories != 500)
+				return;
+			
+			if (score > bestScore.sc)
+			{
+				int[] copy = new int[prevSteps.Length];
+				Array.Copy(prevSteps, 0, copy, 0, prevSteps.Length);
+				bestScore = (score, copy);
+			}
 
-            maxScore = Math.Max(maxScore, score);
-        }
+			return;
+		}
 
-        return maxScore.ToString();
-    }
+		int[] attempt = new int[prevSteps.Length + 1];
+		Array.Copy(prevSteps, 0, attempt, 0, prevSteps.Length);
 
-    public override string Part2(string input)
-    {
-        (int, int, int, int, int)[] ingredients = input.Split("\n", StringSplitOptions.RemoveEmptyEntries)
-            .Select(line => line.Replace(",", "").Split(' ')).Select(lineArr => (int.Parse(lineArr[2]),
-                int.Parse(lineArr[4]), int.Parse(lineArr[6]), int.Parse(lineArr[8]), int.Parse(lineArr[10])))
-            .ToArray();
+		int tspLeft = 100 - prevSteps.Sum();
 
-        int maxScore = int.MinValue;
+		for (int amountCurrent = ingredients.Length - attempt.Length > 0 ? 0 : tspLeft; amountCurrent <= tspLeft; amountCurrent++)
+		{
+			attempt[^1] = amountCurrent;
+			GetBestAmounts(ingredients, ref bestScore, p2, attempt);
+		}
+	}
 
-        for (int i1 = 0; i1 < 100; i1++)
-        for (int i2 = 0; i2 < 100 - i1; i2++)
-        for (int i3 = 0; i3 < 100 - i1 - i2; i3++)
-        {
-            int i4 = 100 - i1 - i2 - i3;
-            int calories = i1 * ingredients[0].Item5 + i2 * ingredients[1].Item5 +
-                           i3 * ingredients[2].Item5 + i4 * ingredients[3].Item5;
-            if (calories != 500)
-                continue;
+	public override string Part1(string input)
+	{
+		(int, int, int, int, int)[] ingredients = input.Split("\n", StringSplitOptions.RemoveEmptyEntries)
+			.Select(line => line.Replace(",", "").Split(' ')).Select(lineArr => (int.Parse(lineArr[2]),
+				int.Parse(lineArr[4]), int.Parse(lineArr[6]), int.Parse(lineArr[8]), 0)).ToArray();
 
-            int capacity = i1 * ingredients[0].Item1 + i2 * ingredients[1].Item1 +
-                           i3 * ingredients[2].Item1 + i4 * ingredients[3].Item1;
-            int durability = i1 * ingredients[0].Item2 + i2 * ingredients[1].Item2 +
-                             i3 * ingredients[2].Item2 + i4 * ingredients[3].Item2;
-            int flavor = i1 * ingredients[0].Item3 + i2 * ingredients[1].Item3 +
-                         i3 * ingredients[2].Item3 + i4 * ingredients[3].Item3;
-            int texture = i1 * ingredients[0].Item4 + i2 * ingredients[1].Item4 +
-                          i3 * ingredients[2].Item4 + i4 * ingredients[3].Item4;
+		(long sc, int[] amounts) result = (0, new int[] {});
+		GetBestAmounts(ingredients, ref result);
 
-            int score = capacity * durability * flavor * texture;
-            if (capacity <= 0 || durability <= 0 || flavor <= 0 || texture <= 0)
-                score = 0;
+		return result.sc.ToString();
+	}
 
-            maxScore = Math.Max(maxScore, score);
-        }
+	public override string Part2(string input)
+	{
+		(int, int, int, int, int)[] ingredients = input.Split("\n", StringSplitOptions.RemoveEmptyEntries)
+			.Select(line => line.Replace(",", "").Split(' ')).Select(lineArr => (int.Parse(lineArr[2]),
+				int.Parse(lineArr[4]), int.Parse(lineArr[6]), int.Parse(lineArr[8]), int.Parse(lineArr[10])))
+			.ToArray();
 
-        return maxScore.ToString();
-    }
+		(long sc, int[] amounts) result = (0, new int[] {});
+		GetBestAmounts(ingredients, ref result, true);
+
+		return result.sc.ToString();
+	}
 }

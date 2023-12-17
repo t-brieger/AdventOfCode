@@ -1,0 +1,19 @@
+inc a
+inc b
+jie a, +6
+jio a, +4
+tpl b
+tpl b
+tpl b
+tpl b
+inc b
+
+
+
+
+4
+
+
+
+
+2

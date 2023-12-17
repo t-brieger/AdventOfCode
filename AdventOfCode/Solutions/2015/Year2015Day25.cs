@@ -6,8 +6,7 @@ public class Year2015Day25 : Solution
 {
     public override string Part1(string input)
     {
-        input = input["To continue, please consult the code grid in the manual.  Enter the code at row ".Length..];
-        input = input[..^1];
+        input = input["To continue, please consult the code grid in the manual.  Enter the code at row ".Length..^1];
         int[] numbers = input.Split(", column ").Select(int.Parse).ToArray();
         int codeIx = Enumerable.Range(0, numbers[0] + numbers[1] - 1).Sum() + numbers[1];
         long currentCode = 20151125;
