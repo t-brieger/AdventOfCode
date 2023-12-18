@@ -170,7 +170,7 @@ public class Year2023Day10 : Solution
         //   - the total amount of tiles that are part of the pre-scaling loop is `loop.Count`
         //   - the entire pre-scaling rectangle we are looking at is of size (maxX + 1)*(maxY + 1)
         // (also, the floodfill itself is possible because the loop is non-self-intersecting)
-        HashSet<(int, int)> outerArea = Util.FloodFill((0, 0), pos =>
+        HashSet<(int, int)> outerArea = Util.FloodFill(new[]{(0, 0)}, pos =>
         {
             List<(int, int)> ret = new();
             foreach ((int ox, int oy) in new[] { (-1, 0), (1, 0), (0, 1), (0, -1) })

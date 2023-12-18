@@ -8,130 +8,136 @@ namespace AdventOfCode;
 // ReSharper disable once InconsistentNaming
 public static class Util
 {
-    // https://stackoverflow.com/a/29717490
-    public static long Lcm(params long[] numbers)
-    {
-        return numbers.Aggregate(lcm);
-    }
+	// https://stackoverflow.com/a/29717490
+	public static long Lcm(params long[] numbers)
+	{
+		return numbers.Aggregate(lcm);
+	}
 
-    private static long lcm(long a, long b)
-    {
-        return Math.Abs(a * b) / Gcd(a, b);
-    }
+	private static long lcm(long a, long b)
+	{
+		return Math.Abs(a * b) / Gcd(a, b);
+	}
 
-    // https://stackoverflow.com/a/41766138
-    public static long Gcd(long a, long b)
-    {
-        while (true)
-        {
-            if ((a == 0) ^ (b == 0)) return Math.Abs(a + b);
-            if (a == 0 && b == 0) return 1;
+	// https://stackoverflow.com/a/41766138
+	public static long Gcd(long a, long b)
+	{
+		while (true)
+		{
+			if ((a == 0) ^ (b == 0)) return Math.Abs(a + b);
+			if (a == 0 && b == 0) return 1;
 
-            if (Math.Sign(a) != Math.Sign(b))
-            {
-                a *= -1;
-                continue;
-            }
+			if (Math.Sign(a) != Math.Sign(b))
+			{
+				a *= -1;
+				continue;
+			}
 
-            if (a < 0 && b < 0)
-            {
-                a *= -1;
-                b *= -1;
-            }
+			if (a < 0 && b < 0)
+			{
+				a *= -1;
+				b *= -1;
+			}
 
-            while (a != 0 && b != 0)
-                if (a > b)
-                    a %= b;
-                else
-                    b %= a;
+			while (a != 0 && b != 0)
+				if (a > b)
+					a %= b;
+				else
+					b %= a;
 
-            return a | b;
-        }
-    }
+			return a | b;
+		}
+	}
 
-    // https://stackoverflow.com/a/10629938
-    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-    public static IEnumerable<T[]> GetPermutations<T>(IEnumerable<T> list, int length = 2) where T : IComparable
-    {
-        if (length == 1) return list.Select(t => new[] {t});
-        return GetPermutations(list, length - 1)
-            .SelectMany(t => list.Where(o => !t.Contains(o)),
-                (t1, t2) => t1.Concat(new[] {t2}).ToArray());
-    }
+	// https://stackoverflow.com/a/10629938
+	[SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
+	public static IEnumerable<T[]> GetPermutations<T>(IEnumerable<T> list, int length = 2) where T : IComparable
+	{
+		if (length == 1) return list.Select(t => new[] {t});
+		return GetPermutations(list, length - 1)
+			.SelectMany(t => list.Where(o => !t.Contains(o)),
+				(t1, t2) => t1.Concat(new[] {t2}).ToArray());
+	}
 
-    public static string Reverse(this string s)
-    {
-        char[] charArray = s.ToCharArray();
-        Array.Reverse(charArray);
-        return new string(charArray);
-    }
+	public static string Reverse(this string s)
+	{
+		char[] charArray = s.ToCharArray();
+		Array.Reverse(charArray);
+		return new string(charArray);
+	}
 
-    public static int FirstIndexOf<T>(this IEnumerable<T> e, Func<T, bool> f)
-    {
-        int i = 0;
-        foreach (T t in e)
-        {
-            if (f(t))
-                return i;
-            i++;
-        }
+	public static int FirstIndexOf<T>(this IEnumerable<T> e, Func<T, bool> f)
+	{
+		int i = 0;
+		foreach (T t in e)
+		{
+			if (f(t))
+				return i;
+			i++;
+		}
 
-        return -1;
-    }
+		return -1;
+	}
 
-    public static int FirstIndexOf<T>(this IEnumerable<T> e, T what)
-    {
-        return e.FirstIndexOf(t => t.Equals(what));
-    }
+	public static int FirstIndexOf<T>(this IEnumerable<T> e, T what)
+	{
+		return e.FirstIndexOf(t => t.Equals(what));
+	}
 
-    public static (TState, int) Djikstra<TState>(TState initial, Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal, bool skipSeenStates = true)
-    {
-        HashSet<TState> seen = new HashSet<TState>();
-        PriorityQueue<(TState, int), int> states = new PriorityQueue<(TState, int), int>();
-        states.Enqueue((initial, 0), 0);
+	public static (TState, int) Djikstra<TState>(TState initial,
+		Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal,
+		bool skipSeenStates = true)
+	{
+		HashSet<TState> seen = new HashSet<TState>();
+		PriorityQueue<(TState, int), int> states = new PriorityQueue<(TState, int), int>();
+		states.Enqueue((initial, 0), 0);
 
-        while (states.Count > 0)
-        {
-            (TState currentState, int weight) = states.Dequeue();
-            if (skipSeenStates)
-            {
-                if (seen.Contains(currentState))
-                    continue;
-                seen.Add(currentState);
-            }
+		while (states.Count > 0)
+		{
+			(TState currentState, int weight) = states.Dequeue();
+			if (skipSeenStates)
+			{
+				if (seen.Contains(currentState))
+					continue;
+				seen.Add(currentState);
+			}
 
-            if (isGoal(currentState))
-                return (currentState, weight);
+			if (isGoal(currentState))
+				return (currentState, weight);
 
-            foreach ((TState, int) s in generateReachableStates(currentState, weight))
-            {
-                states.Enqueue(s, s.Item2);
-            }
-        }
+			foreach ((TState, int) s in generateReachableStates(currentState, weight))
+			{
+				states.Enqueue(s, s.Item2);
+			}
+		}
 
-        // would be a little clearer to return "null" here instead of the initial state, but alas, it seems not to be
-        // possible to cast null to State (or even to "State?")
-        return (initial, -1);
-    }
+		// would be a little clearer to return "null" here instead of the initial state, but alas, it seems not to be
+		// possible to cast null to State (or even to "State?")
+		return (initial, -1);
+	}
 
-    public static (TState, int) Djikstra<TState>(TState initial,
-        Func<TState, int, IEnumerable<(TState, int)>> generateReachable, TState singleGoal, bool skipSeen = true)
-    {
-        return Djikstra(initial, generateReachable, candidate => singleGoal.Equals(candidate), skipSeen);
-    }
-    
-    private static void DoFloodFill<TState>(HashSet<TState> hs, TState curr, Func<TState, IEnumerable<TState>> tr)
-    {
-        if (hs.Contains(curr))
-            return;
-        hs.Add(curr);
-        foreach (TState ts in tr(curr))
-            DoFloodFill(hs, ts, tr);
-    }
-    public static HashSet<TState> FloodFill<TState>(TState startLocation, Func<TState, IEnumerable<TState>> transitions)
-    {
-        HashSet<TState> hashset = new();
-        DoFloodFill(hashset, startLocation, transitions);
-        return hashset;
-    }
+	public static (TState, int) Djikstra<TState>(TState initial,
+		Func<TState, int, IEnumerable<(TState, int)>> generateReachable, TState singleGoal, bool skipSeen = true)
+	{
+		return Djikstra(initial, generateReachable, candidate => singleGoal.Equals(candidate), skipSeen);
+	}
+
+	public static HashSet<TState> FloodFill<TState>(IEnumerable<TState> locations,
+		Func<TState, IEnumerable<TState>> transitions)
+	{
+		HashSet<TState> seen = new();
+		HashSet<TState> locationsHs = new HashSet<TState>(locations);
+		while (locationsHs.Any())
+		{
+			TState curr = locationsHs.First();
+			locationsHs.Remove(curr);
+			if (!seen.Add(curr))
+				continue;
+
+			foreach (TState next in transitions(curr))
+				locationsHs.Add(next);
+		}
+
+		return seen;
+	}
 }
