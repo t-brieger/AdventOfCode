@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -88,7 +89,7 @@ public static class Util
 		Func<TState, int, IEnumerable<(TState, int)>> generateReachableStates, Func<TState, bool> isGoal,
 		bool skipSeenStates = true)
 	{
-		HashSet<TState> seen = new HashSet<TState>();
+		HashSet<TState> seen = [];
 		PriorityQueue<(TState, int), int> states = new PriorityQueue<(TState, int), int>();
 		states.Enqueue((initial, 0), 0);
 
@@ -96,11 +97,8 @@ public static class Util
 		{
 			(TState currentState, int weight) = states.Dequeue();
 			if (skipSeenStates)
-			{
-				if (seen.Contains(currentState))
+				if (!seen.Add(currentState))
 					continue;
-				seen.Add(currentState);
-			}
 
 			if (isGoal(currentState))
 				return (currentState, weight);
@@ -125,8 +123,8 @@ public static class Util
 	public static HashSet<TState> FloodFill<TState>(IEnumerable<TState> locations,
 		Func<TState, IEnumerable<TState>> transitions)
 	{
-		HashSet<TState> seen = new();
-		HashSet<TState> locationsHs = new HashSet<TState>(locations);
+		HashSet<TState> seen = [];
+		HashSet<TState> locationsHs = [..locations];
 		while (locationsHs.Any())
 		{
 			TState curr = locationsHs.First();
@@ -140,4 +138,32 @@ public static class Util
 
 		return seen;
 	}
+}
+
+// Start is included, End isn't.
+public struct Interval(long start, long end)
+{
+	public readonly long Start = start, End = end;
+
+	public long Length => End - Start;
+
+	public static (Interval l, Interval r) operator -(Interval a, Interval b)
+	{
+		long startIntersect = Math.Max(a.Start, b.Start);
+		long endIntersect = Math.Min(a.End, b.End);
+
+		return (new Interval(a.Start, Math.Max(startIntersect, a.Start)),
+			new Interval(Math.Min(endIntersect, a.End), a.End));
+	}
+	
+	// this is just an intersect operation.
+	public static Interval operator *(Interval a, Interval b)
+	{
+		long startIntersect = Math.Max(a.Start, b.Start);
+		long endIntersect = Math.Min(a.End, b.End);
+
+		return new Interval(startIntersect, endIntersect);
+	}
+
+	public override string ToString() => $"[{Start}-{End}]";
 }
