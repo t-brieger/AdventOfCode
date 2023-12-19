@@ -1,0 +1,23 @@
+cpy 10 a
+cpy a b
+inc d
+dec b
+jnz b -2
+dec a
+jnz a -5
+cpy d a
+jnz c 2
+jnz a 1000
+dec c
+dec a
+jnz a -10
+
+
+
+
+55
+
+
+
+
+1540
