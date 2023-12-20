@@ -36,7 +36,9 @@ public class Year2016Day06 : Solution
             Dictionary<char, int> counts = new Dictionary<char, int>();
             for (char c = 'a'; c <= 'z'; c++)
             {
-                counts[c] = lines.Count(x => x[i] == c);
+                int count = lines.Count(x => x[i] == c);
+                if (count != 0)
+                    counts[c] = count;
             }
 
             s += counts.MinBy(kvp => kvp.Value).Key;

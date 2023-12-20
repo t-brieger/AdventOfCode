@@ -14,8 +14,9 @@ public class Year2015Day13 : Solution
                 arr => (arr[2][0] == 'l' ? -1 : 1) * int.Parse(arr[3]));
 
         int maxDist = Int32.MinValue;
-        foreach (string[] perm in Util.GetPermutations(likeScores.Keys.Select(x => x.Item1).Distinct()
-                     .ToArray()))
+
+        string[] relations = likeScores.Keys.Select(x => x.Item1).Distinct().ToArray();
+        foreach (string[] perm in Util.GetPermutations(relations, relations.Length))
         {
             int dist = 0;
             for (int i = 0; i < perm.Length; i++)
@@ -47,8 +48,8 @@ public class Year2015Day13 : Solution
             likeScores.Add(key, value);
 
         int maxDist = Int32.MinValue;
-        foreach (string[] perm in Util.GetPermutations(likeScores.Keys.Select(x => x.Item1).Distinct()
-                     .ToArray()))
+        string[] relations = likeScores.Keys.Select(x => x.Item1).Distinct().ToArray();
+        foreach (string[] perm in Util.GetPermutations(relations, relations.Length))
         {
             int dist = 0;
             for (int i = 0; i < perm.Length; i++)

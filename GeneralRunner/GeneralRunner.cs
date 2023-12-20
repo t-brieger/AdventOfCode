@@ -99,8 +99,10 @@ public static class GeneralRunner
 					continue;
 
 				if (showdesc)
+				{
 					await DisplayText(day, year);
-				Console.WriteLine();
+					Console.WriteLine();
+				}
 
 				await RunSolution(s, day, year, test, progressWidth);
 
@@ -161,17 +163,13 @@ public static class GeneralRunner
 	private static async Task RunSolution(Solution s, byte d, ushort y, bool test, int progressWidth)
 	{
 		string input = await GetInput(d, y, test);
-
-		Console.WriteLine($"{(test ? "Testing" : "Running")} Day {y}/{d:00}...");
+		
 		if (test)
 		{
 			if (input == "")
-			{
-				Console.ForegroundColor = ConsoleColor.Blue;
-				Console.WriteLine("\tNo tests found.");
-				Console.ResetColor();
 				return;
-			}
+			
+			Console.WriteLine($"Testing Day {y}/{d:00}...");
             
 			string[] parts = input.Split("\n\n\n\n\n");
 			for (int i = 0; i < parts.Length; i += 3)
@@ -222,6 +220,8 @@ public static class GeneralRunner
 			return;
 		}
 
+		Console.WriteLine($"Running Day {y}/{d:00}...");
+		
 		s!.rawInput = input;
 		input = input.Trim();
 
