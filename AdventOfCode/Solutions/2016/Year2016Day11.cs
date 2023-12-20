@@ -1,157 +1,196 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using ILGPU.Runtime.Cuda;
 
 namespace AdventOfCode.Solutions;
 
 public class Year2016Day11 : Solution
 {
-    // strings are more convenient because of their immutability
-    private static string StateToString(List<Device>[] devices, int ourLevel)
-    {
-        return ourLevel + "\n" + string.Join('\n',
-            devices.Select(floor =>
-                string.Join("",
-                    floor.Select(dev => dev.Element[..3] + (dev.IsGenerator ? 'G' : 'C')).OrderBy(x => x))));
-    }
+	private static uint changeOneLocationInState(uint prevState, int id, bool isChip, int newLocation)
+	{
+		// ... Chip1Floor Gen1Floor Chip0Floor Gen0Floor OurFloor
+		int dataIndex = 1 + (2 * id) + (isChip ? 1 : 0);
+		uint newState = prevState & (0xFF_FF_FF_FF << (2 + 2 * dataIndex));
+		newState |= prevState & (0xFF_FF_FF_FF >> (32 - 2 * dataIndex));
 
-    private static (List<Device>[], int) StringToState(string state)
-    {
-        string[] lines = state.Split('\n');
-        List<Device>[] result = new List<Device>[lines.Length - 1];
-        for (int i = 1; i < lines.Length; i++)
-        {
-            if (lines[i] == "")
-            {
-                result[i - 1] = new List<Device>();
-                continue;
-            }
+		newState |= (uint) (newLocation << (2 * dataIndex));
 
-            result[i - 1] = new List<Device>();
+		return newState;
+	}
 
-            for (int j = 0; j < lines[i].Length; j += 4)
-            {
-                result[i - 1].Add(new Device
-                {
-                    Element = lines[i][j..(j + 3)],
-                    IsGenerator = lines[i][j + 3] == 'G'
-                });
-            }
-        }
+	private static int CountSteps(string input)
+	{
+		string[] lines = input.Split('\n');
+		Dictionary<string, int> elementToId = new();
 
-        return (result, int.Parse(lines[0]));
-    }
+		HashSet<(int floor, int type, bool isChip)> devices = [];
+		for (int i = 0; i < lines.Length; i++)
+		{
+			string[] words = lines[i].Split(" ");
+			if (words[4] == "nothing")
+				continue;
+			for (int j = 0; j < words.Length; j++)
+			{
+				string word = words[j];
+				string element = "";
+				bool type = false;
+				if (word.Contains('-'))
+				{
+					// x-compatible microchip (we want "x")
+					element = word.Split('-')[0];
+					type = true;
+				}
+				else if (word.StartsWith("generator"))
+				{
+					element = words[j - 1];
+				}
 
-    private class Device
-    {
-        public string Element;
-        public bool IsGenerator;
-    }
+				if (element == "") continue;
+				
+				int id;
+				if (elementToId.TryGetValue(element, out int elementId))
+					id = elementId;
+				else
+					id = elementToId[element] = elementToId.Count;
 
-    // I'm almost certain this code is correct, but no guarantees about how its runtime compares to the age of the universe.
-    public override string Part1(string input)
-    {
-        input = input.Replace("The ", "").Replace("floor ", "").Replace("contains ", "").Replace(" a ", " ")
-            .Replace(" and ", " ").Replace(",", "").Replace(".", "");
+				devices.Add((i, id, type));
+			}
+		}
 
-        string[][] floorStrings = input.Split('\n').Select(x => x.Split(' ')).ToArray();
+		uint state = 0;
+		for (int i = 0; i < elementToId.Count; i++)
+		{
+			state <<= 2;
+			state |= (uint) devices.First(d => d.type == i && d.isChip).floor;
+			state <<= 2;
+			state |= (uint) devices.First(d => d.type == i && !d.isChip).floor;
+		}
 
-        List<Device>[] initialState = new List<Device>[floorStrings.Length];
+		state <<= 2;
+		// our current floor.
+		state |= 0;
 
-        for (int i = 0; i < floorStrings.Length; i++)
-        {
-            if (floorStrings[i][1] == "nothing")
-            {
-                initialState[i] = new List<Device>();
-                continue;
-            }
+		int chipCount = elementToId.Count;
 
-            List<Device> devicesOnFloor = new List<Device>();
-            for (int j = 1; j < floorStrings[i].Length; j += 2)
-            {
-                string element = floorStrings[i][j].Split('-')[0];
-                bool isGen = floorStrings[i][j + 1] == "generator";
+		(uint _, int cost) res = Util.Djikstra(state, (st, cost) =>
+		{
+			uint originalState = st;
 
-                devicesOnFloor.Add(new Device() {Element = element, IsGenerator = isGen});
-            }
+			int[] chipFloors = new int[chipCount];
+			int[] genFloors = new int[chipCount];
+			uint ourFloor = st & 3;
 
-            initialState[i] = devicesOnFloor.ToList();
-        }
+			List<(bool isChip, int id)> onOurFloor = [];
 
-        (_, int steps) = Util.Djikstra(StateToString(initialState, 0), (state, cost) =>
-        {
-            (List<Device>[] devices, int floor) = StringToState(state);
+			for (int i = 0; i < chipCount; i++)
+			{
+				st >>= 2;
+				genFloors[i] = (int) (st & 3);
+				st >>= 2;
+				chipFloors[i] = (int) (st & 3);
 
-            List<(string, int)> reachable = new List<(string, int)>();
+				if (genFloors[i] == ourFloor)
+					onOurFloor.Add((false, i));
+				if (chipFloors[i] == ourFloor)
+					onOurFloor.Add((true, i));
+			}
 
-            for (int i = 0; i < devices[floor].Count; i++)
-            {
-                if (floor != 3)
-                {
-                    // copy
-                    (List<Device>[], int) tmp = StringToState(state);
-                    tmp.Item1[floor].Remove(devices[floor][i]);
-                    tmp.Item1[floor + 1].Add(devices[floor][i]);
-                    if (!tmp.Item1.Any(floorDevices => floorDevices.Where(dev => !dev.IsGenerator).Any(chip =>
-                            !floorDevices.Any(gen => gen.IsGenerator && gen.Element == chip.Element) &&
-                            floorDevices.Any(gen => gen.IsGenerator && gen.Element != chip.Element))))
-                        reachable.Add((StateToString(tmp.Item1, tmp.Item2 + 1), cost + 1));
-                }
+			// check for chips that are in the same room as a (non-compatible) generator without their own generator
+			// nearby.
+			for (int i = 0; i < chipCount; i++)
+			{
+				if (chipFloors[i] == genFloors[i])
+					continue;
+				bool invalid = false;
+				for (int j = 0; j < chipCount; j++)
+				{
+					if (chipFloors[i] == genFloors[j])
+					{
+						invalid = true;
+						break;
+					}
+				}
 
-                if (floor != 0)
-                {
-                    (List<Device>[], int) tmp = StringToState(state);
-                    tmp.Item1[floor].Remove(devices[floor][i]);
-                    tmp.Item1[floor - 1].Add(devices[floor][i]);
-                    if (!tmp.Item1.Any(floorDevices => floorDevices.Where(dev => !dev.IsGenerator).Any(chip =>
-                            !floorDevices.Any(gen => gen.IsGenerator && gen.Element == chip.Element) &&
-                            floorDevices.Any(gen => gen.IsGenerator && gen.Element != chip.Element))))
-                        reachable.Add((StateToString(tmp.Item1, tmp.Item2 - 1), cost + 1));
-                }
-            }
+				if (invalid)
+					return new (uint, int)[] { };
+			}
 
-            for (int i = 0; i < devices[floor].Count; i++)
-            {
-                for (int j = i + 1; j < devices[floor].Count; j++)
-                {
-                    if (floor != 3)
-                    {
-                        (List<Device>[], int) tmp = StringToState(state);
-                        tmp.Item1[floor].Remove(devices[floor][i]);
-                        tmp.Item1[floor].Remove(devices[floor][j]);
-                        tmp.Item1[floor + 1].Add(devices[floor][i]);
-                        tmp.Item1[floor + 1].Add(devices[floor][j]);
-                        if (!tmp.Item1.Any(floorDevices => floorDevices.Where(dev => !dev.IsGenerator).Any(chip =>
-                                !floorDevices.Any(gen => gen.IsGenerator && gen.Element == chip.Element) &&
-                                floorDevices.Any(gen => gen.IsGenerator && gen.Element != chip.Element))))
-                            reachable.Add((StateToString(tmp.Item1, tmp.Item2 + 1), cost + 1));
-                    }
+			int amountOnOurFloor = onOurFloor.Count;
+			List<(uint, int)> ret = new(amountOnOurFloor * (amountOnOurFloor - 1) + amountOnOurFloor * 2);
 
-                    if (floor != 0)
-                    {
-                        (List<Device>[], int) tmp = StringToState(state);
-                        tmp.Item1[floor].Remove(devices[floor][i]);
-                        tmp.Item1[floor].Remove(devices[floor][j]);
-                        tmp.Item1[floor - 1].Add(devices[floor][i]);
-                        tmp.Item1[floor - 1].Add(devices[floor][j]);
-                        if (!tmp.Item1.Any(floorDevices => floorDevices.Where(dev => !dev.IsGenerator).Any(chip =>
-                                !floorDevices.Any(gen => gen.IsGenerator && gen.Element == chip.Element) &&
-                                floorDevices.Any(gen => gen.IsGenerator && gen.Element != chip.Element))))
-                            reachable.Add((StateToString(tmp.Item1, tmp.Item2 - 1), cost + 1));
-                    }
-                }
-            }
+			foreach ((bool c, int id)[] elevatorContent in Util.GetPermutations(onOurFloor))
+			{
+				(bool c, int id, int currentFloor) d1 = (elevatorContent[0].c, elevatorContent[0].id,
+					(elevatorContent[0].c ? chipFloors : genFloors)[elevatorContent[0].id]);
+				(bool c, int id, int currentFloor) d2 = (elevatorContent[1].c, elevatorContent[1].id,
+					(elevatorContent[1].c ? chipFloors : genFloors)[elevatorContent[1].id]);
 
-            return reachable;
-        }, state => state.FirstIndexOf(c => c is >= 'A' and <= 'Z' or >= 'a' and <= 'z') == 5);
+				uint newState1 = changeOneLocationInState(originalState, d1.id, d1.c, d1.currentFloor + 1);
+				newState1 = changeOneLocationInState(newState1, d2.id, d2.c, d2.currentFloor + 1);
+				newState1 ^= ourFloor;
+				newState1 |= ourFloor + 1;
+				uint newState2 = changeOneLocationInState(originalState, d1.id, d1.c, d1.currentFloor - 1);
+				newState2 = changeOneLocationInState(newState2, d2.id, d2.c, d2.currentFloor - 1);
+				newState2 ^= ourFloor;
+				newState2 |= ourFloor - 1;
 
-        return steps.ToString();
-    }
+				if (ourFloor != 3)
+					ret.Add((newState1, cost + 1));
+				if (ourFloor != 0)
+					ret.Add((newState2, cost + 1));
+			}
 
-    public override string Part2(string input)
-    {
-        //TODO
-        return null;
-    }
+			foreach ((bool c, int id) elevatorContent in onOurFloor)
+			{
+				(bool c, int id, int currentFloor) cont = (elevatorContent.c, elevatorContent.id,
+					(elevatorContent.c ? chipFloors : genFloors)[elevatorContent.id]);
+
+				uint newState1 = changeOneLocationInState(originalState, cont.id, cont.c, cont.currentFloor + 1);
+				newState1 ^= ourFloor;
+				newState1 |= ourFloor + 1;
+				uint newState2 = changeOneLocationInState(originalState, cont.id, cont.c, cont.currentFloor - 1);
+				newState2 ^= ourFloor;
+				newState2 |= ourFloor - 1;
+
+				if (ourFloor != 3)
+					ret.Add((newState1, cost + 1));
+				if (ourFloor != 0)
+					ret.Add((newState2, cost + 1));
+			}
+
+			return ret;
+		}, st =>
+		{
+			bool allOnTopFloor = true;
+			for (int i = 0; i < chipCount; i++)
+			{
+				if (((st >>= 2) & 3) != 3)
+				{
+					allOnTopFloor = false;
+					break;
+				}
+				if (((st >>= 2) & 3) != 3)
+				{
+					allOnTopFloor = false;
+					break;
+				}
+			}
+
+			return allOnTopFloor;
+		});
+
+		return res.cost;
+	}
+
+	public override string Part1(string input)
+	{
+		return CountSteps(input).ToString();
+	}
+
+	public override string Part2(string input)
+	{
+		string[] lines = input.Split('\n');
+		lines[0] += " elerium generator elerium-compatible dilithium generator dilithium-compatible";
+
+		return CountSteps(string.Join("\n", lines)).ToString();
+	}
 }

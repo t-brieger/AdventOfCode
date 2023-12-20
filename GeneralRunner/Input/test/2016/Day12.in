@@ -9,8 +9,8 @@ cpy d a
 jnz c 2
 jnz a 1000
 dec c
-dec a
-jnz a -10
+cpy 0 d
+jnz a -11
 
 
 
